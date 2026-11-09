@@ -1,4 +1,4 @@
-body {margin: 0; font-family: system-ui, sans-serif}
+body {margin: 0; font-family: ui-monospace, "SF Mono", Menlo, Consolas, "Courier New", monospace;}
 
 .app-layout
 {
@@ -19,6 +19,8 @@ body {margin: 0; font-family: system-ui, sans-serif}
 {
   font-size: 1.1rem;
   margin: 0 0 1rem;
+  font-family: inherit;
+
 }
 
 .sidebar ul
@@ -39,6 +41,7 @@ body {margin: 0; font-family: system-ui, sans-serif}
   border-radius: 6px;
   font-size: 1rem;
   cursor: pointer;
+  font-family: inherit;
 }
 
 .nav-item:hover
