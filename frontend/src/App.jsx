@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Sidebar from "./components/sidebar";
 import { sections } from "./data/sections";
+import SectionPage from "./components/sectionPage";
 import "./App.css";
 
 function App() {
@@ -15,8 +16,7 @@ function App() {
         onSelect={setActiveId}
       />
       <main className="content">
-        <h1>{activeSection.title}</h1>
-        <p>Content for this section will go here.</p>
+        <SectionPage section={activeSection} />
       </main>
     </div>
   );
