@@ -1,7 +1,9 @@
 import DijkstraAnimation from "./DijkstraAnimation";
 import RichText from "./RichText";
+import EdgeExplorer from "./EdgeExplorer"
+import QuizRunner from "./QuizRunner";
 
-function SectionPage({ section }) {
+function SectionPage({ section, onComplete=()=>{} }) {
   return (
     <div>
       <h1>{section.title}</h1>
@@ -49,6 +51,15 @@ function SectionPage({ section }) {
         if (block.type=="animation")
         {
           return <DijkstraAnimation key={index} />
+        }
+
+        if (block.type =="interactive")
+        {
+          return block.name ==="edge"? <EdgeExplorer key={index}/> :null;
+        }
+        if (block.type ==="quiz")
+        {
+          return <QuizRunner key={section.id + index} section={block.section} onPass={onComplete} />;
         }
         return null;
       })}

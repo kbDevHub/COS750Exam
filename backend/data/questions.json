@@ -1,0 +1,48 @@
+[
+    {
+        "id": "edges-1",
+        "section": "edges",
+        "question": "What is an edge in the graph?",
+        "options":
+            [
+                "A connection between two nodes",
+                "A single item stored in the graph",
+                "The total number of nodes",
+                "The first nod visited"
+            ],
+        "answer": "A connection between two nodes",
+        "hint": "Look at the lines in the diagram. What do they join?",
+        "reteach":"An edge is a LINE joining two nodes. Nodes are the items; edges are the links between them."
+    },
+    {
+        "id": "edges-2",
+        "section": "edges",
+        "question": "In a weighted graph, the edge A-C has weight 2 and A-B has weight 4. Which is cheaper to travel?",
+        "options":
+            [
+                "A-B, becuase 4 is bigger",
+                "A-C becuase 2 is smaller",
+                "They cost the same",
+                "You can't tell without more nodes"
+            ],
+        "answer": "A-C becuase 2 is smaller",
+        "hint": "Weight = cost. Do you want a higher or lower cost?",
+        "reteach":"The weigth is the cost of using that edge. Lower weight = cheaper."
+    },
+    {
+        "id": "edges-3",
+        "section": "edges",
+        "question": "In a DIRECTED graph, ther is an edge A -> B. Can you automatically travel from B to A?",
+        "options":
+            [
+                "Yes, edges always work both ways",
+                "No, you can only go in the arrow's direction",
+                "Only if the weight is 0",
+                "Only if B has no other edges"
+            ],
+        "answer": "No, you can only go in the arrow's direction",
+        "hint": "Turn on 'Show directions' in the diagram and look at the arrowheads",
+        "reteach":"A directed edge is a one-way street. A -> B lets you go from A to B only. Undirected edges are two-way."
+    }
+
+]

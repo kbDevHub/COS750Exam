@@ -60,8 +60,13 @@ export const sections=
                 ]
             },
             {   type: "paragraph", text: "Two vertices joined by an edge are called {{accent:adjacent}}, or {{accent:neighbours}}. If there is an edge between A and B, then A and B are neighbours."},
-            {   type: "paragraph", text: "Example: If Pretoria- Midrand and Midrand-Johannesburg are edges, then Midrand is a neighbour of both Pretoria and Johannesburg. Pretoria and Johannesburg are not neighbours, becuase no edge joins the, directly."}
-
+            {   type: "paragraph", text: "Example: If Pretoria- Midrand and Midrand-Johannesburg are edges, then Midrand is a neighbour of both Pretoria and Johannesburg. Pretoria and Johannesburg are not neighbours, becuase no edge joins the, directly."},
+            {   type:"divider"},
+            {   type: "paragraph", text: "{{bold: Try It}}"},
+            {   type: "interactive", name: "edge"},
+            {   type:"divider"},
+            {   type: "paragraph", text: "{{bold: Mini Test}}"},
+            {   type: "quiz", section:"edges"}
         ]
     },
 
