@@ -1,3 +1,4 @@
+import DijkstraAnimation from "./DijkstraAnimation";
 import RichText from "./RichText";
 
 function SectionPage({ section }) {
@@ -44,6 +45,10 @@ function SectionPage({ section }) {
               ))}
             </ul>
           );
+        }
+        if (block.type=="animation")
+        {
+          return <DijkstraAnimation key={index} />
         }
         return null;
       })}

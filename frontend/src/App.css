@@ -82,3 +82,63 @@ body {margin: 0; font-family: ui-monospace, "SF Mono", Menlo, Consolas, "Courier
 {
   font-weight: bold;
 }
+
+.anim-note {
+  background: #f3f4f6;
+  border-left: 4px solid #2563eb;
+  padding: 10px 14px;
+  border-radius: 4px;
+  min-height: 2.5em;
+}
+
+.anim-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+
+.anim-btn {
+  padding: 8px 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #111827;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.05s;
+}
+
+.anim-btn:hover:not(:disabled) {
+  background: #f3f4f6;
+}
+
+.anim-btn:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+.anim-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.anim-btn-primary {
+  background: #2563eb;
+  border-color: #2563eb;
+  color: #ffffff;
+}
+
+.anim-btn-primary:hover:not(:disabled) {
+  background: #1d4ed8;
+}
+
+.anim-btn-secondary {
+  color: #6b7280;
+}
+
+.anim-step {
+  margin-left: auto;
+  color: #6b7280;
+  font-size: 0.9rem;
+}

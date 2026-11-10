@@ -89,7 +89,7 @@ export const sections=
 
             },
             {   type: "paragraph", text: "Both paths use two edges, byt the first is cheaper"},
-            {   type: "paragraph", text: "The fewese-edges path is {{bold:not}} always the cheapest path. A route with more edges can still cost less in total if its weights are small enough."},
+            {   type: "paragraph", text: "The fewest-edges path is {{bold:not}} always the cheapest path. A route with more edges can still cost less in total if its weights are small enough."},
             {   type: "divider"},
             {   type: "paragraph", text: "{{bold:Shortest path problem}}"},
             {   type: "paragraph", text: " The {{accent: shortest path probelem}} asks: given a start vertex and a destination vertex, which path has the lowest total cost? This is what routing apps do when finding the quickest route between two places."}
@@ -141,6 +141,8 @@ export const sections=
             {   type: "paragraph", text:"{{bold: Step 4:}} Visit D (8). Relax D-E: 8+2 = {{bold:10}}, which is less that E=12, so E=10."},
             {   type: "paragraph", text:"{{bold: Step 5:}} Visit E (10). No more possible updates, therfore we are done."},
             {   type: "paragraph", text:"{{bold: Final distances from A:}} Visit D (10). A=0, B=3, C=2, D=8, E=10."},
+            {   type: "paragraph", text: "The animation below shows the worked example in action"},
+            {   type: "animation", name:"dijkstra"},
             {   type:"divider"},
             {   type: "paragraph", text:"{{bold:Reading the path}}"},
             {   type: "paragraph", text: "To find the path to E, follow the previous vertives backwards: E <- D <- B <- C <- A. Reversed, the shortest path is A -> C -> B -> D -> E, with a cost of 2+1+5+2= {{bold:10}}."},
