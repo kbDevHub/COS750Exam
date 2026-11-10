@@ -1,3 +1,5 @@
+import RichText from "./RichText";
+
 function SectionPage({ section }) {
   return (
     <div>
@@ -9,16 +11,36 @@ function SectionPage({ section }) {
 
       {(section.content || []).map((block, index) => {
         if (block.type === "heading") {
-          return <h2 key={index}>{block.text}</h2>;
+          return <h2 key={index}><RichText text={block.text} /></h2>;
         }
         if (block.type === "paragraph") {
-          return <p key={index}>{block.text}</p>;
+          return <p key={index}><RichText text={block.text} /></p>;
+        }
+        if (block.type === "objectives") {
+          return (
+            <div key={index} className="section-page-objectives">
+              <strong>Learning Objectives</strong>
+              <p><RichText text={block.text} /></p>
+            </div>
+          );
+        }
+        if (block.type === "divider") {
+          return <hr key={index} className="section-page-divider" />;
+        }
+        if (block.type === "numbered") {
+          return (
+            <ol key={index}>
+              {block.items.map((item, i) => (
+                <li key={i}><RichText  text={item} /></li>
+              ))}
+            </ol>
+          );
         }
         if (block.type === "list") {
           return (
             <ul key={index}>
               {block.items.map((item, i) => (
-                <li key={i}>{item}</li>
+                <li key={i}><RichText text={item} /></li>
               ))}
             </ul>
           );
