@@ -8,7 +8,7 @@
                 "A connection between two nodes",
                 "A single item stored in the graph",
                 "The total number of nodes",
-                "The first nod visited"
+                "The first node visited"
             ],
         "answer": "A connection between two nodes",
         "hint": "Look at the lines in the diagram. What do they join?",
@@ -99,7 +99,7 @@
                 "Sorting a list a numbers",
                 "Find the shortest path from one source vertex to all other vertices in a weighted graph",
                 "Detecting whether a graph contains a cycle",
-                "Searcing for a value in an array"
+                "Searching for a value in an array"
             ],
         "answer": "Find the shortest path from one source vertex to all other vertices in a weighted graph",
         "hint": "Think about a GPS finding the quickest route from where you are to everywhere else.",
@@ -113,12 +113,12 @@
             [
                 "All vertices are 0",
                 "All vertices are infinity",
-                "The source is 0 and all othes sare infinity",
+                "The source is 0 and all others are infinity",
                 "The source is infinity and all others are 0"
             ],
         "answer": "The source is 0 and all others are infinity",
         "hint": "It costs nothing to get where you already are, and you haven't found a route to anywhere else yet.",
-        "reteach":"The source is 0 becuase you are already there. Every other vertex starts at infinity, meaning 'no route found yet'. Real distances replace the infinities as teh algorithm discovers paths."
+        "reteach":"The source is 0 becuase you are already there. Every other vertex starts at infinity, meaning 'no route found yet'. Real distances replace the infinities as the algorithm discovers paths."
     },
     {
         "id": "dijk-3",
@@ -134,23 +134,6 @@
         "answer": "The unvisited vertex with the smallest tentative distance",
         "hint": "The algorithm is 'greedy': it always locks in the cheapest option available",
         "reteach":"Dijkstra repeatedly picks the unvisited vertex that currently has the smallest distance from the source and finalises it. Since all weights are non-negative, no later route can beat that distance."
-    },
-    {
-        "id": "dijk-4",
-        "section": "dijkstra",
-        "question": "What is the final shortest distance from A to D?",
-        "options":
-            [
-                "The vertex that was added first",
-                "The unvisited vertex with the smallest tentative distance",
-                "A random neighbour of the current vertex",
-                "The vertex witht the most edges"
-            ],
-        "answer": "The unvisited vertex with the smallest tentative distance",
-        "hint": "The algorithm is 'greedy': it always locks in the cheapest option available",
-        "reteach":"Dijkstra repeatedly picks the unvisited vertex that currently has the smallest distance from the source and finalises it. Since all weights are non-negative, no later route can beat that distance."
     }
-
-
 
 ]

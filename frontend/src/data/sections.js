@@ -32,9 +32,9 @@ export const sections=
                 ]
             },
             {   type: "divider"},
-            {   type: "paragraph", text: "A grpah is a way of representing things and the connection between them. The 'things' are called {{accent:vertices}} (singular vertex). In programming, they are often called {{accent:nodes}}. The two words mean the same thing." },
-            {   type: "paragraph", text: "A vetex can represnt anything: a city on a map, a person in a social netwrk, a web page, a train station. On its own, a vertex is just a labelled point. In diagrams, vertices are drawns as circles with names inside, such as A, B or C." },
-            {   type: "paragraph", text: "Example: A small road netwokr has four towns: Pretoria, Johannesburg, Midrand and Centurion. This graph has 4 vetices" },
+            {   type: "paragraph", text: "A graph is a way of representing things and the connection between them. The 'things' are called {{accent:vertices}} (singular vertex). In programming, they are often called {{accent:nodes}}. The two words mean the same thing." },
+            {   type: "paragraph", text: "A vertex can represent anything: a city on a map, a person in a social network, a web page, a train station. On its own, a vertex is just a labelled point. In diagrams, vertices are drawn as circles with names inside, such as A, B or C." },
+            {   type: "paragraph", text: "Example: A small road network has four towns: Pretoria, Johannesburg, Midrand and Centurion. This graph has 4 vertices" },
             {   type:"divider"},
             {   type: "paragraph", text: "{{bold: Mini Test}}"},
             {   type: "quiz", section:"nodes"}
@@ -58,12 +58,12 @@ export const sections=
             {   type: "paragraph", text: "Edges come in two kinds:"},
             {   type: "list", items:
                 [
-                    "{{bold:Undirected edge}}: the conection works both ways, like a two-way road. If Node A is connected to Node B, then Node B is connected to Node A.",
-                    "{{bold:Directed edge}}: the connection works only one way, like a on-way street. Anedge from Node A to Node B does not mean there is an edge from Node B to Node A. Directed edges are drawn as arrowns."
+                    "{{bold:Undirected edge}}: the connection works both ways, like a two-way road. If Node A is connected to Node B, then Node B is connected to Node A.",
+                    "{{bold:Directed edge}}: the connection works only one way, like a on-way street. An edge from Node A to Node B does not mean there is an edge from Node B to Node A. Directed edges are drawn as arrows."
                 ]
             },
             {   type: "paragraph", text: "Two vertices joined by an edge are called {{accent:adjacent}}, or {{accent:neighbours}}. If there is an edge between A and B, then A and B are neighbours."},
-            {   type: "paragraph", text: "Example: If Pretoria- Midrand and Midrand-Johannesburg are edges, then Midrand is a neighbour of both Pretoria and Johannesburg. Pretoria and Johannesburg are not neighbours, becuase no edge joins the, directly."},
+            {   type: "paragraph", text: "Example: If Pretoria- Midrand and Midrand-Johannesburg are edges, then Midrand is a neighbour of both Pretoria and Johannesburg. Pretoria and Johannesburg are not neighbours, becuase no edge joins them directly."},
             {   type:"divider"},
             {   type: "paragraph", text: "{{bold: Try It}}"},
             {   type: "interactive", name: "edge", "allowWeights": false},
@@ -79,15 +79,15 @@ export const sections=
             {   type: "objectives", text: "By the end of this section you should be able to:"},
             {   type: "numbered", items:
                 [
-                    "Define a weighted graph and explain ehat and edge weight represents,",
+                    "Define a weighted graph and explain what an edge weight represents,",
                     "Define a a path and calculate its total cost.",
-                    "Explain why the path with the fewsest edges is not always the cheapest path.",
+                    "Explain why the path with the fewest edges is not always the cheapest path.",
                     "State the shortest path problem"
                 ]
             },
             {   type: "divider"},
-            {   type: "paragraph", text: "In a {{accent:weighted graph}}, every edge has a number attachd to it called a {{accent:weight}}. The weoght can represent distance, travel time, cost or any other measure. For example, an edge between two towns might have weight 40 to show they are 40 km apart."},
-            {   type: "paragraph", text: "A {{accent:path}} is a sequence of vertices wehre each consecutitve pair is joined by an edge. The {{accent:cost}} of a path is the sum of the wieghts of its edges."},
+            {   type: "paragraph", text: "In a {{accent:weighted graph}}, every edge has a number attached to it called a {{accent:weight}}. The weight can represent distance, travel time, cost or any other measure. For example, an edge between two towns might have weight 40 to show they are 40 km apart."},
+            {   type: "paragraph", text: "A {{accent:path}} is a sequence of vertices wehre each consecutitve pair is joined by an edge. The {{accent:cost}} of a path is the sum of the weights of its edges."},
             {   type: "paragraph", text: "Example: take edges A-B (weigth 4), B-D (weight 5), A-C (weight 2) and C-D (weigth 8)."},
             {   type: "list", items:
                 [
@@ -96,7 +96,7 @@ export const sections=
                 ]
 
             },
-            {   type: "paragraph", text: "Both paths use two edges, byt the first is cheaper"},
+            {   type: "paragraph", text: "Both paths use two edges, but the first is cheaper"},
             {   type:"divider"},
             {   type: "paragraph", text: "{{bold: Try It}}"},
             {   type: "interactive", name: "edge"},
@@ -129,7 +129,7 @@ export const sections=
             {   type: "list", items:
                 [
                     "{{bold:Distance:}} the cheapest cost found so far to reach it from the start (initially infinity, except the start vertex which is 0).",
-                    "{{bold:Previous:}} the vertex we cam from on that cheapest route."
+                    "{{bold:Previous:}} the vertex we came from on that cheapest route."
                 ]
             },
             {   type: "paragraph", text : "{{bold: Steps:}}"},
@@ -163,10 +163,13 @@ export const sections=
             {   type: "paragraph", text :"Always visiting the closest unvisited vertex first guarentees its distance cannot be improved later becuase every other route would have to pass through vertices that are at least as far away."},
             {   type: "divider"},
             {   type: "paragraph", text:"{{bold:Greedy Algorithm}}"},
-            {   type: "paragraph", text: "Dijkstra's algorithm is known as a {{accent:Greedy Algorithm}} becasue at every step it makes the choice that looks best right now: it picks the unvisited vertex witht the {{bold:smallest distance}} form the source, and locks that distance in."},
+            {   type: "paragraph", text: "Dijkstra's algorithm is known as a {{accent:Greedy Algorithm}} becasue at every step, it makes the choice that looks best right now: it picks the unvisited vertex witht the {{bold:smallest distance}} from the source, and locks that distance in."},
             {   type: "paragraph", text: "It never goes back to change a decision once a vertex has been finalised. This is safe becuase all edge weights are {{bold:non-negative}}. Any other route to tha vertex would have to pass through vertices that are already further away, and adding more weights can only make the total bigger, never smaller."},
             {   type: "paragraph", text:"{{bold:Limitation}}"},
-            {   type: "paragraph", text: "Negative edge weights break this guarentee, so Dijkstra's algorithm cannot beused on graphs with negative weights."}
+            {   type: "paragraph", text: "Negative edge weights break this guarentee, so Dijkstra's algorithm cannot be used on graphs with negative weights."},
+            {   type:"divider"},
+            {   type: "paragraph", text: "{{bold: Mini Test}}"},
+            {   type: "quiz", section:"dijkstra"}
 
         ]
     },
