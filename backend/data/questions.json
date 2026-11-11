@@ -43,6 +43,53 @@
         "answer": "No, you can only go in the arrow's direction",
         "hint": "Turn on 'Show directions' in the diagram and look at the arrowheads",
         "reteach":"A directed edge is a one-way street. A -> B lets you go from A to B only. Undirected edges are two-way."
+    },
+    {
+        "id": "nodes-1",
+        "section": "nodes",
+        "question": "What is a node in a graph?",
+        "options":
+            [
+                "A connection between two points",
+                "A point that represnts an object or entity, such as a town or a person",
+                "The cost of travelling between two points",
+                "A route through the graph"
+            ],
+        "answer": "A point that represnts an object or entity, such as a town or a person",
+        "hint": "Picture a map drawn as dots and lines. Which of the two are the dots?",
+        "reteach":"A node, also called a vertex, is a single point in a graph that stands for a 'thing' like a city, person or a computer."
+    },
+    {
+        "id": "nodes-2",
+        "section": "nodes",
+        "question": "A graph has the nodes {A,B,C,D,E}. How many nodes does it have",
+        "options":
+            [
+                "4",
+                "5",
+                "6",
+                "You can't tell without the edges"
+            ],
+        "answer": "5",
+        "hint": "The nodes are listed in the set, so count its members.",
+        "reteach":"The number of nodes only depend on the set of nodes, not the edges. The set {A,B,C,D,E} has 5 items, so therer are 5 nodes."
+    },
+    {
+        "id": "nodes-3",
+        "section": "nodes",
+        "question": "In a graph of a city's metro system, what would the nodes most likely represent?",
+        "options":
+            [
+                "The train tracks",
+                "The stations",
+                "The ticket prices",
+                "The travel times"
+            ],
+        "answer": "The stations",
+        "hint": "Nodes are the 'things'.",
+        "reteach":"Stations are places you travel between, so they are the nodes."
     }
+
+
 
 ]

@@ -34,7 +34,10 @@ export const sections=
             {   type: "divider"},
             {   type: "paragraph", text: "A grpah is a way of representing things and the connection between them. The 'things' are called {{accent:vertices}} (singular vertex). In programming, they are often called {{accent:nodes}}. The two words mean the same thing." },
             {   type: "paragraph", text: "A vetex can represnt anything: a city on a map, a person in a social netwrk, a web page, a train station. On its own, a vertex is just a labelled point. In diagrams, vertices are drawns as circles with names inside, such as A, B or C." },
-            {   type: "paragraph", text: "Example: A small road netwokr has four towns: Pretoria, Johannesburg, Midrand and Centurion. This graph has 4 vetices" }
+            {   type: "paragraph", text: "Example: A small road netwokr has four towns: Pretoria, Johannesburg, Midrand and Centurion. This graph has 4 vetices" },
+            {   type:"divider"},
+            {   type: "paragraph", text: "{{bold: Mini Test}}"},
+            {   type: "quiz", section:"nodes"}
         ]
     },
 
@@ -63,7 +66,7 @@ export const sections=
             {   type: "paragraph", text: "Example: If Pretoria- Midrand and Midrand-Johannesburg are edges, then Midrand is a neighbour of both Pretoria and Johannesburg. Pretoria and Johannesburg are not neighbours, becuase no edge joins the, directly."},
             {   type:"divider"},
             {   type: "paragraph", text: "{{bold: Try It}}"},
-            {   type: "interactive", name: "edge"},
+            {   type: "interactive", name: "edge", "allowWeights": false},
             {   type:"divider"},
             {   type: "paragraph", text: "{{bold: Mini Test}}"},
             {   type: "quiz", section:"edges"}
@@ -85,7 +88,7 @@ export const sections=
             {   type: "divider"},
             {   type: "paragraph", text: "In a {{accent:weighted graph}}, every edge has a number attachd to it called a {{accent:weight}}. The weoght can represent distance, travel time, cost or any other measure. For example, an edge between two towns might have weight 40 to show they are 40 km apart."},
             {   type: "paragraph", text: "A {{accent:path}} is a sequence of vertices wehre each consecutitve pair is joined by an edge. The {{accent:cost}} of a path is the sum of the wieghts of its edges."},
-            {   type: "paragraph", text: "Example: take edges A-B (weigth 4), B-D (weight 5), A-C (weight ) and C-D (weigth 8)."},
+            {   type: "paragraph", text: "Example: take edges A-B (weigth 4), B-D (weight 5), A-C (weight 2) and C-D (weigth 8)."},
             {   type: "list", items:
                 [
                     "Path A-> -> B -> D cost 4+ 5 = {{bold:9}}",
@@ -94,6 +97,10 @@ export const sections=
 
             },
             {   type: "paragraph", text: "Both paths use two edges, byt the first is cheaper"},
+            {   type:"divider"},
+            {   type: "paragraph", text: "{{bold: Try It}}"},
+            {   type: "interactive", name: "edge"},
+            {   type:"divider"},
             {   type: "paragraph", text: "The fewest-edges path is {{bold:not}} always the cheapest path. A route with more edges can still cost less in total if its weights are small enough."},
             {   type: "divider"},
             {   type: "paragraph", text: "{{bold:Shortest path problem}}"},

@@ -53,9 +53,15 @@ function SectionPage({ section, onComplete=()=>{} }) {
           return <DijkstraAnimation key={index} />
         }
 
-        if (block.type =="interactive")
+        if (block.type === "interactive")
         {
-          return block.name ==="edge"? <EdgeExplorer key={index}/> :null;
+          return block.name === "edge"
+            ? <EdgeExplorer
+                key={index}
+                allowWeights={block.allowWeights ?? true}
+                allowDirections={block.allowDirections ?? true}
+              />
+            : null;
         }
         if (block.type ==="quiz")
         {

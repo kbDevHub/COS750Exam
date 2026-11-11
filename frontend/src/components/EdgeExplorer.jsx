@@ -7,10 +7,15 @@ const EDGES =
     {id: 1, from: "A", to: "B", w:4 },
     {id: 2, from: "A", to: "C", w:2 },
     {id: 3, from: "B", to: "D", w:5 },
-    {id: 4, from: "C", to: "D", w:1 },
+    {id: 4, from: "C", to: "D", w:8 },
 ]
-export default function EdgeExplorer()
+export default function EdgeExplorer({
+    allowWeights = true,
+    allowDirections = true,
+})
 {
+
+
     const [weighted, setWeighted] = useState(false);
     const [directed, setDirected]= useState(false);
     const [picked, setPicked]= useState(null);
@@ -19,8 +24,10 @@ export default function EdgeExplorer()
 
  return (
     <div>
-      <label><input type="checkbox" checked={weighted} onChange={(e) => setWeighted(e.target.checked)} /> Show weights</label>{" "}
-      <label><input type="checkbox" checked={directed} onChange={(e) => setDirected(e.target.checked)} /> Show directions</label>
+      {allowWeights && (
+      <label><input type="checkbox" checked={weighted} onChange={(e) => setWeighted(e.target.checked)} /> Show weights</label>)}{" "}
+      {allowDirections && (
+      <label><input type="checkbox" checked={directed} onChange={(e) => setDirected(e.target.checked)} /> Show directions</label> )}
 
       <svg viewBox="0 0 320 250" width="100%" style={{ background: "#f7f7fb", borderRadius: 8 }}>
         <defs>
