@@ -162,6 +162,9 @@ export const sections=
             {   type: "paragraph", text:"{{bold:Why is works}}"},
             {   type: "paragraph", text :"Always visiting the closest unvisited vertex first guarentees its distance cannot be improved later becuase every other route would have to pass through vertices that are at least as far away."},
             {   type: "divider"},
+            {   type: "paragraph", text:"{{bold:Greedy Algorithm}}"},
+            {   type: "paragraph", text: "Dijkstra's algorithm is known as a {{accent:Greedy Algorithm}} becasue at every step it makes the choice that looks best right now: it picks the unvisited vertex witht the {{bold:smallest distance}} form the source, and locks that distance in."},
+            {   type: "paragraph", text: "It never goes back to change a decision once a vertex has been finalised. This is safe becuase all edge weights are {{bold:non-negative}}. Any other route to tha vertex would have to pass through vertices that are already further away, and adding more weights can only make the total bigger, never smaller."},
             {   type: "paragraph", text:"{{bold:Limitation}}"},
             {   type: "paragraph", text: "Negative edge weights break this guarentee, so Dijkstra's algorithm cannot beused on graphs with negative weights."}
 
