@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useProgress } from "./Progress";
 
 const MAX_ATTEMPTS = 2;
 
@@ -67,6 +68,7 @@ export default function QuizRunner({ section, onPass = () => { } }) {
   const [missed, setMissed] = useState([]); // ids not answered within MAX_ATTEMPTS
   const navigate = useNavigate();
   const nextChapter = getNextChapter(section);
+  const { markComplete } = useProgress();
 
   // Load questions from the backend
   useEffect(() => {
@@ -177,6 +179,7 @@ export default function QuizRunner({ section, onPass = () => { } }) {
     if (status === "wrong") setMissed(finalMissed);
 
     if (isLast) {
+      markComplete(`/${section}`);
       onPass(finalMissed);
       if (nextChapter) navigate(nextChapter.path);
       return;

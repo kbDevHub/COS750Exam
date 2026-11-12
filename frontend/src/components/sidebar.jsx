@@ -1,5 +1,7 @@
 
 import { NavLink } from "react-router-dom";
+import { Check, ChevronRight } from "lucide-react";
+import { useProgress } from "./Progress";
 
 function Sidebar() {
     const units = [
@@ -26,6 +28,8 @@ function Sidebar() {
             : "text-gray-300 hover:bg-[#374151] hover:text-white"
         }`;
 
+    const { completed } = useProgress();
+
     return (
         <aside className="fixed left-0 top-0 z-50 flex h-screen w-[220px] flex-col overflow-y-auto bg-[#1f2937] px-4 py-6 font-mono text-white">
 
@@ -50,28 +54,62 @@ function Sidebar() {
 
                 {/* Units */}
                 <div className="mt-7">
-                    {units.map((unit) => (
-                        <div key={unit.title} className="mb-7">
-                            <p className="mb-2 px-3 text-xs font-bold uppercase tracking-wider text-gray-400">
-                                {unit.title}
-                            </p>
+                    {units.map((unit) => {
+                        const doneCount = unit.sections.filter((s) => completed.includes(s.path)).length;
+                        const total = unit.sections.length;
+                        const pct = (doneCount / total) * 100;
 
-                            <ul className="space-y-1 border-l border-gray-600 ml-3">
-                                {unit.sections.map((section) => (
-                                    <li key={section.path}>
-                                        <NavLink
-                                            to={section.path}
-                                            className={({ isActive }) =>
-                                                `${linkStyle({ isActive })} ml-2`
-                                            }
-                                        >
-                                            {section.title}
-                                        </NavLink>
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-                    ))}
+                        return (
+                            <div key={unit.title} className="mb-7">
+                                <p className="mb-2 px-3 text-xs font-bold uppercase tracking-wider text-gray-400">
+                                    {unit.title}
+                                </p>
+
+                                {/* Unit progress */}
+                                <div className="mb-3 px-3">
+                                    <div
+                                        className="h-1.5 overflow-hidden rounded-full bg-gray-700"
+                                        role="progressbar"
+                                        aria-valuemin={0}
+                                        aria-valuemax={total}
+                                        aria-valuenow={doneCount}
+                                        aria-label={`${unit.title} progress`}
+                                    >
+                                        <div
+                                            className="h-full rounded-full bg-emerald-500 transition-all duration-500"
+                                            style={{ width: `${pct}%` }}
+                                        />
+                                    </div>
+                                    <p className="mt-1 text-[11px] text-gray-400">
+                                        {doneCount} of {total} complete
+                                    </p>
+                                </div>
+
+                                <ul className="ml-3 space-y-1 border-l border-gray-600">
+                                    {unit.sections.map((section) => {
+                                        const done = completed.includes(section.path);
+                                        return (
+                                            <li key={section.path}>
+                                                <NavLink
+                                                    to={section.path}
+                                                    className={({ isActive }) =>
+                                                        `${linkStyle({ isActive })} ml-2 flex items-center justify-between gap-2`
+                                                    }
+                                                >
+                                                    <span>{section.title}</span>
+                                                    {done ? (
+                                                        <Check size={14} className="shrink-0 text-emerald-400" aria-label="Completed" />
+                                                    ) : (
+                                                        <ChevronRight size={14} className="shrink-0 text-gray-500" aria-hidden="true" />
+                                                    )}
+                                                </NavLink>
+                                            </li>
+                                        );
+                                    })}
+                                </ul>
+                            </div>
+                        );
+                    })}
                 </div>
 
                 {/* Test Yourself */}

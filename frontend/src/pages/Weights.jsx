@@ -78,14 +78,7 @@ function Weights() {
                 <p>Both paths use two edges, but the first path is cheaper.</p>
             </section>
 
-            <section className="space-y-3">
-                <h2 className="text-2xl font-bold text-slate-900">
-                    The Shortest Path Problem
-                </h2>
-                <p className="leading-7">
-                    The shortest path problem asks which path has the lowest total cost between a starting vertex and a destination vertex.
-                </p>
-            </section>
+            
 
         </div>
     );
