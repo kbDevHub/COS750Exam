@@ -1,25 +1,43 @@
-import { useState } from "react";
-import Sidebar from "./components/sidebar";
-import { sections } from "./data/sections";
-import SectionPage from "./components/sectionPage";
-import "./App.css";
+
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+import Sidebar from "./components/Sidebar";
+
+import Introduction from "./pages/Introduction";
+import Nodes from "./pages/Nodes";
+import Edges from "./pages/Edges";
+import Weights from "./pages/Weights";
+import Dijkstra from "./pages/Dijkstra";
+import Test from "./pages/Test";
+
 
 function App() {
-  const [activeId, setActiveId] = useState(sections[0].id);
-  const activeSection = sections.find((s) => s.id === activeId);
+    return (
+        <BrowserRouter>
+            <div className="flex min-h-screen bg-gray-50">
 
-  return (
-    <div className="app-layout">
-      <Sidebar
-        sections={sections}
-        activeId={activeId}
-        onSelect={setActiveId}
-      />
-      <main className="content">
-        <SectionPage section={activeSection} />
-      </main>
-    </div>
-  );
+                {/* Sidebar */}
+                <Sidebar />
+
+                {/* Main content */}
+                <main className="ml-[180px] min-w-0 flex-1 px-6 py-8 md:px-12 md:py-10">
+                    <div className="mx-auto max-w-5xl">
+
+                        <Routes>
+                            <Route path="/" element={<Introduction />} />
+                            <Route path="/nodes" element={<Nodes />} />
+                            <Route path="/edges" element={<Edges />} />
+                            <Route path="/weights" element={<Weights />} />
+                            <Route path="/dijkstra" element={<Dijkstra />} />
+                            <Route path="/test" element={<Test />} />
+                        </Routes>
+
+                    </div>
+                </main>
+
+            </div>
+        </BrowserRouter>
+    );
 }
 
 export default App;

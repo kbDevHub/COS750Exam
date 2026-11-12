@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 
 const shuffle = (arr) => [...arr].sort(() => Math.random() - 0.5);
 
-export default function QuizRunner({ section, onPass }) {
+export default function QuizRunner({section,onPass = () => {},}) {
   const [questions, setQuestions] = useState([]);
   const [loadError, setLoadError] = useState(false);
 
