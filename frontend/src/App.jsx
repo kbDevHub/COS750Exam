@@ -1,7 +1,7 @@
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-import Sidebar from "./components/Sidebar";
+import Sidebar from "./components/sidebar";
 
 import Introduction from "./pages/Introduction";
 import Nodes from "./pages/Nodes";
@@ -9,6 +9,8 @@ import Edges from "./pages/Edges";
 import Weights from "./pages/Weights";
 import Dijkstra from "./pages/Dijkstra";
 import Test from "./pages/Test";
+import Short from "./pages/Short";
+import NoteTaker from "./components/NoteTaker";
 
 
 function App() {
@@ -18,6 +20,7 @@ function App() {
 
                 {/* Sidebar */}
                 <Sidebar />
+                <NoteTaker />
 
                 {/* Main content */}
                 <main className="ml-[180px] min-w-0 flex-1 px-6 py-8 md:px-12 md:py-10">
@@ -30,6 +33,7 @@ function App() {
                             <Route path="/weights" element={<Weights />} />
                             <Route path="/dijkstra" element={<Dijkstra />} />
                             <Route path="/test" element={<Test />} />
+                            <Route path="/shortest-path" element={<Short />} />
                         </Routes>
 
                     </div>
