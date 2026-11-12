@@ -32,7 +32,7 @@
     {
         "id": "edges-3",
         "section": "edges",
-        "question": "In a DIRECTED graph, ther is an edge A -> B. Can you automatically travel from B to A?",
+        "question": "In a DIRECTED graph, there is an edge A -> B. Can you automatically travel from B to A?",
         "options":
             [
                 "Yes, edges always work both ways",
@@ -51,11 +51,11 @@
         "options":
             [
                 "A connection between two points",
-                "A point that represnts an object or entity, such as a town or a person",
-                "The cost of travelling between two points",
+                "A point that represents an object or entity, such as a town or a person",
+                "The cost of traveling between two points",
                 "A route through the graph"
             ],
-        "answer": "A point that represnts an object or entity, such as a town or a person",
+        "answer": "A point that represents an object or entity, such as a town or a person",
         "hint": "Picture a map drawn as dots and lines. Which of the two are the dots?",
         "reteach":"A node, also called a vertex, is a single point in a graph that stands for a 'thing' like a city, person or a computer."
     },
@@ -118,7 +118,7 @@
             ],
         "answer": "The source is 0 and all others are infinity",
         "hint": "It costs nothing to get where you already are, and you haven't found a route to anywhere else yet.",
-        "reteach":"The source is 0 becuase you are already there. Every other vertex starts at infinity, meaning 'no route found yet'. Real distances replace the infinities as the algorithm discovers paths."
+        "reteach":"The source is 0 because you are already there. Every other vertex starts at infinity, meaning 'no route found yet'. Real distances replace the infinities as the algorithm discovers paths."
     },
     {
         "id": "dijk-3",
@@ -129,7 +129,7 @@
                 "The vertex that was added first",
                 "The unvisited vertex with the smallest tentative distance",
                 "A random neighbour of the current vertex",
-                "The vertex witht the most edges"
+                "The vertex with the most edges"
             ],
         "answer": "The unvisited vertex with the smallest tentative distance",
         "hint": "The algorithm is 'greedy': it always locks in the cheapest option available",
