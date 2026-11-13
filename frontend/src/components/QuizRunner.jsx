@@ -55,7 +55,7 @@ const btnSecondary =
   "transition hover:bg-slate-100 active:scale-[0.98] focus:outline-none " +
   "focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2";
 
-export default function QuizRunner({ section, onPass = () => { } }) {
+export default function QuizRunner({ section, completePath, onPass = () => { } }) {
   const [questions, setQuestions] = useState([]);
   const [loadError, setLoadError] = useState(false);
 
@@ -179,7 +179,7 @@ export default function QuizRunner({ section, onPass = () => { } }) {
     if (status === "wrong") setMissed(finalMissed);
 
     if (isLast) {
-      markComplete(`/${section}`);
+      markComplete(completePath ?? `/${section}`);
       onPass(finalMissed);
       if (nextChapter) navigate(nextChapter.path);
       return;
