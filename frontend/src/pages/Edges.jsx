@@ -1,8 +1,15 @@
 
 import EdgeExplorer from "../components/EdgeExplorer";
 import QuizRunner from "../components/QuizRunner";
+import EdgesExample from "../components/EdgesExample";
+import ReadAloud from "../components/ReadAloud";
 
-function Edges() {
+
+const DEF_EDGE =
+  "An edge is a line that connects two vertices. It represents a relationship between them, such as a path between two places or a friendship between two people";
+  const DEF_ADJ="Two vertices joined by an edge are called adjacent, or neighbours";
+
+  function Edges() {
   return (
     <div className="mx-auto max-w-5xl space-y-8 text-slate-700">
 
@@ -25,8 +32,9 @@ function Edges() {
 
       <section className="space-y-3">
         <h2 className="text-2xl font-bold text-slate-900">What is an Edge?</h2>
+        <ReadAloud text={DEF_EDGE} />
         <p className="leading-7">
-          An <strong>edge</strong> is a line that connects two vertices. It represents a relationship between them, such as a road between two towns or a friendship between two people.
+          An <strong>edge</strong> is a line that connects two vertices. It represents a relationship between them, such as a path between two places or a friendship between two people.
         </p>
       </section>
 
@@ -50,8 +58,17 @@ function Edges() {
         </div>
       </section>
 
+      <section className="space-y-4">
+        <h2 className="text-2xl font-bold text-slate-900">Try It</h2>
+        <p>Click on the edges to explore the connections. Try switching between directed and undirected edges.</p>
+        <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+          <EdgeExplorer allowWeights={false} allowDirections={true} />
+        </div>
+      </section>
+
       <section className="space-y-3">
         <h2 className="text-2xl font-bold text-slate-900">Adjacent Vertices</h2>
+        <ReadAloud text={DEF_ADJ}/>
         <p>
           Two vertices joined by an edge are called <strong>adjacent</strong>, or <strong>neighbours</strong>.
         </p>
@@ -61,18 +78,13 @@ function Edges() {
       <section className="space-y-3">
         <h2 className="text-2xl font-bold text-slate-900">Example</h2>
         <p>
-          If Pretoria–Midrand and Midrand–Johannesburg are edges, then Midrand is a neighbour of both Pretoria and Johannesburg.
+          If IT Building–Merensky and Merensky–Aula are edges, then Merensky is a neighbour of both IT Building and Aula.
         </p>
         <p>
-          Pretoria and Johannesburg are not neighbours because no edge joins them directly.
+          IT Building and Aula are not neighbours because no edge joins them directly.
         </p>
-      </section>
-
-      <section className="space-y-4">
-        <h2 className="text-2xl font-bold text-slate-900">Try It</h2>
-        <p>Click on the edges to explore the connections. Try switching between directed and undirected edges.</p>
         <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
-          <EdgeExplorer allowWeights={false} allowDirections={true} />
+          <EdgesExample />
         </div>
       </section>
 

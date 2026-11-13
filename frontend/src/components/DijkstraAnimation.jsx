@@ -31,7 +31,7 @@ export default function DijkstraAnimation() {
           return (
             <g key={k}>
               <line x1={a.x} y1={a.y} x2={b.x} y2={b.y}
-                    stroke={active ? "#2563eb" : "#9ca3af"} strokeWidth={active ? 4 : 2} />
+                    stroke={active ? "#4f46e5" : "#9ca3af"} strokeWidth={active ? 4 : 2} />
               <text x={(a.x + b.x) / 2} y={(a.y + b.y) / 2 - 6} textAnchor="middle" fontSize="13">{e.w}</text>
             </g>
           );
