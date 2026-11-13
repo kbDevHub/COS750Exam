@@ -2,6 +2,7 @@ import QuizRunner from "../components/QuizRunner";
 import CampusGraph from "../components/Test/CampusGraph.jsx";
 import {CAMPUS_GRAPH, MATRIX_GRAPH} from "../data/testGraphs.js";
 import AdjacencyMatrix from "../components/Test/AdjacencyMatrix.jsx";
+import DijkstraTrace from "../components/Test/DijkstraTrace.jsx";
 
 function Test() {
   return (
@@ -57,6 +58,22 @@ function Test() {
        </div >
        <QuizRunner section = "final-matrix" />
       </section >
+
+      { /* Part 3: Dijkstra */}
+      <section className = "rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+        <h2 className = "mb-3 text-2xl font-bold text-slate-900">
+          Part 3: Dijkstra 's algorithm
+        </h2>
+        <DijkstraTrace/>
+        <hr className = "my-8 border-slate-200"/>
+        <h3 className = "mb-3 text-lg font-semibold text-slate-900" >
+          Question 2
+        </h3>
+        <p className = "mb-4 leading-7">
+          Answer the following questions. Use your solution from Question 1 to answer the first question.
+        </p>
+        <QuizRunner section = "final-dijkstra"/>
+      </section>
     </div>
   );
 }

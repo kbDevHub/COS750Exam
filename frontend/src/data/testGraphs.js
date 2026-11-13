@@ -1,3 +1,9 @@
+/* Each drawn graph has:
+ *   nodes    { name: [x, y] }   x, y only position the circle in the diagram
+ *   edges    [[from, to, weight]]
+ *   viewBox  "0 0 width height" of the drawing; enlarge it if you move nodes outward
+ */
+
 /* ---------- Part 1: University of Pretoria campuses  [final-basics] ---------- */
 // Undirected. Weights are approximate distances in km, taken from google maps.
 // Node's third value is where its name is drawn: "above" | "below" | "left" | "right".
@@ -54,5 +60,22 @@ export const MATRIX_GRAPH = {
     ["A", "C", 2],
     ["B", "D", 5],
     ["C", "D", 1],
+  ],
+};
+
+
+/* ---------- Part 3: Dijkstra trace table  [final-dijkstra] ---------- */
+// Directed. The table has one iteration column per vertex.
+export const TRACE_GRAPH = {
+  source: "A",
+  viewBox: "0 0 340 250",
+  nodes: {
+    A: [40, 110], B: [140, 40], C: [140, 110], D: [300, 40], E: [300, 210],
+  },
+  edges: [
+    ["A", "B", 1], ["A", "C", 3], ["A", "E", 5],
+    ["B", "C", 1], ["B", "D", 4],
+    ["C", "E", 3], ["C", "D", 1],
+    ["D", "E", 1],
   ],
 };
