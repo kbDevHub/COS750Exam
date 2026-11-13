@@ -165,7 +165,7 @@
             ],
         "answer": "5.8 km",
         "hint": "The weight is the number written on the edge (the line) joining the two campuses.",
-        "reteach": "In a weighted graph, each edge carries a number. Here the weight is the distance in km, and the Hatfield-Prinshof edge is 5.8 km. The 5.7 km edge joins Groenkloof and Prinshof."
+        "reteach": "In a weighted graph, each edge bears a value. Here the weight is the distance in km, and the Hatfield-Prinshof edge is 5.8 km. The 5.7 km edge joins Groenkloof and Prinshof."
     },
     {
         "id": "final-basics-3",
