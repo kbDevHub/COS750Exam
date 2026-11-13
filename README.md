@@ -120,38 +120,6 @@ To check the backend on its own, open `http://127.0.0.1:8000/docs`. This page le
 | GET | `/api/questions/{section}` | Returns the questions for a section (without answers) |
 | POST | `/api/check-answer` | Takes `{ questionId, answer }` and returns `{ correct: true/false }` |
 
-## Adding or editing content
-
-### Section text
-
-Section content is written as data in `sections.js`. Each section is a list of blocks (`heading`, `paragraph`, `list`, `numbered`, `objectives`, `divider`, `animation`, `interactive`, `quiz`). To add a mini test to a section, add this block at the end of its content:
-
-```js
-{ type: "quiz", section: "edges" }
-```
-
-### Quiz questions
-
-Questions live in `backend/data/questions.json`:
-
-```json
-{
-  "id": "edges-1",
-  "section": "edges",
-  "question": "What is an edge in a graph?",
-  "options": ["A connection between two nodes", "A single item", "..."],
-  "answer": "A connection between two nodes",
-  "hint": "Look at the lines in the diagram. What do they join?",
-  "reteach": "An edge is a line joining two nodes..."
-}
-```
-
-Rules:
-- `section` must match the section's `id` in `sections.js` exactly (`nodes`, `edges`, `weights`, `dijkstra`).
-- `id` must be unique and follow the `section-number` pattern.
-- `answer` must be copied **exactly** from one of the `options`. Marking is a plain text comparison.
-- The backend reads the file when it starts, so **restart `npm run dev` after editing it**.
-- Check the JSON syntax (commas between questions, none after the last one). A syntax error stops the backend from starting.
 
 ## Troubleshooting
 
