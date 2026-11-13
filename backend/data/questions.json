@@ -134,6 +134,112 @@
         "answer": "The unvisited vertex with the smallest tentative distance",
         "hint": "The algorithm is 'greedy': it always locks in the cheapest option available",
         "reteach":"Dijkstra repeatedly picks the unvisited vertex that currently has the smallest distance from the source and finalises it. Since all weights are non-negative, no later route can beat that distance."
-    }
+    },
 
+
+    {
+        "id": "final-basics-1",
+        "section": "final-basics",
+        "question": "How many nodes does the campus graph have?",
+        "options":
+            [
+                "6",
+                "8",
+                "14",
+                "It depends on the roads"
+            ],
+        "answer": "6",
+        "hint": "Nodes are the 'things'. What are the circles in the diagram?",
+        "reteach": "Each campus is a node, and there are six campuses. The 8 is the number of edges (roads), not nodes."
+    },
+    {
+        "id": "final-basics-2",
+        "section": "final-basics",
+        "question": "What is the weight of the edge between Hatfield and Prinshof?",
+        "options":
+            [
+                "5.8 km",
+                "5.7 km",
+                "4.3 km",
+                "15.9 km"
+            ],
+        "answer": "5.8 km",
+        "hint": "The weight is the number written on the edge (the line) joining the two campuses.",
+        "reteach": "In a weighted graph, each edge carries a number. Here the weight is the distance in km, and the Hatfield-Prinshof edge is 5.8 km. The 5.7 km edge joins Groenkloof and Prinshof."
+    },
+    {
+        "id": "final-basics-3",
+        "section": "final-basics",
+        "question": "Which campus is joined to only one other campus by a road?",
+        "options":
+            [
+                "Hatfield",
+                "Prinshof",
+                "Mamelodi",
+                "Onderstepoort"
+            ],
+        "answer": "Mamelodi",
+        "hint": "Count the lines touching each circle.",
+        "reteach": "Mamelodi has just one edge, to Hatfield. Hatfield has five, Prinshof has three, and Onderstepoort has two."
+    },
+    {
+        "id": "final-basics-4",
+        "section": "final-basics",
+        "question": "Which of these is a valid path from Hillcrest to Onderstepoort?",
+        "options":
+            [
+                "Hillcrest -> Hatfield -> Prinshof -> Onderstepoort",
+                "Hillcrest -> Prinshof -> Onderstepoort",
+                "Hillcrest -> Mamelodi -> Onderstepoort",
+                "Hillcrest -> Groenkloof -> Mamelodi -> Onderstepoort"
+            ],
+        "answer": "Hillcrest -> Hatfield -> Prinshof -> Onderstepoort",
+        "hint": "A path is valid only if every consecutive pair of campuses is joined by an edge.",
+        "reteach": "Check each step. Hillcrest-Hatfield, Hatfield-Prinshof and Prinshof-Onderstepoort are all edges, so the first path is valid. The others use a step with no edge, such as Hillcrest-Prinshof or Mamelodi-Onderstepoort."
+    },
+    {
+        "id": "final-basics-5",
+        "section": "final-basics",
+        "question": "What is the total cost of the path Hatfield -> Groenkloof -> Prinshof?",
+        "options":
+            [
+                "10.0 km",
+                "10.1 km",
+                "5.7 km",
+                "4.3 km"
+            ],
+        "answer": "10.0 km",
+        "hint": "Add up the weights of every edge along the path, not just one.",
+        "reteach": "The path uses two edges: Hatfield-Groenkloof (4.3 km) and Groenkloof-Prinshof (5.7 km). The cost of a path is the sum of its edge weights: 4.3 + 5.7 = 10.0 km."
+    },
+    {
+        "id": "final-basics-6",
+        "section": "final-basics",
+        "question": "A graph models a social network where people can be friends. What do the nodes and edges represent?",
+        "options":
+            [
+                "Nodes are friendships and edges are people",
+                "Nodes are people and edges are friendships",
+                "Nodes are messages and edges are people",
+                "Nodes and edges both represent people"
+            ],
+        "answer": "Nodes are people and edges are friendships",
+        "hint": "Nodes are the 'things'. Edges are the connections between them.",
+        "reteach": "A person is a thing, so each person is a node. A friendship connects two people, so each friendship is an edge."
+    },
+    {
+        "id": "final-basics-7",
+        "section": "final-basics",
+        "question": "A graph models airports and the flights between them. Each flight has a ticket price. What is the weight of an edge?",
+        "options":
+            [
+                "The airport's name",
+                "The number of airports in the graph",
+                "The ticket price of that flight",
+                "Whether the flight is direct"
+            ],
+        "answer": "The ticket price of that flight",
+        "hint": "The weight is the cost or distance attached to an edge.",
+        "reteach": "Airports are the nodes and flights are the edges. A weight is a number attached to an edge, such as a price, distance or time, so here it is the ticket price."
+    }
 ]

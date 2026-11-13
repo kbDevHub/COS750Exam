@@ -1,34 +1,46 @@
+import QuizRunner from "../components/QuizRunner";
+import CampusGraph from "../components/Test/CampusGraph.jsx";
+import { CAMPUS_GRAPH } from "../data/testGraphs.js";
 
 function Test() {
   return (
-    <div className="section-page">
-      <h1>Test Yourself</h1>
+    <div className="mx-auto max-w-5xl space-y-8 text-slate-700">
 
-      <p>
-        Test your understanding of graph theory by
-        completing the questions below.
-      </p>
+      <header>
+        <h1 className="text-4xl font-bold text-slate-900">Test Yourself</h1>
+        <p className="mt-3 leading-7">
+          Test your understanding of graph theory. The assessment covers every
+          topic in this learning module and has three parts.
+        </p>
+      </header>
 
-      <h2>Topics Covered</h2>
+      <section className="rounded-xl border border-indigo-500 bg-indigo-50 p-6">
+        <h2 className="mb-3 text-2xl font-semibold text-indigo-900">Topics Covered</h2>
+        <ul className="list-inside list-disc space-y-1">
+          {/*<li>Introduction to Graphs</li>*/}
+          <li>Nodes</li>
+          <li>Edges</li>
+          <li>Weighted Graphs and Paths</li>
+          <li>Adjacency Matrix</li>
+          <li>Dijkstra's Algorithm</li>
+        </ul>
+      </section>
 
-      <ul>
-        <li>Introduction to Graphs</li>
-        <li>Nodes and Vertices</li>
-        <li>Edges</li>
-        <li>Weighted Graphs and Paths</li>
-        <li>Dijkstra's Algorithm</li>
-      </ul>
-
-      <hr />
-
-      <h2>Final Assessment</h2>
-
-      <p>
-        Your assessment will cover all the topics
-        discussed in this learning module.
-      </p>
-
-      {/* Add your final assessment quiz here */}
+    {/* Part 1: nodes, edges, weights (campus graph + real-world examples) */}
+      <section className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+        <h2 className="mb-3 text-2xl font-bold text-slate-900">
+          Part 1: Nodes, edges and weights
+        </h2>
+        <p className="mb-4 leading-7">
+          The graph shows {Object.keys(CAMPUS_GRAPH.nodes).length} University of
+          Pretoria campuses and the roads between them. Use it to answer the
+          first five questions.
+        </p>
+        <div className="mb-6">
+          <CampusGraph />
+        </div>
+        <QuizRunner section="final-basics" />
+      </section>
     </div>
   );
 }
