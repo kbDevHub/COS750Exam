@@ -241,5 +241,96 @@
         "answer": "The ticket price of that flight",
         "hint": "The weight is the cost or distance attached to an edge.",
         "reteach": "Airports are the nodes and flights are the edges. A weight is a number attached to an edge, such as a price, distance or time, so here it is the ticket price."
-    }
+    },
+
+    {
+    "id": "final-matrix-1",
+    "section": "final-matrix",
+    "question": "A graph has vertices A, B, C and D. Its adjacency matrix is given row by row (columns in the order A, B, C, D):\nA: 0 4 2 0\nB: 4 0 0 5\nC: 2 0 0 1\nD: 0 5 1 0\nWhat is the weight of the edge between A and B?",
+    "options":
+        [
+            "0",
+            "2",
+            "4",
+            "5"
+        ],
+    "answer": "4",
+    "hint": "Find row A, then look at the column for B.",
+    "reteach": "The entry in row A, column B is the weight of the edge from A to B. Here it is 4."
+},
+{
+    "id": "final-matrix-2",
+    "section": "final-matrix",
+    "question": "Using the same matrix, is there an edge between A and D?",
+    "options":
+        [
+            "Yes, with weight 0",
+            "Yes, with weight 5",
+            "No, because the entry is 0",
+            "You cannot tell from a matrix"
+        ],
+    "answer": "No, because the entry is 0",
+    "hint": "Look at row A, column D. What does a 0 stand for?",
+    "reteach": "In a weighted adjacency matrix, 0 means there is no edge between those two vertices. A and D are not directly connected."
+},
+{
+    "id": "final-matrix-3",
+    "section": "final-matrix",
+    "question": "How many edges does this undirected graph have?",
+    "options":
+        [
+            "4",
+            "6",
+            "8",
+            "16"
+        ],
+    "answer": "4",
+    "hint": "The matrix has 8 non-zero entries. In an undirected graph, how many entries does each edge use?",
+    "reteach": "An undirected edge appears twice in the matrix (once above the diagonal and once below), so 8 non-zero entries means 4 edges: A-B, A-C, B-D and C-D."
+},
+{
+    "id": "final-matrix-4",
+    "section": "final-matrix",
+    "question": "Which list of edges matches the matrix?",
+    "options":
+        [
+            "A-B (4), A-C (2), B-D (5), C-D (1)",
+            "A-B (4), A-D (2), B-C (5), C-D (1)",
+            "A-B (2), A-C (4), B-D (1), C-D (5)",
+            "A-B (4), A-C (2), B-D (5), A-D (1)"
+        ],
+    "answer": "A-B (4), A-C (2), B-D (5), C-D (1)",
+    "hint": "Go through the matrix row by row and write down each non-zero entry with its two vertices.",
+    "reteach": "Row A gives A-B (4) and A-C (2). Row B adds B-D (5). Row C adds C-D (1). Row D repeats edges you already have."
+},
+{
+    "id": "final-matrix-5",
+    "section": "final-matrix",
+    "question": "In another graph's adjacency matrix, the entry in row A, column B is 3, but the entry in row B, column A is 0. What does this tell you?",
+    "options":
+        [
+            "The edge is undirected with weight 3",
+            "There is a directed edge from A to B with weight 3, but none from B to A",
+            "There is no edge between A and B",
+            "The matrix contains an error"
+        ],
+    "answer": "There is a directed edge from A to B with weight 3, but none from B to A",
+    "hint": "Rows are where an edge starts and columns are where it ends. Is the matrix symmetric here?",
+    "reteach": "An undirected graph always gives a symmetric matrix. When the two entries differ, the edges are directed. Row A, column B is the edge A -> B, and row B, column A is the edge B -> A."
+},
+{
+    "id": "final-matrix-6",
+    "section": "final-matrix",
+    "question": "A road network has 1,000 towns, but each town connects to only about 4 others. Which representation is the better choice, and why?",
+    "options":
+        [
+            "Adjacency matrix, because it is always faster",
+            "Adjacency list, because it only stores the edges that exist",
+            "Adjacency matrix, because it uses less memory for sparse graphs",
+            "Neither can store a graph this big"
+        ],
+    "answer": "Adjacency list, because it only stores the edges that exist",
+    "hint": "A matrix needs one entry for every PAIR of vertices. How many pairs are there for 1,000 towns?",
+    "reteach": "A matrix for 1,000 vertices needs 1,000 x 1,000 = 1,000,000 entries, even though only about 4,000 are real edges. An adjacency list stores only the edges that exist, so it suits sparse graphs like road networks."
+}
 ]

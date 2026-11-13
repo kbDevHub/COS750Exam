@@ -1,6 +1,7 @@
 import QuizRunner from "../components/QuizRunner";
 import CampusGraph from "../components/Test/CampusGraph.jsx";
-import { CAMPUS_GRAPH } from "../data/testGraphs.js";
+import {CAMPUS_GRAPH, MATRIX_GRAPH} from "../data/testGraphs.js";
+import AdjacencyMatrix from "../components/Test/AdjacencyMatrix.jsx";
 
 function Test() {
   return (
@@ -41,6 +42,21 @@ function Test() {
         </div>
         <QuizRunner section="final-basics" />
       </section>
+
+    {/* Part 2: adjacency matrix */}
+      <section className = "rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+        <h2 className = "mb-3 text-2xl font-bold text-slate-900">
+          Part 2: Adjacency matrices
+        </h2 >
+        <p className = "mb-4 leading-7">
+         This is the adjacency matrix of {MATRIX_GRAPH.directed ? "a directed": "an undirected"}, weighted graph with
+         vertices {MATRIX_GRAPH.vertices.join(", ")}.Use it to answer the first four questions.
+        </p>
+       <div className = "mb-6 overflow-x-auto">
+         <AdjacencyMatrix />
+       </div >
+       <QuizRunner section = "final-matrix" />
+      </section >
     </div>
   );
 }

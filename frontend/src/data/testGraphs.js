@@ -23,3 +23,36 @@ export const CAMPUS_GRAPH = {
     ["Hatfield", "Mamelodi", 20.5],
   ],
 };
+// Full table of estimated distances between every pair of campuses (reference only). Taken from google maps.
+export const CAMPUS_ALL_DISTANCES = [
+  ["Hatfield", "Groenkloof", 4.3],
+  ["Hatfield", "Hillcrest", 2.6],
+  ["Hatfield", "Prinshof", 5.8],
+  ["Hatfield", "Mamelodi", 20.5],
+  ["Hatfield", "Onderstepoort", 15.9],
+  ["Hillcrest", "Groenkloof", 6.7],
+  ["Hillcrest", "Prinshof", 8.1],
+  ["Hillcrest", "Mamelodi", 20.0],
+  ["Hillcrest", "Onderstepoort", 18.2],
+  ["Prinshof", "Mamelodi", 25.0],
+  ["Prinshof", "Groenkloof", 5.7],
+  ["Prinshof", "Onderstepoort", 11.6],
+  ["Mamelodi", "Groenkloof", 24.9],
+  ["Mamelodi", "Onderstepoort", 35.0],
+  ["Groenkloof", "Onderstepoort", 15.9],
+];
+
+
+
+/* ---------- Part 2: adjacency matrix  [final-matrix] ---------- */
+// vertices = row/column order. directed: false fills both [a][b] and [b][a].
+export const MATRIX_GRAPH = {
+  vertices: ["A", "B", "C", "D"],
+  directed: false,
+  edges: [
+    ["A", "B", 4],
+    ["A", "C", 2],
+    ["B", "D", 5],
+    ["C", "D", 1],
+  ],
+};
