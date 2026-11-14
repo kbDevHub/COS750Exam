@@ -164,8 +164,14 @@ function Sidebar() {
                 </div>
 
                 {/* Test Yourself */}
-                <div className="mt-2 border-t border-gray-700 pt-4 pb-4">
-                    <NavLink to="/test" className={linkStyle} > Test Yourself</NavLink>
+                <div className="mt-2 border-t border-gray-700 pt-4">
+                    <NavLink to="/test" className={({ isActive }) =>
+                      `${linkStyle({ isActive })} flex items-center justify-between gap-2`}>
+                      <span>Test Yourself</span>
+                      {completed.includes("/test") && (
+                        <Check size={14} className="shrink-0 text-emerald-400" aria-label="Completed" />
+                      )}
+                    </NavLink>
                 </div>
             </nav>
 
