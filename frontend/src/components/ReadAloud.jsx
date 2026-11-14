@@ -10,8 +10,8 @@ export default function ReadAloud({ text }) {
 
     return (
         <div className="anim-controls">
-            <button className="anim-btn" onClick={play}>🔊</button>
-            <button className="anim-btn anim-btn-secondary" onClick={stop}>⏸️</button>
+            <button className="anim-btn" onClick={play} aria-label="Read aloud" title="Read aloud">🔊</button>
+            <button className="anim-btn anim-btn-secondary" onClick={stop} aria-label="Stop reading" title="Stop reading">⏸️</button>
         </div>
     );
 }

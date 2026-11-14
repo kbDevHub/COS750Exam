@@ -392,5 +392,34 @@
         "answer": "Bellman-Ford",
         "hint": "It is the algorithm you will meet after Dijkstra when negative weights come up.",
         "reteach": "Bellman-Ford repeatedly relaxes every edge instead of locking in vertices early, so it handles negative weights. It is slower than Dijkstra, which is why Dijkstra is still used when all weights are non-negative."
+    },
+
+    {
+        "id": "shortest-path-1",
+        "section": "shortest-path",
+        "question": "A route uses three roads with driving times of 3, 4 and 2 minutes. What is the total cost of the route?",
+        "options": ["9 minutes", "4 minutes", "3 minutes", "24 minutes"],
+        "answer": "9 minutes",
+        "hint": "The cost of a path combines the weights of all its edges. How do you combine them?",
+        "reteach": "The cost of a path is the SUM of its edge weights: 3 + 4 + 2 = 9. Not the largest weight, and not the product."
+    },
+    {
+        "id": "shortest-path-2",
+        "section": "shortest-path",
+        "question": "Route X uses 2 roads and takes 15 minutes in total. Route Y uses 4 roads and takes 11 minutes in total. Which is the shortest path?",
+        "options": ["Route Y, because its total cost is lower", "Route X, because it uses fewer roads", "Both, because they reach the same place", "Neither, you need to know the first road"],
+        "answer": "Route Y, because its total cost is lower",
+        "hint": "Remember the ambulance: did the route with the fewest roads win?",
+        "reteach": "The shortest path is the one with the LOWEST TOTAL COST, not the fewest edges. Route Y costs 11, which is less than 15, so Route Y is shorter even though it uses more roads."
+    },
+    {
+        "id": "shortest-path-3",
+        "section": "shortest-path",
+        "question": "What does the single-source shortest path problem ask?",
+        "options": ["The lowest-cost path from one start vertex to every other vertex", "The path that uses the fewest edges between two vertices", "The longest path from one start vertex", "The cheapest single edge in the graph"],
+        "answer": "The lowest-cost path from one start vertex to every other vertex",
+        "hint": "'Single-source' tells you how many start vertices there are. Where do the paths go?",
+        "reteach": "Single-source means ONE start vertex (the source). The problem asks for the lowest-cost path from that source to EVERY other vertex in the graph. Dijkstra's algorithm, in the next section, solves it."
     }
+
 ]
