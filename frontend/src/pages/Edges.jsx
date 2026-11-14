@@ -31,8 +31,10 @@ const DEF_EDGE =
       </section>
 
       <section className="space-y-3">
-        <h2 className="text-2xl font-bold text-slate-900">What is an Edge?</h2>
-        <ReadAloud text={DEF_EDGE} />
+        <div className="flex items-center justify-between">
+          <h2 className="text-2xl font-bold text-slate-900">What is an Edge?</h2>
+          <ReadAloud text={DEF_EDGE} />
+        </div>
         <p className="leading-7">
           An <strong>edge</strong> is a line that connects two vertices. It represents a relationship between them, such as a path between two places or a friendship between two people.
         </p>
@@ -67,8 +69,10 @@ const DEF_EDGE =
       </section>
 
       <section className="space-y-3">
-        <h2 className="text-2xl font-bold text-slate-900">Adjacent Vertices</h2>
-        <ReadAloud text={DEF_ADJ}/>
+        <div className="flex items-center justify-between">
+          <h2 className="text-2xl font-bold text-slate-900">Adjacent Vertices</h2>
+          <ReadAloud text={DEF_ADJ}/>
+        </div>
         <p>
           Two vertices joined by an edge are called <strong>adjacent</strong>, or <strong>neighbours</strong>.
         </p>

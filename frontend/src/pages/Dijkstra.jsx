@@ -35,10 +35,12 @@ function Dijkstra() {
       </section>
 
       <section className="space-y-4">
-        <h2 className="border-b border-slate-200 pb-2 text-2xl font-bold text-slate-900">
-          What is Dijkstra's Algorithm?
+        <div className="flex items-center justify-between">
+          <h2 className="border-b border-slate-200 pb-2 text-2xl font-bold text-slate-900">
+            What is Dijkstra's Algorithm?
+          </h2>
           <ReadAloud text={DEF_DIJK}/>
-        </h2>
+        </div>
         <p className="leading-7">
           Dijkstra's algorithm finds the shortest path from one starting vertex to every other vertex in a weighted graph.
         </p>
@@ -145,18 +147,18 @@ function Dijkstra() {
         <h2 className="text-2xl font-bold text-slate-900">
           Reading the Shortest Path
         </h2>
-        <p>To find the path to E, follow the previous vertices backwards:</p>
+        <p>To find the path to P, follow the previous vertices backwards:</p>
 
         <div className="rounded-xl bg-indigo-50 p-5 text-center text-xl font-bold text-indigo-800">
-          E ← D ← B ← C ← A
+          P ← A ← I 
         </div>
 
         <p>
           Therefore, the shortest path is:
-          <strong className="text-indigo-700"> A → C → B → D → E</strong>
+          <strong className="text-indigo-700"> I → A → P</strong>
         </p>
         <p>
-          Total cost: 2 + 1 + 5 + 2 = <strong>10</strong>.
+          Total cost: 4 + 5 = <strong>9</strong>.
         </p>
       </section>
 
