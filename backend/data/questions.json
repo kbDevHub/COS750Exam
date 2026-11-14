@@ -134,6 +134,57 @@
         "answer": "The unvisited vertex with the smallest tentative distance",
         "hint": "The algorithm is 'greedy': it always locks in the cheapest option available",
         "reteach":"Dijkstra repeatedly picks the unvisited vertex that currently has the smallest distance from the source and finalises it. Since all weights are non-negative, no later route can beat that distance."
-    }
+    },
+    {
+        "id": "w1",
+        "section": "weights",
+        "question": "What does the weight on an edge represent?",
+        "options": [
+        "The cost of using that edge, such as distance or time",
+        "The number of vertices it connects",
+        "The name of the edge",
+        "How many times the edge can be used"
+        ],
+        "answer": "The cost of using that edge, such as distance or time",
+        "hint": "Think about the walking minutes on the campus map.",
+        "reteach": "A weight is a number on an edge. It tells you how costly that connection is: distance, travel time or money."
+  },
+  {
+        "id": "w2",
+        "section": "weights",
+        "question": "Path I → A → P uses edges with weights 4 and 5. What is its cost?",
+        "options": ["9", "20", "5", "2"],
+        "answer": "9",
+        "hint": "The cost of a path is a sum.",
+        "reteach": "Add the weights of every edge on the path: 4 + 5 = 9."
+  },
+  {
+        "id": "w3",
+        "section": "weights",
+        "question": "Which statement is true?",
+        "options": [
+        "The path with the fewest edges is not always the cheapest",
+        "The path with the fewest edges is always the cheapest",
+        "A path must use exactly two edges",
+        "Weights are always distances"
+        ],
+        "answer": "The path with the fewest edges is not always the cheapest",
+        "hint": "Remember the direct I → P road that took 12 minutes.",
+        "reteach": "I → P is one edge but costs 12. I → A → P uses two edges but costs only 9. Cost depends on the weights, not the number of edges."
+  },
+  {
+        "id": "w4",
+        "section": "weights",
+        "question": "The shortest path problem asks us to find...",
+        "options": [
+        "the path between two vertices with the lowest total cost",
+        "the path with the most vertices",
+        "the vertex with the most edges",
+        "every path in the graph"
+        ],
+        "answer": "the path between two vertices with the lowest total cost",
+        "hint": "Think about the cheapest route from I to P.",
+        "reteach": "Given a start and an end vertex, we want the path whose edge weights add up to the smallest total."
+  }
 
 ]

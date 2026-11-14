@@ -52,8 +52,7 @@ function Nodes() {
         </p>
       </section>
 
-      <div className="flex items-center justify-between border-b border-slate-300 pb-3 mb-4">
-      </div>
+      <div className="flex items-center justify-between border-b border-slate-300 pb-3 mb-4"/>
 
       {/* Mini Test */}
       <section className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
