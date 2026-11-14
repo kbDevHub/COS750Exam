@@ -89,6 +89,51 @@
         "hint": "Nodes are the 'things'.",
         "reteach":"Stations are places you travel between, so they are the nodes."
     },
+    {
+        "id": "adjacency-1",
+        "section": "adjacency",
+        "question": "In a weighted adjacency matrix, the cell in row C, column F holds 7. What does this tell you?",
+        "options":
+            [
+                "There is an edge from C to F with weight 7",
+                "C has 7 neighbours",
+                "The path from C to F uses 7 edges",
+                "There is no edge between C and F"
+            ],
+        "answer": "There is an edge from C to F with weight 7",
+        "hint": "Rows are where an edge starts and columns are where it ends. What does the number in a cell stand for?",
+        "reteach": "The cell in row C, column F describes the edge that starts at C and ends at F. A number other than 0 means that edge exists, and the number is its weight, so the edge C to F has weight 7."
+    },
+    {
+        "id": "adjacency-2",
+        "section": "adjacency",
+        "question": "Why is every cell on the diagonal of the campus matrix (row I column I, row A column A, and so on) equal to 0?",
+        "options":
+            [
+                "No vertex has an edge to itself",
+                "Every vertex is 0 minutes from its neighbours",
+                "The diagonal is where the start vertex is stored",
+                "The diagonal is left blank for the adjacency list"
+            ],
+        "answer": "No vertex has an edge to itself",
+        "hint": "Row I, column I would be an edge that starts at I and ends at I. Is there one in the drawing?",
+        "reteach": "A diagonal cell, such as row I, column I, would be an edge from a vertex back to itself. The campus graph has no such edge, so every diagonal cell is 0."
+    },
+    {
+        "id": "adjacency-3",
+        "section": "adjacency",
+        "question": "An undirected weighted graph has 5 edges. How many cells in its adjacency matrix are not 0?",
+        "options":
+            [
+                "5",
+                "10",
+                "20",
+                "25"
+            ],
+        "answer": "10",
+        "hint": "An undirected edge works both ways. How many cells does each edge fill?",
+        "reteach": "An undirected edge between X and Y fills row X, column Y and row Y, column X. So 5 edges fill 2 x 5 = 10 cells, mirrored across the diagonal."
+    },
 
     {
         "id": "dijk-1",
@@ -135,9 +180,58 @@
         "hint": "The algorithm is 'greedy': it always locks in the cheapest option available",
         "reteach":"Dijkstra repeatedly picks the unvisited vertex that currently has the smallest distance from the source and finalises it. Since all weights are non-negative, no later route can beat that distance."
     },
-
-
     {
+        "id": "w1",
+        "section": "weights",
+        "question": "What does the weight on an edge represent?",
+        "options": [
+        "The cost of using that edge, such as distance or time",
+        "The number of vertices it connects",
+        "The name of the edge",
+        "How many times the edge can be used"
+        ],
+        "answer": "The cost of using that edge, such as distance or time",
+        "hint": "Think about the walking minutes on the campus map.",
+        "reteach": "A weight is a number on an edge. It tells you how costly that connection is: distance, travel time or money."
+  },
+  {
+        "id": "w2",
+        "section": "weights",
+        "question": "Path I → A → P uses edges with weights 4 and 5. What is its cost?",
+        "options": ["9", "20", "5", "2"],
+        "answer": "9",
+        "hint": "The cost of a path is a sum.",
+        "reteach": "Add the weights of every edge on the path: 4 + 5 = 9."
+  },
+  {
+        "id": "w3",
+        "section": "weights",
+        "question": "Which statement is true?",
+        "options": [
+        "The path with the fewest edges is not always the cheapest",
+        "The path with the fewest edges is always the cheapest",
+        "A path must use exactly two edges",
+        "Weights are always distances"
+        ],
+        "answer": "The path with the fewest edges is not always the cheapest",
+        "hint": "Remember the direct I → P road that took 12 minutes.",
+        "reteach": "I → P is one edge but costs 12. I → A → P uses two edges but costs only 9. Cost depends on the weights, not the number of edges."
+  },
+  {
+        "id": "w4",
+        "section": "weights",
+        "question": "The shortest path problem asks us to find...",
+        "options": [
+        "the path between two vertices with the lowest total cost",
+        "the path with the most vertices",
+        "the vertex with the most edges",
+        "every path in the graph"
+        ],
+        "answer": "the path between two vertices with the lowest total cost",
+        "hint": "Think about the cheapest route from I to P.",
+        "reteach": "Given a start and an end vertex, we want the path whose edge weights add up to the smallest total."
+  },
+  {
         "id": "final-basics-1",
         "section": "final-basics",
         "question": "How many nodes does the campus graph have?",
@@ -392,5 +486,34 @@
         "answer": "Bellman-Ford",
         "hint": "It is the algorithm you will meet after Dijkstra when negative weights come up.",
         "reteach": "Bellman-Ford repeatedly relaxes every edge instead of locking in vertices early, so it handles negative weights. It is slower than Dijkstra, which is why Dijkstra is still used when all weights are non-negative."
+    },
+
+    {
+        "id": "shortest-path-1",
+        "section": "shortest-path",
+        "question": "A route uses three roads with driving times of 3, 4 and 2 minutes. What is the total cost of the route?",
+        "options": ["9 minutes", "4 minutes", "3 minutes", "24 minutes"],
+        "answer": "9 minutes",
+        "hint": "The cost of a path combines the weights of all its edges. How do you combine them?",
+        "reteach": "The cost of a path is the SUM of its edge weights: 3 + 4 + 2 = 9. Not the largest weight, and not the product."
+    },
+    {
+        "id": "shortest-path-2",
+        "section": "shortest-path",
+        "question": "Route X uses 2 roads and takes 15 minutes in total. Route Y uses 4 roads and takes 11 minutes in total. Which is the shortest path?",
+        "options": ["Route Y, because its total cost is lower", "Route X, because it uses fewer roads", "Both, because they reach the same place", "Neither, you need to know the first road"],
+        "answer": "Route Y, because its total cost is lower",
+        "hint": "Remember the ambulance: did the route with the fewest roads win?",
+        "reteach": "The shortest path is the one with the LOWEST TOTAL COST, not the fewest edges. Route Y costs 11, which is less than 15, so Route Y is shorter even though it uses more roads."
+    },
+    {
+        "id": "shortest-path-3",
+        "section": "shortest-path",
+        "question": "What does the single-source shortest path problem ask?",
+        "options": ["The lowest-cost path from one start vertex to every other vertex", "The path that uses the fewest edges between two vertices", "The longest path from one start vertex", "The cheapest single edge in the graph"],
+        "answer": "The lowest-cost path from one start vertex to every other vertex",
+        "hint": "'Single-source' tells you how many start vertices there are. Where do the paths go?",
+        "reteach": "Single-source means ONE start vertex (the source). The problem asks for the lowest-cost path from that source to EVERY other vertex in the graph. Dijkstra's algorithm, in the next section, solves it."
     }
+
 ]

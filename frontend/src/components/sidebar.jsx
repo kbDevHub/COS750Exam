@@ -1,9 +1,20 @@
 
+import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
-import { Check, ChevronRight } from "lucide-react";
+import { Check, ChevronRight, Menu, X } from "lucide-react";
 import { useProgress } from "./Progress";
+import defaultAvatar from "../assets/user.png";
 
 function Sidebar() {
+    const [open, setOpen] = useState(false);
+
+    useEffect(() => {
+        if (!open) return;
+        const onKey = (e) => e.key === "Escape" && setOpen(false);
+        window.addEventListener("keydown", onKey);
+        return () => window.removeEventListener("keydown", onKey);
+    }, [open]);
+
     const units = [
         {
             title: "Unit 1: Graphs",
@@ -11,6 +22,7 @@ function Sidebar() {
                 { title: "1.1 Nodes", path: "/nodes" },
                 { title: "1.2 Edges", path: "/edges" },
                 { title: "1.3 Weighted Graphs", path: "/weights" },
+                { title: "1.4 Adjacency Matrix", path: "/adjacency" }
             ],
         },
         {
@@ -31,18 +43,52 @@ function Sidebar() {
     const { completed } = useProgress();
 
     return (
-        <aside className="fixed left-0 top-0 z-50 flex h-screen w-[220px] flex-col overflow-y-auto bg-[#1f2937] px-4 py-6 font-mono text-white">
+        <>
+        <button
+            type="button"
+            onClick={() => setOpen(true)}
+            aria-label="Open menu"
+            aria-expanded={open}
+            aria-controls="sidebar"
+            className="fixed left-4 top-4 z-40 flex items-center justify-center rounded-lg border bg-white p-2 text-black shadow-sm transition hover:bg-slate-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 md:hidden"
+        >
+            <Menu size={20} strokeWidth={1.8} />
+        </button>
 
-            <div className="mb-8 border-b border-gray-700 pb-5">
-                <h2 className="mb-2 text-lg font-bold">
-                    Pre-Class
-                </h2>
-                <p className="text-sm text-gray-400">
-                    Graphs + Dijkstra
-                </p>
+        {open && (
+            <div
+                className="fixed inset-0 z-40 bg-black/40 md:hidden"
+                onClick={() => setOpen(false)}
+                aria-hidden="true"
+            />
+        )}
+
+        <aside
+            id="sidebar"
+            onClick={(e) => e.target.closest("a") && setOpen(false)}
+            className={`fixed left-0 top-0 z-50 flex h-screen w-[220px] flex-col overflow-hidden bg-[#1f2937] px-4 py-6 font-mono text-white transition-[translate,visibility] duration-200 md:visible md:translate-x-0 ${open ? "visible translate-x-0" : "invisible -translate-x-full"}`}
+        >
+
+            <div className="mb-8 flex items-start justify-between border-b border-gray-700 pb-5">
+                <div>
+                    <h2 className="mb-2 text-lg font-bold">
+                        Pre-Class
+                    </h2>
+                    <p className="text-sm text-gray-400">
+                        Graphs + Dijkstra
+                    </p>
+                </div>
+                <button
+                    type="button"
+                    onClick={() => setOpen(false)}
+                    aria-label="Close menu"
+                    className="rounded-md p-1 text-gray-400 hover:bg-[#374151] hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 md:hidden"
+                >
+                    <X size={20} />
+                </button>
             </div>
 
-            <nav className="flex-1">
+            <nav className="sidebar-scroll min-h-0 flex-1 overflow-y-auto">
                 {/* Introduction */}
                 <NavLink
                     to="/"
@@ -112,6 +158,11 @@ function Sidebar() {
                     })}
                 </div>
 
+                {/* Sandbox */}
+                <div className="mt-2 border-t border-gray-700 pt-4">
+                    <NavLink to="/sandbox" className={linkStyle}>Tool: Sandbox</NavLink>
+                </div>
+
                 {/* Test Yourself */}
                 <div className="mt-2 border-t border-gray-700 pt-4">
                     <NavLink to="/test" className={({ isActive }) =>
@@ -124,13 +175,37 @@ function Sidebar() {
                 </div>
             </nav>
 
-            {/* Sidebar footer */}
-            <div className="mt-8 border-t border-gray-700 pt-5">
-                <p className="text-xs text-gray-400">
-                    COS 750 Exam
-                </p>
+            {/* User profile */}
+            <div className="mt-auto shrink-0 border-t border-gray-700 pt-5">
+                <div className="flex items-center gap-3">
+
+                    <img
+                        src={defaultAvatar}
+                        alt="User profile"
+                        className="h-10 w-10 shrink-0 rounded-full object-cover border-2 border-gray-600"
+                    />
+
+                    <div className="min-w-0 flex-1">
+                        <p className="truncate text-sm font-semibold text-white">
+                            u12345678
+                        </p>
+                        <p className="text-xs text-gray-400">
+                            Student
+                        </p>
+                    </div>
+
+                    <NavLink
+                        to="/profile"
+                        className="rounded-lg p-2 text-gray-400 transition hover:bg-gray-700 hover:text-white"
+                        aria-label="View profile"
+                    >
+                        <ChevronRight className="h-5 w-5" strokeWidth={2} />
+                    </NavLink>
+
+                </div>
             </div>
         </aside>
+        </>
     );
 }
 
