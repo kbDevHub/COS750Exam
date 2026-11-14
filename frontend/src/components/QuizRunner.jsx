@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useProgress } from "./Progress";
+import { SECTION_TITLES } from "../data/SectionTitles";
 
 const MAX_ATTEMPTS = 2;
 
@@ -11,16 +12,6 @@ const shuffle = (arr) => {
     [a[i], a[j]] = [a[j], a[i]];
   }
   return a;
-};
-
-const SECTION_TITLES = {
-  "/": "Introduction",
-  "/nodes": "1.1 Graph: Nodes",
-  "/edges": "1.2 Graph: Edges",
-  "/weights": "1.3 Graph: Weighted Graphs",
-  "/shortest-path": "2.1 Dijkstra algorithm: Shortest path problem",
-  "/dijkstra": "2.2 Dijkstra algorithm: Dijkstra algorithm",
-  "/test": "Test Yourself",
 };
 
 const getNextChapter = (section) => {

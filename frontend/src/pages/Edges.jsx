@@ -17,7 +17,7 @@ const DEF_EDGE =
         <h1 className="text-4xl font-bold text-slate-900">Edges</h1>
       </header>
 
-      <section className="rounded-xl border border-indigo-100 bg-indigo-50 p-6">
+      <section className="rounded-xl border border-indigo-500 bg-indigo-50 p-6">
         <h2 className="mb-4 text-2xl font-semibold text-indigo-900">
           Learning Objectives
         </h2>
@@ -31,8 +31,10 @@ const DEF_EDGE =
       </section>
 
       <section className="space-y-3">
-        <h2 className="text-2xl font-bold text-slate-900">What is an Edge?</h2>
-        <ReadAloud text={DEF_EDGE} />
+        <div className="flex items-center justify-between">
+          <h2 className="text-2xl font-bold text-slate-900">What is an Edge?</h2>
+          <ReadAloud text={DEF_EDGE} />
+        </div>
         <p className="leading-7">
           An <strong>edge</strong> is a line that connects two vertices. It represents a relationship between them, such as a path between two places or a friendship between two people.
         </p>
@@ -67,8 +69,10 @@ const DEF_EDGE =
       </section>
 
       <section className="space-y-3">
-        <h2 className="text-2xl font-bold text-slate-900">Adjacent Vertices</h2>
-        <ReadAloud text={DEF_ADJ}/>
+        <div className="flex items-center justify-between">
+          <h2 className="text-2xl font-bold text-slate-900">Adjacent Vertices</h2>
+          <ReadAloud text={DEF_ADJ}/>
+        </div>
         <p>
           Two vertices joined by an edge are called <strong>adjacent</strong>, or <strong>neighbours</strong>.
         </p>
@@ -87,6 +91,8 @@ const DEF_EDGE =
           <EdgesExample />
         </div>
       </section>
+
+      <div className="flex items-center justify-between border-b border-slate-300 pb-3 mb-4" />
 
       <section className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
         <h2 className="mb-4 text-2xl font-bold text-slate-900">Mini Test</h2>

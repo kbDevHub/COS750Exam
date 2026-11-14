@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { Check, ChevronRight, Menu, X } from "lucide-react";
 import { useProgress } from "./Progress";
+import defaultAvatar from "../assets/user.png";
 
 function Sidebar() {
     const [open, setOpen] = useState(false);
@@ -64,7 +65,8 @@ function Sidebar() {
 
         <aside
             id="sidebar"
-            className={`fixed left-0 top-0 z-50 flex h-screen w-[220px] flex-col overflow-y-auto bg-[#1f2937] px-4 py-6 font-mono text-white transition-[transform,visibility] duration-200 md:visible md:translate-x-0 ${open ? "visible translate-x-0" : "invisible -translate-x-full"}`}
+            onClick={(e) => e.target.closest("a") && setOpen(false)}
+            className={`fixed left-0 top-0 z-50 flex h-screen w-[220px] flex-col overflow-hidden bg-[#1f2937] px-4 py-6 font-mono text-white transition-[translate,visibility] duration-200 md:visible md:translate-x-0 ${open ? "visible translate-x-0" : "invisible -translate-x-full"}`}
         >
 
             <div className="mb-8 flex items-start justify-between border-b border-gray-700 pb-5">
@@ -86,7 +88,7 @@ function Sidebar() {
                 </button>
             </div>
 
-            <nav className="flex-1" onClick={(e) => e.target.closest("a") && setOpen(false)}>
+            <nav className="sidebar-scroll min-h-0 flex-1 overflow-y-auto">
                 {/* Introduction */}
                 <NavLink
                     to="/"
@@ -156,22 +158,45 @@ function Sidebar() {
                     })}
                 </div>
 
-                {/* Test Yourself */}
+                {/* Sandbox */}
                 <div className="mt-2 border-t border-gray-700 pt-4">
-                    <NavLink
-                        to="/test"
-                        className={linkStyle}
-                    >
-                        Test Yourself
-                    </NavLink>
+                    <NavLink to="/sandbox" className={linkStyle}>Tool: Sandbox</NavLink>
+                </div>
+
+                {/* Test Yourself */}
+                <div className="mt-2 border-t border-gray-700 pt-4 pb-4">
+                    <NavLink to="/test" className={linkStyle} > Test Yourself</NavLink>
                 </div>
             </nav>
 
-            {/* Sidebar footer */}
-            <div className="mt-8 border-t border-gray-700 pt-5">
-                <p className="text-xs text-gray-400">
-                    COS 750 Exam
-                </p>
+            {/* User profile */}
+            <div className="mt-auto shrink-0 border-t border-gray-700 pt-5">
+                <div className="flex items-center gap-3">
+
+                    <img
+                        src={defaultAvatar}
+                        alt="User profile"
+                        className="h-10 w-10 shrink-0 rounded-full object-cover border-2 border-gray-600"
+                    />
+
+                    <div className="min-w-0 flex-1">
+                        <p className="truncate text-sm font-semibold text-white">
+                            u12345678
+                        </p>
+                        <p className="text-xs text-gray-400">
+                            Student
+                        </p>
+                    </div>
+
+                    <NavLink
+                        to="/profile"
+                        className="rounded-lg p-2 text-gray-400 transition hover:bg-gray-700 hover:text-white"
+                        aria-label="View profile"
+                    >
+                        <ChevronRight className="h-5 w-5" strokeWidth={2} />
+                    </NavLink>
+
+                </div>
             </div>
         </aside>
         </>
