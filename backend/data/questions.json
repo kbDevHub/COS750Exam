@@ -89,6 +89,51 @@
         "hint": "Nodes are the 'things'.",
         "reteach":"Stations are places you travel between, so they are the nodes."
     },
+    {
+        "id": "adjacency-1",
+        "section": "adjacency",
+        "question": "In a weighted adjacency matrix, the cell in row C, column F holds 7. What does this tell you?",
+        "options":
+            [
+                "There is an edge from C to F with weight 7",
+                "C has 7 neighbours",
+                "The path from C to F uses 7 edges",
+                "There is no edge between C and F"
+            ],
+        "answer": "There is an edge from C to F with weight 7",
+        "hint": "Rows are where an edge starts and columns are where it ends. What does the number in a cell stand for?",
+        "reteach": "The cell in row C, column F describes the edge that starts at C and ends at F. A number other than 0 means that edge exists, and the number is its weight, so the edge C to F has weight 7."
+    },
+    {
+        "id": "adjacency-2",
+        "section": "adjacency",
+        "question": "Why is every cell on the diagonal of the campus matrix (row I column I, row A column A, and so on) equal to 0?",
+        "options":
+            [
+                "No vertex has an edge to itself",
+                "Every vertex is 0 minutes from its neighbours",
+                "The diagonal is where the start vertex is stored",
+                "The diagonal is left blank for the adjacency list"
+            ],
+        "answer": "No vertex has an edge to itself",
+        "hint": "Row I, column I would be an edge that starts at I and ends at I. Is there one in the drawing?",
+        "reteach": "A diagonal cell, such as row I, column I, would be an edge from a vertex back to itself. The campus graph has no such edge, so every diagonal cell is 0."
+    },
+    {
+        "id": "adjacency-3",
+        "section": "adjacency",
+        "question": "An undirected weighted graph has 5 edges. How many cells in its adjacency matrix are not 0?",
+        "options":
+            [
+                "5",
+                "10",
+                "20",
+                "25"
+            ],
+        "answer": "10",
+        "hint": "An undirected edge works both ways. How many cells does each edge fill?",
+        "reteach": "An undirected edge between X and Y fills row X, column Y and row Y, column X. So 5 edges fill 2 x 5 = 10 cells, mirrored across the diagonal."
+    },
 
     {
         "id": "dijk-1",
