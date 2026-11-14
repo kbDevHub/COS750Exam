@@ -1,6 +1,11 @@
 
 import DijkstraAnimation from "../components/DijkstraAnimation";
 import QuizRunner from "../components/QuizRunner";
+import ReadAloud from "../components/ReadAloud";
+import DijkstraCodeview from "../components/DijkstraCodeview";
+
+
+const DEF_DIJK = "Dijkstra's algorithm finds the shortest path from one starting vertex to every other vertex in a weighted graph.";
 
 function Dijkstra() {
   return (
@@ -32,6 +37,7 @@ function Dijkstra() {
       <section className="space-y-4">
         <h2 className="border-b border-slate-200 pb-2 text-2xl font-bold text-slate-900">
           What is Dijkstra's Algorithm?
+          <ReadAloud text={DEF_DIJK}/>
         </h2>
         <p className="leading-7">
           Dijkstra's algorithm finds the shortest path from one starting vertex to every other vertex in a weighted graph.
@@ -116,6 +122,18 @@ function Dijkstra() {
         </p>
         <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
           <DijkstraAnimation />
+        </div>
+      </section>
+
+      <section className="space-y-4">
+        <h2 className="text-2xl font-bold text-slate-900">
+          Algorithm Code
+        </h2>
+        <p className="leading-7">
+          Use the tab above to switch between the pseudocode and C++ code for this algorithm
+        </p>
+        <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+          <DijkstraCodeview />
         </div>
       </section>
 

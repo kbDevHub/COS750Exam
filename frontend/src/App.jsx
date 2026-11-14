@@ -11,6 +11,7 @@ import Test from "./pages/Test";
 import Short from "./pages/Short";
 import NoteTaker from "./components/NoteTaker";
 import { ProgressProvider } from "./components/Progress";
+import Adjacency from "./pages/Adjacency";
 
 function App() {
     return (
@@ -31,6 +32,7 @@ function App() {
                                 <Route path="/nodes" element={<Nodes />} />
                                 <Route path="/edges" element={<Edges />} />
                                 <Route path="/weights" element={<Weights />} />
+                                <Route path = "/adjacency" element={<Adjacency/>}/>
                                 <Route path="/dijkstra" element={<Dijkstra />} />
                                 <Route path="/test" element={<Test />} />
                                 <Route path="/shortest-path" element={<Short />} />

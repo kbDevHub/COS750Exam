@@ -185,6 +185,261 @@
         "answer": "the path between two vertices with the lowest total cost",
         "hint": "Think about the cheapest route from I to P.",
         "reteach": "Given a start and an end vertex, we want the path whose edge weights add up to the smallest total."
-  }
+  },
+  {
+        "id": "final-basics-1",
+        "section": "final-basics",
+        "question": "How many nodes does the campus graph have?",
+        "options":
+            [
+                "6",
+                "8",
+                "14",
+                "It depends on the roads"
+            ],
+        "answer": "6",
+        "hint": "Nodes are the 'things'. What are the circles in the diagram?",
+        "reteach": "Each campus is a node, and there are six campuses. The 8 is the number of edges (roads), not nodes."
+    },
+    {
+        "id": "final-basics-2",
+        "section": "final-basics",
+        "question": "What is the weight of the edge between Hatfield and Prinshof?",
+        "options":
+            [
+                "5.8 km",
+                "5.7 km",
+                "4.3 km",
+                "15.9 km"
+            ],
+        "answer": "5.8 km",
+        "hint": "The weight is the number written on the edge (the line) joining the two campuses.",
+        "reteach": "In a weighted graph, each edge carries a number. Here the weight is the distance in km, and the Hatfield-Prinshof edge is 5.8 km. The 5.7 km edge joins Groenkloof and Prinshof."
+    },
+    {
+        "id": "final-basics-3",
+        "section": "final-basics",
+        "question": "Which campus is joined to only one other campus by a road?",
+        "options":
+            [
+                "Hatfield",
+                "Prinshof",
+                "Mamelodi",
+                "Onderstepoort"
+            ],
+        "answer": "Mamelodi",
+        "hint": "Count the lines touching each circle.",
+        "reteach": "Mamelodi has just one edge, to Hatfield. Hatfield has five, Prinshof has three, and Onderstepoort has two."
+    },
+    {
+        "id": "final-basics-4",
+        "section": "final-basics",
+        "question": "Which of these is a valid path from Hillcrest to Onderstepoort?",
+        "options":
+            [
+                "Hillcrest -> Hatfield -> Prinshof -> Onderstepoort",
+                "Hillcrest -> Prinshof -> Onderstepoort",
+                "Hillcrest -> Mamelodi -> Onderstepoort",
+                "Hillcrest -> Groenkloof -> Mamelodi -> Onderstepoort"
+            ],
+        "answer": "Hillcrest -> Hatfield -> Prinshof -> Onderstepoort",
+        "hint": "A path is valid only if every consecutive pair of campuses is joined by an edge.",
+        "reteach": "Check each step. Hillcrest-Hatfield, Hatfield-Prinshof and Prinshof-Onderstepoort are all edges, so the first path is valid. The others use a step with no edge, such as Hillcrest-Prinshof or Mamelodi-Onderstepoort."
+    },
+    {
+        "id": "final-basics-5",
+        "section": "final-basics",
+        "question": "What is the total cost of the path Hatfield -> Groenkloof -> Prinshof?",
+        "options":
+            [
+                "10.0 km",
+                "10.1 km",
+                "5.7 km",
+                "4.3 km"
+            ],
+        "answer": "10.0 km",
+        "hint": "Add up the weights of every edge along the path, not just one.",
+        "reteach": "The path uses two edges: Hatfield-Groenkloof (4.3 km) and Groenkloof-Prinshof (5.7 km). The cost of a path is the sum of its edge weights: 4.3 + 5.7 = 10.0 km."
+    },
+    {
+        "id": "final-basics-6",
+        "section": "final-basics",
+        "question": "A graph models a social network where people can be friends. What do the nodes and edges represent?",
+        "options":
+            [
+                "Nodes are friendships and edges are people",
+                "Nodes are people and edges are friendships",
+                "Nodes are messages and edges are people",
+                "Nodes and edges both represent people"
+            ],
+        "answer": "Nodes are people and edges are friendships",
+        "hint": "Nodes are the 'things'. Edges are the connections between them.",
+        "reteach": "A person is a thing, so each person is a node. A friendship connects two people, so each friendship is an edge."
+    },
+    {
+        "id": "final-basics-7",
+        "section": "final-basics",
+        "question": "A graph models airports and the flights between them. Each flight has a ticket price. What is the weight of an edge?",
+        "options":
+            [
+                "The airport's name",
+                "The number of airports in the graph",
+                "The ticket price of that flight",
+                "Whether the flight is direct"
+            ],
+        "answer": "The ticket price of that flight",
+        "hint": "The weight is the cost or distance attached to an edge.",
+        "reteach": "Airports are the nodes and flights are the edges. A weight is a number attached to an edge, such as a price, distance or time, so here it is the ticket price."
+    },
 
+    {
+        "id": "final-matrix-1",
+        "section": "final-matrix",
+        "question": "A graph has vertices A, B, C and D. Its adjacency matrix is given row by row (columns in the order A, B, C, D):\nA: 0 4 2 0\nB: 4 0 0 5\nC: 2 0 0 1\nD: 0 5 1 0\nWhat is the weight of the edge between A and B?",
+        "options":
+            [
+                "0",
+                "2",
+                "4",
+                "5"
+            ],
+        "answer": "4",
+        "hint": "Find row A, then look at the column for B.",
+        "reteach": "The entry in row A, column B is the weight of the edge from A to B. Here it is 4."
+    },
+    {
+        "id": "final-matrix-2",
+        "section": "final-matrix",
+        "question": "Using the same matrix, is there an edge between A and D?",
+        "options":
+            [
+                "Yes, with weight 0",
+                "Yes, with weight 5",
+                "No, because the entry is 0",
+                "You cannot tell from a matrix"
+            ],
+        "answer": "No, because the entry is 0",
+        "hint": "Look at row A, column D. What does a 0 stand for?",
+        "reteach": "In a weighted adjacency matrix, 0 means there is no edge between those two vertices. A and D are not directly connected."
+},
+    {
+        "id": "final-matrix-3",
+        "section": "final-matrix",
+        "question": "How many edges does this undirected graph have?",
+        "options":
+            [
+                "4",
+                "6",
+                "8",
+                "16"
+            ],
+        "answer": "4",
+        "hint": "The matrix has 8 non-zero entries. In an undirected graph, how many entries does each edge use?",
+        "reteach": "An undirected edge appears twice in the matrix (once above the diagonal and once below), so 8 non-zero entries means 4 edges: A-B, A-C, B-D and C-D."
+    },
+    {
+        "id": "final-matrix-4",
+        "section": "final-matrix",
+        "question": "Which list of edges matches the matrix?",
+        "options":
+            [
+                "A-B (4), A-C (2), B-D (5), C-D (1)",
+                "A-B (4), A-D (2), B-C (5), C-D (1)",
+                "A-B (2), A-C (4), B-D (1), C-D (5)",
+                "A-B (4), A-C (2), B-D (5), A-D (1)"
+            ],
+        "answer": "A-B (4), A-C (2), B-D (5), C-D (1)",
+        "hint": "Go through the matrix row by row and write down each non-zero entry with its two vertices.",
+        "reteach": "Row A gives A-B (4) and A-C (2). Row B adds B-D (5). Row C adds C-D (1). Row D repeats edges you already have."
+    },
+    {
+        "id": "final-matrix-5",
+        "section": "final-matrix",
+        "question": "In another graph's adjacency matrix, the entry in row A, column B is 3, but the entry in row B, column A is 0. What does this tell you?",
+        "options":
+            [
+                "The edge is undirected with weight 3",
+                "There is a directed edge from A to B with weight 3, but none from B to A",
+                "There is no edge between A and B",
+                "The matrix contains an error"
+            ],
+        "answer": "There is a directed edge from A to B with weight 3, but none from B to A",
+        "hint": "Rows are where an edge starts and columns are where it ends. Is the matrix symmetric here?",
+        "reteach": "An undirected graph always gives a symmetric matrix. When the two entries differ, the edges are directed. Row A, column B is the edge A -> B, and row B, column A is the edge B -> A."
+    },
+    {
+        "id": "final-matrix-6",
+        "section": "final-matrix",
+        "question": "A road network has 1,000 towns, but each town connects to only about 4 others. Which representation is the better choice, and why?",
+        "options":
+            [
+                "Adjacency matrix, because it is always faster",
+                "Adjacency list, because it only stores the edges that exist",
+                "Adjacency matrix, because it uses less memory for sparse graphs",
+                "Neither can store a graph this big"
+            ],
+        "answer": "Adjacency list, because it only stores the edges that exist",
+        "hint": "A matrix needs one entry for every PAIR of vertices. How many pairs are there for 1,000 towns?",
+        "reteach": "A matrix for 1,000 vertices needs 1,000 x 1,000 = 1,000,000 entries, even though only about 4,000 are real edges. An adjacency list stores only the edges that exist, so it suits sparse graphs like road networks."
+    },
+
+    {
+        "id": "final-dijkstra-1",
+        "section": "final-dijkstra",
+        "question": "What is the shortest path from vertex A to vertex E as given by the algorithm above, and what is its cost?",
+        "options":
+            [
+                "A -> B -> C -> D -> E, cost 4",
+                "A -> E, cost 5",
+                "A -> C -> D -> E, cost 5",
+                "A -> B -> D -> E, cost 6"
+            ],
+        "answer": "A -> B -> C -> D -> E, cost 4",
+        "hint": "Look at E's final distance in your table, then follow each vertex's updates back to A.",
+        "reteach": "E ends with distance 4. That distance was set in iteration 4, when D was processed (3 + 1). D got 3 from C (2 + 1), and C got 2 from B (1 + 1). The direct edge A -> E costs 5, so the longer route is cheaper."
+    },
+    {
+        "id": "final-dijkstra-2",
+        "section": "final-dijkstra",
+        "question": "Why is Dijkstra's algorithm described as a greedy algorithm?",
+        "options":
+            [
+                "It always explores every possible path before deciding",
+                "It always picks the closest unvisited vertex and treats its distance as final",
+                "It picks vertices at random until it finds the destination",
+                "It uses as much memory as possible"
+            ],
+        "answer": "It always picks the closest unvisited vertex and treats its distance as final",
+        "hint": "A greedy algorithm makes the best-looking choice at each step and never goes back on it.",
+        "reteach": "Dijkstra locks in the cheapest unvisited vertex at every step and never revisits it. That is the greedy choice. It works because no later path can be cheaper when all weights are non-negative."
+    },
+    {
+        "id": "final-dijkstra-3",
+        "section": "final-dijkstra",
+        "question": "Suppose one edge in the graph had a NEGATIVE weight. Why could Dijkstra's algorithm give a wrong answer?",
+        "options":
+            [
+                "Negative numbers cannot be stored in a table",
+                "A finalised vertex might later be reached by a cheaper path through the negative edge",
+                "Dijkstra only works on undirected graphs",
+                "The algorithm would run forever on every graph"
+            ],
+        "answer": "A finalised vertex might later be reached by a cheaper path through the negative edge",
+        "hint": "Dijkstra finalises a vertex and never looks at it again. What if a cheaper route appears later?",
+        "reteach": "Dijkstra assumes that once a vertex is finalised, no other route can beat it. With a negative edge, a longer route can end up cheaper, so that assumption breaks and the finalised distance may be wrong."
+    },
+    {
+        "id": "final-dijkstra-4",
+        "section": "final-dijkstra",
+        "question": "Which algorithm can find shortest paths in a graph that contains negative edge weights?",
+        "options": [
+            "Bubble sort",
+            "Binary search",
+            "Bellman-Ford",
+            "Dijkstra's algorithm with a larger table"
+        ],
+        "answer": "Bellman-Ford",
+        "hint": "It is the algorithm you will meet after Dijkstra when negative weights come up.",
+        "reteach": "Bellman-Ford repeatedly relaxes every edge instead of locking in vertices early, so it handles negative weights. It is slower than Dijkstra, which is why Dijkstra is still used when all weights are non-negative."
+    }
 ]
