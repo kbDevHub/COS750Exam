@@ -1,17 +1,17 @@
+export const START = "I";
+export const TARGET = "P";
+
 export const nodes = [
-  { id: "A", x: 60,  y: 120 },
-  { id: "B", x: 200, y: 40 },
-  { id: "C", x: 200, y: 200 },
-  { id: "D", x: 360, y: 60 },
-  { id: "E", x: 360, y: 190 },
+  { id: "I", name: "IT Building", x: 300, y: 70,  labelDy: -46 },
+  { id: "A", name: "Aula",        x: 110, y: 150, labelDy: -46 },
+  { id: "M", name: "Merensky",    x: 490, y: 150, labelDy: -46 },
+  { id: "P", name: "Piazza",      x: 300, y: 230, labelDy: 46 },
 ];
 
 export const edges = [
-  { from: "A", to: "B", w: 4 },
-  { from: "A", to: "C", w: 2 },
-  { from: "B", to: "C", w: 1 },
-  { from: "B", to: "D", w: 5 },
-  { from: "C", to: "D", w: 8 },
-  { from: "C", to: "E", w: 10 },
-  { from: "D", to: "E", w: 2 },
+  { from: "I", to: "A", w: 4 },
+  { from: "A", to: "P", w: 5 },
+  { from: "I", to: "M", w: 2 },
+  { from: "M", to: "P", w: 8 },
+  { from: "I", to: "P", w: 12 },
 ];

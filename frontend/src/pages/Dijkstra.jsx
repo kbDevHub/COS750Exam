@@ -20,7 +20,7 @@ function Dijkstra() {
         </p>
       </header>
 
-      <section className="rounded-xl border border-indigo-100 bg-indigo-50 p-6">
+      <section className="rounded-xl border border-indigo-500 bg-indigo-50 p-6">
         <h2 className="mb-4 text-2xl font-semibold text-indigo-900">
           Learning Objectives
         </h2>
@@ -35,10 +35,12 @@ function Dijkstra() {
       </section>
 
       <section className="space-y-4">
-        <h2 className="border-b border-slate-200 pb-2 text-2xl font-bold text-slate-900">
-          What is Dijkstra's Algorithm?
+        <div className="flex items-center justify-between">
+          <h2 className="border-b border-slate-200 pb-2 text-2xl font-bold text-slate-900">
+            What is Dijkstra's Algorithm?
+          </h2>
           <ReadAloud text={DEF_DIJK}/>
-        </h2>
+        </div>
         <p className="leading-7">
           Dijkstra's algorithm finds the shortest path from one starting vertex to every other vertex in a weighted graph.
         </p>
@@ -67,7 +69,7 @@ function Dijkstra() {
         <h2 className="border-b border-slate-200 pb-2 text-2xl font-bold text-slate-900">
           Steps of the Algorithm
         </h2>
-        <ol className="list-inside list-decimal space-y-3 leading-7">
+        <ol className="list-inside list-decimal pl-6 space-y-3 leading-7">
           <li>Set the start distance to 0 and all others to infinity.</li>
           <li>Mark all vertices as unvisited.</li>
           <li>Choose the unvisited vertex with the smallest distance.</li>
@@ -118,12 +120,14 @@ function Dijkstra() {
           Interactive Dijkstra Animation
         </h2>
         <p className="leading-7">
-          Use the controls to move through each step of the algorithm. Watch how the distances change as vertices are visited.
+          Use the controls to move through each step of the algorithm. The travel path is I-P. Watch how the distances change as vertices are visited.
         </p>
         <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
           <DijkstraAnimation />
         </div>
       </section>
+
+      <div className="flex items-center justify-between border-b border-slate-300 pb-3 mb-4" />
 
       <section className="space-y-4">
         <h2 className="text-2xl font-bold text-slate-900">
@@ -137,22 +141,24 @@ function Dijkstra() {
         </div>
       </section>
 
+      <div className="flex items-center justify-between border-b border-slate-300 pb-3 mb-4" />
+
       <section className="space-y-4">
         <h2 className="text-2xl font-bold text-slate-900">
           Reading the Shortest Path
         </h2>
-        <p>To find the path to E, follow the previous vertices backwards:</p>
+        <p>To find the path to P, follow the previous vertices backwards:</p>
 
         <div className="rounded-xl bg-indigo-50 p-5 text-center text-xl font-bold text-indigo-800">
-          E ← D ← B ← C ← A
+          P ← A ← I 
         </div>
 
         <p>
           Therefore, the shortest path is:
-          <strong className="text-indigo-700"> A → C → B → D → E</strong>
+          <strong className="text-indigo-700"> I → A → P</strong>
         </p>
         <p>
-          Total cost: 2 + 1 + 5 + 2 = <strong>10</strong>.
+          Total cost: 4 + 5 = <strong>9</strong>.
         </p>
       </section>
 
@@ -173,6 +179,8 @@ function Dijkstra() {
           because they can invalidate its distance-finalisation process.
         </p>
       </section>
+
+      <div className="flex items-center justify-between border-b border-slate-300 pb-3 mb-4" />
 
       <section className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
         <h2 className="mb-4 text-2xl font-bold text-slate-900">Mini Test</h2>

@@ -1,20 +1,10 @@
 import { useState, useEffect, useRef } from "react";
 import { useLocation } from "react-router-dom";
 import { NotebookText } from "lucide-react";
+import { SECTION_TITLES } from "../data/SectionTitles";
 
 const STORAGE_KEY = "cos212-notes";
-const HIDDEN_ON = ["/test"];
-
-const SECTION_TITLES = {
-    "/": "Introduction",
-    "/nodes": "1.1 Graph - Nodes",
-    "/edges": "1.2 Graph - Edges",
-    "/weights": "1.3 Graph - Weighted Graphs",
-    "/adjacency": "1.4 Graph - Adjacency Matrix",
-    "/shortest-path": "2.1 Dijkstra algorithm - Shortest path problem",
-    "/dijkstra": "2.2 Dijkstra algorithm - Dijkstra algorithm",
-    "/test": "Test Yourself",
-};
+const HIDDEN_ON = ["/test", "/profile"];
 
 export default function NoteTaker() {
     const [open, setOpen] = useState(false);

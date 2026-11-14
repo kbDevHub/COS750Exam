@@ -12,6 +12,9 @@ import Short from "./pages/Short";
 import NoteTaker from "./components/NoteTaker";
 import { ProgressProvider } from "./components/Progress";
 import Adjacency from "./pages/Adjacency";
+import Sandbox from "./pages/Sandbox";
+import Profile from "./pages/Profile";
+import BadgeToaster from "./components/BadgeToaster";
 
 function App() {
     return (
@@ -19,6 +22,7 @@ function App() {
             <div className="flex min-h-screen bg-gray-50">
 
                 <ProgressProvider>
+                    <BadgeToaster />
                     {/* Sidebar */}
                     <Sidebar />
                     <NoteTaker />
@@ -36,6 +40,8 @@ function App() {
                                 <Route path="/dijkstra" element={<Dijkstra />} />
                                 <Route path="/test" element={<Test />} />
                                 <Route path="/shortest-path" element={<Short />} />
+                                <Route path="/sandbox" element={<Sandbox />} />
+                                <Route path="/profile" element={<Profile />} />
                             </Routes>
 
                         </div>

@@ -14,7 +14,7 @@ function Adjacency() {
         <h1 className="text-4xl font-bold text-slate-900">Adjacency Matrix</h1>
       </header>
 
-      <section className="rounded-xl border border-indigo-100 bg-indigo-50 p-6">
+      <section className="rounded-xl border border-indigo-500 bg-indigo-50 p-6">
         <h2 className="mb-4 text-2xl font-semibold text-indigo-900">
           Learning Objectives
         </h2>
