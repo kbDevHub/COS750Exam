@@ -12,6 +12,7 @@ import Short from "./pages/Short";
 import NoteTaker from "./components/NoteTaker";
 import { ProgressProvider } from "./components/Progress";
 import Adjacency from "./pages/Adjacency";
+import Sandbox from "./pages/Sandbox";
 
 function App() {
     return (
@@ -36,6 +37,7 @@ function App() {
                                 <Route path="/dijkstra" element={<Dijkstra />} />
                                 <Route path="/test" element={<Test />} />
                                 <Route path="/shortest-path" element={<Short />} />
+                                <Route path="/sandbox" element={<Sandbox />} />
                             </Routes>
 
                         </div>

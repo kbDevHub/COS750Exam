@@ -113,14 +113,14 @@ function Sidebar() {
                     })}
                 </div>
 
+                {/* Sandbox */}
+                <div className="mt-2 border-t border-gray-700 pt-4">
+                    <NavLink to="/sandbox" className={linkStyle}>Tool: Sandbox</NavLink>
+                </div>
+
                 {/* Test Yourself */}
                 <div className="mt-2 border-t border-gray-700 pt-4">
-                    <NavLink
-                        to="/test"
-                        className={linkStyle}
-                    >
-                        Test Yourself
-                    </NavLink>
+                    <NavLink to="/test" className={linkStyle}> Test Yourself</NavLink>
                 </div>
             </nav>
 

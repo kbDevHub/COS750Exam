@@ -20,7 +20,7 @@ function Dijkstra() {
         </p>
       </header>
 
-      <section className="rounded-xl border border-indigo-100 bg-indigo-50 p-6">
+      <section className="rounded-xl border border-indigo-500 bg-indigo-50 p-6">
         <h2 className="mb-4 text-2xl font-semibold text-indigo-900">
           Learning Objectives
         </h2>
@@ -67,7 +67,7 @@ function Dijkstra() {
         <h2 className="border-b border-slate-200 pb-2 text-2xl font-bold text-slate-900">
           Steps of the Algorithm
         </h2>
-        <ol className="list-inside list-decimal space-y-3 leading-7">
+        <ol className="list-inside list-decimal pl-6 space-y-3 leading-7">
           <li>Set the start distance to 0 and all others to infinity.</li>
           <li>Mark all vertices as unvisited.</li>
           <li>Choose the unvisited vertex with the smallest distance.</li>
@@ -118,12 +118,14 @@ function Dijkstra() {
           Interactive Dijkstra Animation
         </h2>
         <p className="leading-7">
-          Use the controls to move through each step of the algorithm. Watch how the distances change as vertices are visited.
+          Use the controls to move through each step of the algorithm. The travel path is I-P. Watch how the distances change as vertices are visited.
         </p>
         <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
           <DijkstraAnimation />
         </div>
       </section>
+
+      <div className="flex items-center justify-between border-b border-slate-300 pb-3 mb-4" />
 
       <section className="space-y-4">
         <h2 className="text-2xl font-bold text-slate-900">
@@ -136,6 +138,8 @@ function Dijkstra() {
           <DijkstraCodeview />
         </div>
       </section>
+
+      <div className="flex items-center justify-between border-b border-slate-300 pb-3 mb-4" />
 
       <section className="space-y-4">
         <h2 className="text-2xl font-bold text-slate-900">
@@ -173,6 +177,8 @@ function Dijkstra() {
           because they can invalidate its distance-finalisation process.
         </p>
       </section>
+
+      <div className="flex items-center justify-between border-b border-slate-300 pb-3 mb-4" />
 
       <section className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
         <h2 className="mb-4 text-2xl font-bold text-slate-900">Mini Test</h2>

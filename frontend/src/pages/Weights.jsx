@@ -91,7 +91,6 @@ function Weights() {
                 </ol>
             </section>
 
-            {/* Concrete experience: Visual */}
             <section className="rounded-xl border border-slate-200 bg-white p-6">
                 <h2 className="mb-3 text-2xl font-bold text-slate-900">Not all roads are equal</h2>
                 <p className="mb-4 leading-7">
@@ -101,13 +100,13 @@ function Weights() {
                 <EdgeExplorer allowWeights={true} allowDirections={true} />
             </section>
 
-            {/* Reflective observation: Read/Write, constructivist */}
             <section className="rounded-xl border border-slate-200 bg-white p-6">
                 <h2 className="mb-3 text-2xl font-bold text-slate-900">Make a prediction</h2>
                 <Predict />
             </section>
 
-            {/* Abstract conceptualisation: Read/Write + Auditory */}
+            <div className="flex items-center justify-between border-b border-slate-300 pb-3 mb-4" />
+
             <section className="space-y-4">
                 <div className="flex items-center justify-between">
                     <h2 className="text-2xl font-bold text-slate-900">Weights, Paths and Costs</h2>
@@ -127,15 +126,13 @@ function Weights() {
                 </p>
             </section>
 
-            {/* Active experimentation: Kinesthetic + Visual */}
             <section className="rounded-xl border border-slate-200 bg-white p-6">
                 <h2 className="mb-3 text-2xl font-bold text-slate-900">Try it: find every path</h2>
                 <PathBuilder />
             </section>
 
-            {/* Reflective observation (round 2): Read/Write */}
             <section className="space-y-4">
-                <div className="rounded-xl border border-amber-300 bg-amber-50 p-5">
+                <div className="">
                     <p className="mb-1 text-xs font-bold uppercase tracking-wider text-amber-700">Key idea</p>
                     <p className="leading-7">
                         The path with the <strong>fewest edges</strong> is not always the <strong>cheapest</strong>.
@@ -147,7 +144,6 @@ function Weights() {
 
             <div className="flex items-center justify-between border-b border-slate-300 pb-3 mb-4" />
 
-            {/* Behaviourist feedback */}
             <section className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
                 <h2 className="mb-3 text-2xl font-bold text-slate-900">Mini Test</h2>
                 <p className="mb-4">Test your understanding of weights, paths and costs.</p>

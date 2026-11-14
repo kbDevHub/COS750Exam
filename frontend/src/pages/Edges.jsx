@@ -17,7 +17,7 @@ const DEF_EDGE =
         <h1 className="text-4xl font-bold text-slate-900">Edges</h1>
       </header>
 
-      <section className="rounded-xl border border-indigo-100 bg-indigo-50 p-6">
+      <section className="rounded-xl border border-indigo-500 bg-indigo-50 p-6">
         <h2 className="mb-4 text-2xl font-semibold text-indigo-900">
           Learning Objectives
         </h2>
@@ -87,6 +87,8 @@ const DEF_EDGE =
           <EdgesExample />
         </div>
       </section>
+
+      <div className="flex items-center justify-between border-b border-slate-300 pb-3 mb-4" />
 
       <section className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
         <h2 className="mb-4 text-2xl font-bold text-slate-900">Mini Test</h2>
