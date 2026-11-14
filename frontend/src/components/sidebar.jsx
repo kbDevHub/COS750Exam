@@ -1,9 +1,19 @@
 
+import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
-import { Check, ChevronRight } from "lucide-react";
+import { Check, ChevronRight, Menu, X } from "lucide-react";
 import { useProgress } from "./Progress";
 
 function Sidebar() {
+    const [open, setOpen] = useState(false);
+
+    useEffect(() => {
+        if (!open) return;
+        const onKey = (e) => e.key === "Escape" && setOpen(false);
+        window.addEventListener("keydown", onKey);
+        return () => window.removeEventListener("keydown", onKey);
+    }, [open]);
+
     const units = [
         {
             title: "Unit 1: Graphs",
@@ -32,18 +42,51 @@ function Sidebar() {
     const { completed } = useProgress();
 
     return (
-        <aside className="fixed left-0 top-0 z-50 flex h-screen w-[220px] flex-col overflow-y-auto bg-[#1f2937] px-4 py-6 font-mono text-white">
+        <>
+        <button
+            type="button"
+            onClick={() => setOpen(true)}
+            aria-label="Open menu"
+            aria-expanded={open}
+            aria-controls="sidebar"
+            className="fixed left-4 top-4 z-40 flex items-center justify-center rounded-lg border bg-white p-2 text-black shadow-sm transition hover:bg-slate-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 md:hidden"
+        >
+            <Menu size={20} strokeWidth={1.8} />
+        </button>
 
-            <div className="mb-8 border-b border-gray-700 pb-5">
-                <h2 className="mb-2 text-lg font-bold">
-                    Pre-Class
-                </h2>
-                <p className="text-sm text-gray-400">
-                    Graphs + Dijkstra
-                </p>
+        {open && (
+            <div
+                className="fixed inset-0 z-40 bg-black/40 md:hidden"
+                onClick={() => setOpen(false)}
+                aria-hidden="true"
+            />
+        )}
+
+        <aside
+            id="sidebar"
+            className={`fixed left-0 top-0 z-50 flex h-screen w-[220px] flex-col overflow-y-auto bg-[#1f2937] px-4 py-6 font-mono text-white transition-[transform,visibility] duration-200 md:visible md:translate-x-0 ${open ? "visible translate-x-0" : "invisible -translate-x-full"}`}
+        >
+
+            <div className="mb-8 flex items-start justify-between border-b border-gray-700 pb-5">
+                <div>
+                    <h2 className="mb-2 text-lg font-bold">
+                        Pre-Class
+                    </h2>
+                    <p className="text-sm text-gray-400">
+                        Graphs + Dijkstra
+                    </p>
+                </div>
+                <button
+                    type="button"
+                    onClick={() => setOpen(false)}
+                    aria-label="Close menu"
+                    className="rounded-md p-1 text-gray-400 hover:bg-[#374151] hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 md:hidden"
+                >
+                    <X size={20} />
+                </button>
             </div>
 
-            <nav className="flex-1">
+            <nav className="flex-1" onClick={(e) => e.target.closest("a") && setOpen(false)}>
                 {/* Introduction */}
                 <NavLink
                     to="/"
@@ -131,6 +174,7 @@ function Sidebar() {
                 </p>
             </div>
         </aside>
+        </>
     );
 }
 
