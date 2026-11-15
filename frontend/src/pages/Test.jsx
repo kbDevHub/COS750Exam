@@ -15,10 +15,9 @@ import {
   GRAPH_DAG,
 } from "../data/testGraphs.js";
 
-// The parts, in the order the student unlocks them. QuizRunner already calls
-// markComplete(`/${section}`) when a quiz is finished, so each path below is
-// both the quiz section name and the "part finished" marker in Progress.
-
+// The parts, in the order the student unlocks them. Each path is the quiz section name.
+// QuizRunner marks a section complete per difficulty level, so progress is stored under
+// `${path}@L${level}` (see partPath), and the student has to pass every part at a level.
 const PARTS = [
   { path: "/final-basics", title: "Nodes, edges and weights" },
   { path: "/final-matrix", title: "Adjacency matrices" },
@@ -28,7 +27,13 @@ const PARTS = [
 ];
 const TOTAL_PARTS = PARTS.length;
 
-const partPath = (n, lvl) => `${PARTS[n - 1]}@L${lvl}`;
+const partPath = (n, lvl) => `${PARTS[n - 1].path}@L${lvl}`;
+
+const LEVELS = [
+  { value: 1, label: "Level 1", desc: "Foundations" },
+  { value: 2, label: "Level 2", desc: "Intermediate" },
+  { value: 3, label: "Level 3", desc: "Challenging" },
+];
 
 const btnPrimary =
   "rounded-lg bg-indigo-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm " +
@@ -99,7 +104,38 @@ function GraphFigure({ graph }) {
   );
 }
 
-/* Shown when all three parts are finished. It celebrates finishing (focus is on readiness rather than points) and,
+function DifficultyPicker({ value, onChange }) {
+  return (
+    <fieldset className="mb-4">
+      <legend className="mb-2 text-sm font-semibold text-slate-700">Choose a difficulty</legend>
+      <div className="flex flex-wrap gap-2">
+        {LEVELS.map((l) => (
+          <label
+            key={l.value}
+            className={
+              "cursor-pointer rounded-lg border-2 px-4 py-2 text-sm transition " +
+              "has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-indigo-500 " +
+              (value === l.value
+                ? "border-indigo-600 bg-indigo-50 font-semibold text-indigo-900"
+                : "border-slate-200 bg-white hover:border-indigo-300")
+            }
+          >
+            <input
+              type="radio"
+              name="difficulty"
+              className="sr-only"
+              checked={value === l.value}
+              onChange={() => onChange(l.value)}
+            />
+            {l.label} <span className="text-slate-500">· {l.desc}</span>
+          </label>
+        ))}
+      </div>
+    </fieldset>
+  );
+}
+
+/* Shown when all parts are finished. It celebrates finishing (focus is on readiness rather than points) and,
    depending on the student's performance, points at what is worth a second look before the lecture. */
 function Completion({ missedByPart, headingRef }) {
   const known = PARTS.map((_, i) => i + 1).filter((n) => missedByPart[n]);
@@ -154,62 +190,28 @@ function Completion({ missedByPart, headingRef }) {
   );
 }
 
-const LEVELS = [
-  { value: 1, label: "Level 1", desc: "Foundations" },
-  { value: 2, label: "Level 2", desc: "Intermediate" },
-  { value: 3, label: "Level 3", desc: "Challenging" },
-];
-
-function DifficultyPicker({ value, onChange }) {
-  return (
-    <fieldset className="mb-4">
-      <legend className="mb-2 text-sm font-semibold text-slate-700">Choose a difficulty</legend>
-      <div className="flex flex-wrap gap-2">
-        {LEVELS.map((l) => (
-          <label
-            key={l.value}
-            className={
-              "cursor-pointer rounded-lg border-2 px-4 py-2 text-sm transition " +
-              "has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-indigo-500 " +
-              (value === l.value
-                ? "border-indigo-600 bg-indigo-50 font-semibold text-indigo-900"
-                : "border-slate-200 bg-white hover:border-indigo-300")
-            }
-          >
-            <input
-              type="radio"
-              name="difficulty"
-              className="sr-only"
-              checked={value === l.value}
-              onChange={() => onChange(l.value)}
-            />
-            {l.label} <span className="text-slate-500">· {l.desc}</span>
-          </label>
-        ))}
-      </div>
-    </fieldset>
-  );
-}
-
 
 function Test() {
   const { completed, markComplete, clearTestProgress } = useProgress();
   const [level, setLevel] = useState(null);
+  // Parts that have no questions at the chosen level are skipped (not saved as progress).
   const [emptyParts, setEmptyParts] = useState({});
-  // Part n is unlocked once the previous parts are in the saved progress.
-  const isPartDone = (n) => level !== null && (completed.includes(partPath(n, level)) || !!emptyParts[n]);
 
-  const partsDone = [1, 2, 3].findIndex((n) => !isPartDone(n)) === -1 ? 3 : [1, 2, 3].findIndex((n) => !isPartDone(n));
-  const isLocked = (n) => partsDone < n - 1;
+  // A part is done when it is in the saved progress for this level, or had no questions at this level.
+  const isDone = (n) =>
+    level !== null && (completed.includes(partPath(n, level)) || !!emptyParts[n]);
+  // Part n unlocks only when every earlier part is done.
+  const isLocked = (n) => !PARTS.slice(0, n - 1).every((_, i) => isDone(i + 1));
+  const firstOpen = PARTS.findIndex((_, i) => !isDone(i + 1));
+  const partsDone = firstOpen === -1 ? TOTAL_PARTS : firstOpen;
+
   const [announcement, setAnnouncement] = useState("");
 
   // Questions missed per part, for the parts finished in this visit (not saved)
   const [missedByPart, setMissedByPart] = useState({});
   const [justFinished, setJustFinished] = useState(false);
 
-
   const partRefs = [useRef(null), useRef(null), useRef(null), useRef(null), useRef(null)];
-
   const celebrationRef = useRef(null);
 
   const finishPart = (n, missed = [], { persist = true } = {}) => {
@@ -218,16 +220,7 @@ function Test() {
     setAnnouncement(
       n < TOTAL_PARTS
         ? `Part ${n} complete. Part ${n + 1} is unlocked.`
-        : "All three parts of the assessment are complete. You are ready for the lecture."
-
-    const finishPart = (n, missed = []) => {
-    markComplete(PARTS[n - 1].path); // no-op if QuizRunner already did
-    setMissedByPart((prev) => ({ ...prev, [n]: missed }));
-    const allDone = PARTS.every((p, i) => i === n - 1 || completed.includes(p.path));
-    setAnnouncement(
-        allDone
-        ? `All ${TOTAL_PARTS} parts complete. You have finished the assessment and you are ready for the lecture.`
-        : `Part ${n} complete. Part ${n + 1} is unlocked.`
+        : `All ${TOTAL_PARTS} parts complete. You have finished the assessment and you are ready for the lecture.`
     );
     if (n === TOTAL_PARTS) {
       if (persist) markComplete("/test");
@@ -240,7 +233,14 @@ function Test() {
     finishPart(n, [], { persist: false });
   };
 
-  // Bring the celebration into view once, right after the student finishes Part 3
+  const changeLevel = (v) => {
+    clearTestProgress();
+    setLevel(v);
+    setEmptyParts({});
+    setMissedByPart({});
+    setJustFinished(false);
+  };
+
   // Bring the celebration into view once, right after the student finishes the final part
   useEffect(() => {
     if (!justFinished || !celebrationRef.current) return;
@@ -248,10 +248,6 @@ function Test() {
     celebrationRef.current.focus();
     celebrationRef.current.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "center" });
   }, [justFinished]);
-
-useEffect(() => {
-  if (partsDone === TOTAL_PARTS) markComplete("/test");
-}, [partsDone, markComplete]);
 
   // Move the student (and keyboard / screen reader focus) to a part
   const goToPart = (n) => {
@@ -262,7 +258,7 @@ useEffect(() => {
     el.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
   };
 
-    // "Part n complete" banner with a button to the next part
+  // "Part n complete" banner with a button to the next part
   const banner = (n) =>
     isDone(n) && n < TOTAL_PARTS ? (
       <PartComplete
@@ -278,6 +274,19 @@ useEffect(() => {
     locked: isLocked(n),
     headingRef: partRefs[n - 1],
   });
+
+  // The quiz for part n. key={level} remounts it when the difficulty changes.
+  const quiz = (n, section) =>
+    level ? (
+      <QuizRunner
+        key={level}
+        section={section}
+        level={level}
+        completePath={partPath(n, level)}
+        onPass={(missed) => finishPart(n, missed)}
+        onEmpty={handleEmpty(n)}
+      />
+    ) : null;
 
   return (
     <div className="mx-auto max-w-5xl space-y-8 text-slate-700">
@@ -312,14 +321,12 @@ useEffect(() => {
       </section>
 
       <section className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
-        <DifficultyPicker value={level} onChange={(v) => { clearTestProgress(); setLevel(v); setEmptyParts({}); setMissedByPart({}); setJustFinished(false); }} />
-        {!level && (
-          <p className="text-sm text-slate-500">Pick a difficulty to begin.</p>
-        )}
+        <DifficultyPicker value={level} onChange={changeLevel} />
+        {!level && <p className="text-sm text-slate-500">Pick a difficulty to begin.</p>}
       </section>
 
       {/* Part 1: nodes, edges, weights */}
-      <Part number={1} title="Nodes, edges and weights" locked={false} headingRef={partRefs[0]}>
+      <Part {...partProps(1)} locked={false}>
         {!emptyParts[1] && (
           <>
             <p className="mb-4 leading-7">
@@ -332,74 +339,12 @@ useEffect(() => {
             </div>
           </>
         )}
-        {level && (<QuizRunner key={level} section="final-basics" level={level} completePath={partPath(1, level)} onPass={(missed) => finishPart(1, missed)} onEmpty={handleEmpty(1)} />)}
-        {partsDone >= 1 && (
-          <PartComplete
-            message="Part 1 complete. Part 2 is unlocked."
-            buttonLabel="Go to Part 2"
-            onContinue={partsDone === 1 ? () => goToPart(2) : undefined}
-          />
-        )}
-      {/* Part 1: nodes, edges, weights */}
-      <Part {...partProps(1)} locked={false}>
-        <p className="mb-4 leading-7">
-          The graph shows {Object.keys(CAMPUS_GRAPH.nodes).length} University of
-          Pretoria campuses and the roads between them. Use it to answer the
-          first five questions.
-        </p>
-        <div className="mb-6">
-          <CampusGraph />
-        </div>
-        <QuizRunner section="final-basics" onPass={(missed) => finishPart(1, missed)} />
-          {banner(1)}
+        {quiz(1, "final-basics")}
+        {banner(1)}
       </Part>
 
-
-    {/* Part 2: adjacency matrix */}
-      <Part {...partProps(2)}>
-        <p className="mb-4 leading-7">
-          This is the adjacency matrix of{" "}
-          {MATRIX_GRAPH.directed ? "a directed" : "an undirected"}, weighted graph
-          with vertices {MATRIX_GRAPH.vertices.join(", ")}. Use it to answer the
-          first four questions.
-        </p>
-        <div className="mb-6 overflow-x-auto">
-          <AdjacencyMatrix />
-        </div>
-        <QuizRunner section="final-matrix" onPass={(missed) => finishPart(2, missed)} />
-        {banner(2)}
-      </Part>
-
-    {/* Part 3: connectivity */}
-      <Part {...partProps(3)}>
-        <p className="mb-4 leading-7">
-          Use the two graphs below to answer the questions. Graph 1 is
-          undirected and Graph 2 is directed. These questions need some
-          reasoning, so work through each answer before you choose.
-        </p>
-        <div className="mb-6 grid gap-6 sm:grid-cols-2">
-          <GraphFigure graph={GRAPH_ARTICULATION} />
-          <GraphFigure graph={GRAPH_DIRECTED_CONNECTIVITY} />
-        </div>
-        <QuizRunner section="final-connectivity" onPass={(missed) => finishPart(3, missed)} />
-        {banner(3)}
-      </Part>
-
-      {/* Part 4: cycles */}
-      <Part {...partProps(4)}>
-        <p className="mb-4 leading-7">
-          Use the two graphs below to answer the questions. Graph 3 is
-          undirected and Graph 4 is directed. These questions need some
-          reasoning, so work through each answer before you choose.
-        </p>
-        <div className="mb-6 grid gap-6 sm:grid-cols-2">
-          <GraphFigure graph={GRAPH_TWO_CYCLES} />
-          <GraphFigure graph={GRAPH_DAG} />
-        </div>
-        <QuizRunner section="final-cycles" onPass={(missed) => finishPart(4, missed)} />
-        {banner(4)}
       {/* Part 2: adjacency matrix */}
-      <Part number={2} title="Adjacency matrices" locked={isLocked(2)} headingRef={partRefs[1]}>
+      <Part {...partProps(2)}>
         {!emptyParts[2] && (
           <>
             <p className="mb-4 leading-7">
@@ -413,14 +358,46 @@ useEffect(() => {
             </div>
           </>
         )}
-        {level && (<QuizRunner key={level} section="final-matrix" level={level} completePath={partPath(2, level)} onPass={(missed) => finishPart(2, missed)} onEmpty={handleEmpty(2)} />)}
-        {partsDone >= 2 && (
-          <PartComplete
-            message="Part 2 complete. Part 3 is unlocked."
-            buttonLabel="Go to Part 3"
-            onContinue={partsDone === 2 ? () => goToPart(3) : undefined}
-          />
+        {quiz(2, "final-matrix")}
+        {banner(2)}
+      </Part>
+
+      {/* Part 3: connectivity */}
+      <Part {...partProps(3)}>
+        {!emptyParts[3] && (
+          <>
+            <p className="mb-4 leading-7">
+              Use the two graphs below to answer the questions. Graph 1 is
+              undirected and Graph 2 is directed. These questions need some
+              reasoning, so work through each answer before you choose.
+            </p>
+            <div className="mb-6 grid gap-6 sm:grid-cols-2">
+              <GraphFigure graph={GRAPH_ARTICULATION} />
+              <GraphFigure graph={GRAPH_DIRECTED_CONNECTIVITY} />
+            </div>
+          </>
         )}
+        {quiz(3, "final-connectivity")}
+        {banner(3)}
+      </Part>
+
+      {/* Part 4: cycles */}
+      <Part {...partProps(4)}>
+        {!emptyParts[4] && (
+          <>
+            <p className="mb-4 leading-7">
+              Use the two graphs below to answer the questions. Graph 3 is
+              undirected and Graph 4 is directed. These questions need some
+              reasoning, so work through each answer before you choose.
+            </p>
+            <div className="mb-6 grid gap-6 sm:grid-cols-2">
+              <GraphFigure graph={GRAPH_TWO_CYCLES} />
+              <GraphFigure graph={GRAPH_DAG} />
+            </div>
+          </>
+        )}
+        {quiz(4, "final-cycles")}
+        {banner(4)}
       </Part>
 
       {/* Part 5: Dijkstra */}
@@ -428,10 +405,8 @@ useEffect(() => {
         <DijkstraTrace />
         <hr className="my-8 border-slate-200" />
         <h3 className="mb-3 text-lg font-semibold text-slate-900">Question 2</h3>
-        <p className="mb-4 leading-7">
-          Answer the following questions.
-        </p>
-        {level && (<QuizRunner key={level} section="final-dijkstra" level={level} completePath={partPath(3, level)} onPass={(missed) => finishPart(3, missed)} onEmpty={handleEmpty(3)} />)}
+        <p className="mb-4 leading-7">Answer the following questions.</p>
+        {quiz(5, "final-dijkstra")}
         {justFinished && (
           <Completion missedByPart={missedByPart} headingRef={celebrationRef} />
         )}

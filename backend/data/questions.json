@@ -615,7 +615,6 @@
     "answer": "Each of them needs another package in the loop to be installed first",
     "hint": "Try to install B. What do you need first? Then what does that need?",
     "reteach": "To install B you need C, to install C you need E, and to install E you need B. Every package in the loop is waiting for another, so none can go first. That is why you need to be aware of cycles in a graph."
-  }
     },
 
 
