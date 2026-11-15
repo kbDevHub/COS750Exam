@@ -12,6 +12,11 @@ import Short from "./pages/Short";
 import NoteTaker from "./components/NoteTaker";
 import { ProgressProvider } from "./components/Progress";
 import Adjacency from "./pages/Adjacency";
+import Sandbox from "./pages/Sandbox";
+import Profile from "./pages/Profile";
+import BadgeToaster from "./components/BadgeToaster";
+import Cyclic from "./pages/Cyclic";
+import Connected from "./pages/Connected";
 
 function App() {
     return (
@@ -19,12 +24,13 @@ function App() {
             <div className="flex min-h-screen bg-gray-50">
 
                 <ProgressProvider>
+                    <BadgeToaster />
                     {/* Sidebar */}
                     <Sidebar />
                     <NoteTaker />
 
                     {/* Main content */}
-                    <main className="ml-[180px] min-w-0 flex-1 px-6 py-8 md:px-12 md:py-10">
+                    <main className="min-w-0 flex-1 px-6 pb-8 pt-16 md:ml-[220px] md:px-12 md:py-10">
                         <div className="mx-auto max-w-5xl">
 
                             <Routes>
@@ -36,6 +42,10 @@ function App() {
                                 <Route path="/dijkstra" element={<Dijkstra />} />
                                 <Route path="/test" element={<Test />} />
                                 <Route path="/shortest-path" element={<Short />} />
+                                <Route path="/sandbox" element={<Sandbox />} />
+                                <Route path="/profile" element={<Profile />} />
+                                <Route path="/connected" element={<Connected />} />
+                                <Route path="/cyclic" element={<Cyclic />} />
                             </Routes>
 
                         </div>

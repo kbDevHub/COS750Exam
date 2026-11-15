@@ -85,7 +85,6 @@ export default function EdgeExplorer({ allowWeights = true, allowDirections = tr
           const len = Math.hypot(dx, dy);
           const ux = dx / len;
           const uy = dy / len;
-          // Stop the line at the circle edge so arrowheads are visible
           const x2 = directed ? b.x - ux * (R + 4) : b.x;
           const y2 = directed ? b.y - uy * (R + 4) : b.y;
           const active = picked?.id === e.id;
@@ -106,7 +105,6 @@ export default function EdgeExplorer({ allowWeights = true, allowDirections = tr
                 }
               }}
             >
-              {/* Wide invisible line = easier to click */}
               <line x1={a.x} y1={a.y} x2={b.x} y2={b.y} stroke="transparent" strokeWidth="22" />
               <line
                 x1={a.x} y1={a.y} x2={x2} y2={y2}
@@ -119,7 +117,6 @@ export default function EdgeExplorer({ allowWeights = true, allowDirections = tr
           );
         })}
 
-        {/* Weight labels (drawn after edges so they sit on top) */}
         {weighted &&
           EDGES.map((e) => {
             const a = NODES[e.from];

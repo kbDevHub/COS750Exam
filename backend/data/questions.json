@@ -89,6 +89,51 @@
         "hint": "Nodes are the 'things'.",
         "reteach":"Stations are places you travel between, so they are the nodes."
     },
+    {
+        "id": "adjacency-1",
+        "section": "adjacency",
+        "question": "In a weighted adjacency matrix, the cell in row C, column F holds 7. What does this tell you?",
+        "options":
+            [
+                "There is an edge from C to F with weight 7",
+                "C has 7 neighbours",
+                "The path from C to F uses 7 edges",
+                "There is no edge between C and F"
+            ],
+        "answer": "There is an edge from C to F with weight 7",
+        "hint": "Rows are where an edge starts and columns are where it ends. What does the number in a cell stand for?",
+        "reteach": "The cell in row C, column F describes the edge that starts at C and ends at F. A number other than 0 means that edge exists, and the number is its weight, so the edge C to F has weight 7."
+    },
+    {
+        "id": "adjacency-2",
+        "section": "adjacency",
+        "question": "Why is every cell on the diagonal of the campus matrix (row I column I, row A column A, and so on) equal to 0?",
+        "options":
+            [
+                "No vertex has an edge to itself",
+                "Every vertex is 0 minutes from its neighbours",
+                "The diagonal is where the start vertex is stored",
+                "The diagonal is left blank for the adjacency list"
+            ],
+        "answer": "No vertex has an edge to itself",
+        "hint": "Row I, column I would be an edge that starts at I and ends at I. Is there one in the drawing?",
+        "reteach": "A diagonal cell, such as row I, column I, would be an edge from a vertex back to itself. The campus graph has no such edge, so every diagonal cell is 0."
+    },
+    {
+        "id": "adjacency-3",
+        "section": "adjacency",
+        "question": "An undirected weighted graph has 5 edges. How many cells in its adjacency matrix are not 0?",
+        "options":
+            [
+                "5",
+                "10",
+                "20",
+                "25"
+            ],
+        "answer": "10",
+        "hint": "An undirected edge works both ways. How many cells does each edge fill?",
+        "reteach": "An undirected edge between X and Y fills row X, column Y and row Y, column X. So 5 edges fill 2 x 5 = 10 cells, mirrored across the diagonal."
+    },
 
     {
         "id": "dijk-1",
@@ -134,6 +179,504 @@
         "answer": "The unvisited vertex with the smallest tentative distance",
         "hint": "The algorithm is 'greedy': it always locks in the cheapest option available",
         "reteach":"Dijkstra repeatedly picks the unvisited vertex that currently has the smallest distance from the source and finalises it. Since all weights are non-negative, no later route can beat that distance."
-    }
+    },
+    {
+        "id": "w1",
+        "section": "weights",
+        "question": "What does the weight on an edge represent?",
+        "options": [
+        "The cost of using that edge, such as distance or time",
+        "The number of vertices it connects",
+        "The name of the edge",
+        "How many times the edge can be used"
+        ],
+        "answer": "The cost of using that edge, such as distance or time",
+        "hint": "Think about the walking minutes on the campus map.",
+        "reteach": "A weight is a number on an edge. It tells you how costly that connection is: distance, travel time or money."
+  },
+  {
+        "id": "w2",
+        "section": "weights",
+        "question": "Path I → A → P uses edges with weights 4 and 5. What is its cost?",
+        "options": ["9", "20", "5", "2"],
+        "answer": "9",
+        "hint": "The cost of a path is a sum.",
+        "reteach": "Add the weights of every edge on the path: 4 + 5 = 9."
+  },
+  {
+        "id": "w3",
+        "section": "weights",
+        "question": "Which statement is true?",
+        "options": [
+        "The path with the fewest edges is not always the cheapest",
+        "The path with the fewest edges is always the cheapest",
+        "A path must use exactly two edges",
+        "Weights are always distances"
+        ],
+        "answer": "The path with the fewest edges is not always the cheapest",
+        "hint": "Remember the direct I → P road that took 12 minutes.",
+        "reteach": "I → P is one edge but costs 12. I → A → P uses two edges but costs only 9. Cost depends on the weights, not the number of edges."
+  },
+  {
+        "id": "w4",
+        "section": "weights",
+        "question": "The shortest path problem asks us to find...",
+        "options": [
+        "the path between two vertices with the lowest total cost",
+        "the path with the most vertices",
+        "the vertex with the most edges",
+        "every path in the graph"
+        ],
+        "answer": "the path between two vertices with the lowest total cost",
+        "hint": "Think about the cheapest route from I to P.",
+        "reteach": "Given a start and an end vertex, we want the path whose edge weights add up to the smallest total."
+  },
+
+  {
+        "id": "final-basics-1",
+        "section": "final-basics",
+        "question": "How many nodes does the campus graph have?",
+        "options":
+            [
+                "6",
+                "8",
+                "14",
+                "It depends on the roads"
+            ],
+        "answer": "6",
+        "hint": "Nodes are the 'things'. What are the circles in the diagram?",
+        "reteach": "Each campus is a node, and there are six campuses. The 8 is the number of edges (roads), not nodes.",
+        "level": 1
+  },
+    {
+        "id": "final-basics-2",
+        "section": "final-basics",
+        "question": "What is the weight of the edge between Hatfield and Prinshof?",
+        "options":
+            [
+                "5.8 km",
+                "5.7 km",
+                "4.3 km",
+                "15.9 km"
+            ],
+        "answer": "5.8 km",
+        "hint": "The weight is the number written on the edge (the line) joining the two campuses.",
+        "reteach": "In a weighted graph, each edge bears a value. Here the weight is the distance in km, and the Hatfield-Prinshof edge is 5.8 km. The 5.7 km edge joins Groenkloof and Prinshof.",
+        "level": 1
+    },
+    {
+        "id": "final-basics-3",
+        "section": "final-basics",
+        "question": "Which campus is joined to only one other campus by a road?",
+        "options":
+            [
+                "Hatfield",
+                "Prinshof",
+                "Mamelodi",
+                "Onderstepoort"
+            ],
+        "answer": "Mamelodi",
+        "hint": "Count the lines touching each circle.",
+        "reteach": "Mamelodi has just one edge, to Hatfield. Hatfield has five, Prinshof has three, and Onderstepoort has two.",
+        "level": 1
+    },
+    {
+        "id": "final-basics-4",
+        "section": "final-basics",
+        "question": "Which of these is a valid path from Hillcrest to Onderstepoort?",
+        "options":
+            [
+                "Hillcrest -> Hatfield -> Prinshof -> Onderstepoort",
+                "Hillcrest -> Prinshof -> Onderstepoort",
+                "Hillcrest -> Mamelodi -> Onderstepoort",
+                "Hillcrest -> Groenkloof -> Mamelodi -> Onderstepoort"
+            ],
+        "answer": "Hillcrest -> Hatfield -> Prinshof -> Onderstepoort",
+        "hint": "A path is valid only if every consecutive pair of campuses is joined by an edge.",
+        "reteach": "Check each step. Hillcrest-Hatfield, Hatfield-Prinshof and Prinshof-Onderstepoort are all edges, so the first path is valid. The others use a step with no edge, such as Hillcrest-Prinshof or Mamelodi-Onderstepoort.",
+        "level": 1
+    },
+    {
+        "id": "final-basics-5",
+        "section": "final-basics",
+        "question": "What is the total cost of the path from Hatfield to Groenkloof to Prinshof?",
+        "options":
+            [
+                "10.0 km",
+                "10.1 km",
+                "5.7 km",
+                "4.3 km"
+            ],
+        "answer": "10.0 km",
+        "hint": "Add up the weights of every edge along the path, not just one.",
+        "reteach": "The path uses two edges: Hatfield-Groenkloof (4.3 km) and Groenkloof-Prinshof (5.7 km). The cost of a path is the sum of its edge weights: 4.3 + 5.7 = 10.0 km.",
+        "level": 1
+    },
+    {
+        "id": "final-basics-6",
+        "section": "final-basics",
+        "question": "A graph models airports and the flights between them. Each flight has a ticket price. What is the weight of an edge?",
+        "options":
+            [
+                "The airport's name",
+                "The number of airports in the graph",
+                "The ticket price of that flight",
+                "Whether the flight is direct"
+            ],
+        "answer": "The ticket price of that flight",
+        "hint": "The weight is the cost or distance attached to an edge.",
+        "reteach": "Airports are the nodes and flights are the edges. A weight is a number attached to an edge, such as a price, distance or time, so here it is the ticket price.",
+        "level": 1
+    },
+
+    {
+        "id": "final-matrix-1",
+        "section": "final-matrix",
+        "question": "A graph has vertices A, B, C and D. Its adjacency matrix is given row by row (columns in the order A, B, C, D):\nA: 0 4 2 0\nB: 4 0 0 5\nC: 2 0 0 1\nD: 0 5 1 0\nWhat is the weight of the edge between A and B?",
+        "options":
+            [
+                "0",
+                "2",
+                "4",
+                "5"
+            ],
+        "answer": "4",
+        "hint": "Find row A, then look at the column for B.",
+        "reteach": "The entry in row A, column B is the weight of the edge from A to B. Here it is 4.",
+        "level": 1
+    },
+    {
+        "id": "final-matrix-2",
+        "section": "final-matrix",
+        "question": "Using the same matrix, is there an edge between A and D?",
+        "options":
+            [
+                "Yes, with weight 0",
+                "Yes, with weight 5",
+                "No, because the entry is 0",
+                "You cannot tell from a matrix"
+            ],
+        "answer": "No, because the entry is 0",
+        "hint": "Look at row A, column D. What does a 0 stand for?",
+        "reteach": "In a weighted adjacency matrix, 0 means there is no edge between those two vertices. A and D are not directly connected.",
+        "level": 1
+},
+    {
+        "id": "final-matrix-3",
+        "section": "final-matrix",
+        "question": "How many edges does the same matrix have?",
+        "options":
+            [
+                "4",
+                "6",
+                "8",
+                "16"
+            ],
+        "answer": "4",
+        "hint": "The matrix has 8 non-zero entries. In an undirected graph, how many entries does each edge use?",
+        "reteach": "An undirected edge appears twice in the matrix (once above the diagonal and once below), so 8 non-zero entries means 4 edges: A-B, A-C, B-D and C-D.",
+        "level": 2
+    },
+    {
+        "id": "final-matrix-4",
+        "section": "final-matrix",
+        "question": "Which list of edges matches the matrix?",
+        "options":
+            [
+                "A-B (4), A-C (2), B-D (5), C-D (1)",
+                "A-B (4), A-D (2), B-C (5), C-D (1)",
+                "A-B (2), A-C (4), B-D (1), C-D (5)",
+                "A-B (4), A-C (2), B-D (5), A-D (1)"
+            ],
+        "answer": "A-B (4), A-C (2), B-D (5), C-D (1)",
+        "hint": "Go through the matrix row by row and write down each non-zero entry with its two vertices.",
+        "reteach": "Row A gives A-B (4) and A-C (2). Row B adds B-D (5). Row C adds C-D (1). Row D repeats edges you already have.",
+        "level": 2
+    },
+    {
+        "id": "final-matrix-5",
+        "section": "final-matrix",
+        "question": "In another graph's adjacency matrix, the entry in row A, column B is 3, but the entry in row B, column A is 0. What does this tell you?",
+        "options":
+            [
+                "The edge is undirected with weight 3",
+                "There is a directed edge from A to B with weight 3, but none from B to A",
+                "There is no edge between A and B",
+                "The matrix contains an error"
+            ],
+        "answer": "There is a directed edge from A to B with weight 3, but none from B to A",
+        "hint": "Rows are where an edge starts and columns are where it ends. Is the matrix symmetric here?",
+        "reteach": "An undirected graph always gives a symmetric matrix. When the two entries differ, the edges are directed. Row A, column B is the edge A -> B, and row B, column A is the edge B -> A.",
+        "level": 2
+    },
+    {
+        "id": "final-matrix-6",
+        "section": "final-matrix",
+        "question": "A road network has 1,000 towns, but each town connects to only about 4 others. Which representation is the better choice, and why?",
+        "options":
+            [
+                "Adjacency matrix, because it is always faster",
+                "Adjacency list, because it only stores the edges that exist",
+                "Adjacency matrix, because it uses less memory for sparse graphs",
+                "Neither can store a graph this big"
+            ],
+        "answer": "Adjacency list, because it only stores the edges that exist",
+        "hint": "A matrix needs one entry for every PAIR of vertices. How many pairs are there for 1,000 towns?",
+        "reteach": "A matrix for 1,000 vertices needs 1,000 x 1,000 = 1,000,000 entries, even though only about 4,000 are real edges. An adjacency list stores only the edges that exist, so it suits sparse graphs like road networks.",
+        "level": 2
+    },
+
+    {
+        "id": "final-dijkstra-1",
+        "section": "final-dijkstra",
+        "question": "What is the shortest path from vertex A to vertex E as given by the algorithm above, and what is its cost? Use your solution from Question 1 to answer the question.",
+        "options":
+            [
+                "A -> B -> C -> D -> E, cost 4",
+                "A -> E, cost 5",
+                "A -> C -> D -> E, cost 5",
+                "A -> B -> D -> E, cost 6"
+            ],
+        "answer": "A -> B -> C -> D -> E, cost 4",
+        "hint": "Look at E's final distance in your table, then follow each vertex's updates back to A.",
+        "reteach": "E ends with distance 4. That distance was set in iteration 4, when D was processed (3 + 1). D got 3 from C (2 + 1), and C got 2 from B (1 + 1). The direct edge A -> E costs 5, so the longer route is cheaper.",
+        "level": 2
+    },
+    {
+      "id": "final-dijkstra-2",
+      "section": "final-dijkstra",
+      "question": "When C (dist 2) is removed from unvisited, the road C-E (weight 3) gives newDist = 5. E already has (A, 5). What happens to E? Use your solution from Question 1 to answer the question.",
+      "options": [
+        "E stays (A, 5), because 5 is not less than 5",
+        "E becomes (C, 5), because the newer route is preferred",
+        "E becomes (C, 5), because C is closer to E than A is",
+        "E is removed from unvisited, because it has been reached twice"
+      ],
+      "answer": "E stays (A, 5), because 5 is not less than 5",
+      "hint": "Look at the update rule. When is v.dist replaced?",
+      "reteach": "The rule is to update only if newDist < v.dist. Here 5 is not less than 5, so E keeps (A, 5). E is improved later, to (D, 4), once D is removed.",
+      "level": 2
+    },
+    {
+        "id": "final-dijkstra-3",
+        "section": "final-dijkstra",
+        "question": "Why is Dijkstra's algorithm described as a greedy algorithm?",
+        "options":
+            [
+                "It always explores every possible path before deciding",
+                "It always picks the closest unvisited vertex and treats its distance as final",
+                "It picks vertices at random until it finds the destination",
+                "It uses as much memory as possible"
+            ],
+        "answer": "It always picks the closest unvisited vertex and treats its distance as final",
+        "hint": "A greedy algorithm makes the best-looking choice at each step and never goes back on it.",
+        "reteach": "Dijkstra locks in the cheapest unvisited vertex at every step and never revisits it. That is the greedy choice. It works because no later path can be cheaper when all weights are non-negative.",
+        "level": 1
+    },
+    {
+      "id": "final-dijkstra-4",
+      "section": "final-dijkstra",
+      "question": "Here is a graph of one-way roads:\nA to B costs 2.\nA to C costs 6.\nA to D costs 100.\nB to C costs 3.\nD to B costs 1.\nDijkstra starts at A. The vertices are removed from unvisited in this order: A (dist 0), B (dist 2), C (dist 5), D (dist 100). The road from D to B costs only 1. Does D offer B a shorter route?",
+      "options": [
+        "No: the route through D costs 100 + 1 = 101, far more than B's 2",
+        "Yes: the road from D to B costs only 1, so the route through D must be cheaper",
+        "Yes, but B has already been removed, so the algorithm cannot update it",
+        "No: D was reached by a road of 100, the heaviest road in the graph"
+      ],
+      "answer": "No: the route through D costs 100 + 1 = 101, far more than B's 2",
+      "hint": "Add up the whole route from A to B by way of D, not just the last road.",
+      "reteach": "A route to B through D costs D's dist plus the road's weight: 100 + 1 = 101, which is more than 2. The vertices are removed in order of smallest dist (0, 2, 5, 100), and every vertex still unvisited when B was removed had a dist of at least 2. No weight is negative, so no later route can beat B's dist. Dijkstra isn't missing anything here.",
+      "level": 3
+    },
+    {
+        "id": "final-dijkstra-5",
+        "section": "final-dijkstra",
+        "question": "Which algorithm can find shortest paths in a graph that contains negative edge weights?",
+        "options": [
+            "Breadth-first search",
+            "Running Dijkstra twice",
+            "Bellman-Ford",
+            "Dijkstra's algorithm with a larger table"
+        ],
+        "answer": "Bellman-Ford",
+        "hint": "It is the algorithm you will meet after Dijkstra when negative weights come up.",
+        "reteach": "Bellman-Ford repeatedly relaxes every edge instead of locking in vertices early, so it handles negative weights. It is slower than Dijkstra, which is why Dijkstra is still used when all weights are non-negative.",
+        "level": 2
+    },
+
+    {
+        "id": "shortest-path-1",
+        "section": "shortest-path",
+        "question": "A route uses three roads with driving times of 3, 4 and 2 minutes. What is the total cost of the route?",
+        "options": ["9 minutes", "4 minutes", "3 minutes", "24 minutes"],
+        "answer": "9 minutes",
+        "hint": "The cost of a path combines the weights of all its edges. How do you combine them?",
+        "reteach": "The cost of a path is the SUM of its edge weights: 3 + 4 + 2 = 9. Not the largest weight, and not the product."
+    },
+    {
+        "id": "shortest-path-2",
+        "section": "shortest-path",
+        "question": "Route X uses 2 roads and takes 15 minutes in total. Route Y uses 4 roads and takes 11 minutes in total. Which is the shortest path?",
+        "options": ["Route Y, because its total cost is lower", "Route X, because it uses fewer roads", "Both, because they reach the same place", "Neither, you need to know the first road"],
+        "answer": "Route Y, because its total cost is lower",
+        "hint": "Remember the ambulance: did the route with the fewest roads win?",
+        "reteach": "The shortest path is the one with the LOWEST TOTAL COST, not the fewest edges. Route Y costs 11, which is less than 15, so Route Y is shorter even though it uses more roads."
+    },
+    {
+        "id": "shortest-path-3",
+        "section": "shortest-path",
+        "question": "What does the single-source shortest path problem ask?",
+        "options": ["The lowest-cost path from one start vertex to every other vertex", "The path that uses the fewest edges between two vertices", "The longest path from one start vertex", "The cheapest single edge in the graph"],
+        "answer": "The lowest-cost path from one start vertex to every other vertex",
+        "hint": "'Single-source' tells you how many start vertices there are. Where do the paths go?",
+        "reteach": "Single-source means ONE start vertex (the source). The problem asks for the lowest-cost path from that source to EVERY other vertex in the graph. Dijkstra's algorithm, in the next section, solves it."
+    },
+
+    {
+    "id": "connected-1",
+    "section": "connected",
+    "question": "Two vertices of this graph fail at the same time: R and P. How many separate pieces is the graph split into?",
+    "options": [
+      "3",
+      "2",
+      "4",
+      "1"
+    ],
+    "answer": "3",
+    "hint": "Remove R and P from the graph above. Don't forget any vertex that is left with no neighbours.",
+    "reteach": "Without R and P, the vertices A, J and Z still hold together. But N has lost both of its neighbours (R and P), and L has lost its only neighbour (P). The pieces are {A, J, Z}, {N} and {L}: three in total."
+  },
+  {
+    "id": "connected-2",
+    "section": "connected",
+    "question": "In this graph, which pair of vertices has two non-overlapping paths between them?",
+    "options": [
+      "A and R",
+      "L and R",
+      "N and Z",
+      "J and P"
+    ],
+    "answer": "A and R",
+    "hint": "Two paths overlap if they share a vertex between the two end vertices. Try to find two different routes for each pair.",
+    "reteach": "A to R has the routes A - J - R and A - Z - R, which share no vertex. For L and R, every route has to go through P. For N and Z, and for J and P, every route has to go through R. A pair like that has only one non-overlapping path."
+  },
+  {
+    "id": "connected-3",
+    "section": "connected",
+    "question": "Engineers want to add one new link so that L is no longer cut off when P fails. Which link does that?",
+    "options": [
+      "L - R",
+      "Z - N",
+      "A - R",
+      "J - Z"
+    ],
+    "answer": "L - R",
+    "hint": "Right now L has only one neighbour. What does L need so that it can still reach the rest of the network if P fails?",
+    "reteach": "L's only connection is P, so if P fails L is cut off. A link from L to R gives L a second way into the rest of the network. Z - N, A - R and J - Z don't touch L, so L is still stranded when P fails. (L - N would also have worked)."
+  },
+  {
+    "id": "cyclic-1",
+    "section": "cyclic",
+    "question": "With the dependencies shown before the extra one is added, which order installs all four packages? (An arrow from X to Y means \"to install X you need Y\".)",
+    "options": [
+      "C, B, D, A",
+      "A, B, C, D",
+      "B, C, D, A",
+      "D, B, C, A"
+    ],
+    "answer": "C, B, D, A",
+    "hint": "Start with the package that needs nothing. Then only install a package once everything it needs is already installed.",
+    "reteach": "C needs nothing, so it goes first. B needs C, so it comes next. D needs B, then A needs B, C and D, so A goes last: C, B, D, A. The other orders install a package before one of the packages it needs. A graph with a valid order like this has no cycles."
+  },
+  {
+    "id": "cyclic-2",
+    "section": "cyclic",
+    "question": "Now C needs E, and E needs B. Which sequence of packages is a cycle?",
+    "options": [
+      "B -> C -> E -> B",
+      "A -> B -> C",
+      "A -> C -> E",
+      "A -> D -> B"
+    ],
+    "answer": "B -> C -> E -> B",
+    "hint": "A cycle is a path that arrives back at its start. Follow the arrows and see which sequence returns to where it began.",
+    "reteach": "B needs C, C needs E, and E needs B, which brings you back to B. The other sequences are valid paths, but none of them returns to its starting package."
+  },
+  {
+    "id": "cyclic-3",
+    "section": "cyclic",
+    "question": "Why can't B, C and E ever be installed once C needs E?",
+    "options": [
+      "Each of them needs another package in the loop to be installed first",
+      "Packages that depend on three others can't be installed",
+      "E has no dependencies, so nothing can use it",
+      "A has to be installed before any of them"
+    ],
+    "answer": "Each of them needs another package in the loop to be installed first",
+    "hint": "Try to install B. What do you need first? Then what does that need?",
+    "reteach": "To install B you need C, to install C you need E, and to install E you need B. Every package in the loop is waiting for another, so none can go first. That is why you need to be aware of cycles in a graph."
+    },
+
+
+    {
+        "id": "final-conn-hard-1",
+        "section": "final-connectivity",
+        "question": "Graph 1 has two articulation points. You may add ONE new edge. Which choice makes Graph 1 biconnected, and why?",
+        "options": [
+          "Z - L: L gets a second route that avoids P, and Z, A and J get a second route to the rest that avoids R",
+          "R - L: L gets a second connection, which removes every articulation point",
+          "N - Z: it links the blocks on either side of R, which removes every articulation point",
+          "J - N: any edge that creates a new cycle makes a graph biconnected"
+        ],
+        "answer": "Z - L: L gets a second route that avoids P, and Z, A and J get a second route to the rest that avoids R",
+        "hint": "Test each articulation point separately. After adding the edge, remove R and check the rest is still in one piece. Then remove P and check again.",
+        "reteach": "The articulation points are R (it holds Z, A and J to the rest of the graph) and P (it holds L). One edge has to fix both. Z - L does: without R, Z - L still joins {Z, A, J} to {P, N, L}; without P, L is still reachable through Z. R - L only fixes P, because removing R still strands Z, A and J. N - Z and J - N only fix R, because removing P still strands L. Creating a new cycle is not enough on its own. (A - L or J - L would also have worked.)",
+        "level": 3
+  },
+  {
+        "id": "final-conn-hard-2",
+        "section": "final-connectivity",
+        "question": "Graph 2 is weakly connected but not strongly connected. Why can't adding a single new arrow make it strongly connected?",
+        "options": [
+          "M and L both have no outgoing arrow, and one new arrow can only give one of them a way out",
+          "A has no incoming arrow, and a single new arrow can't fix that",
+          "R, P and N already form a cycle, so no other arrow can be added",
+          "Strong connectivity needs an arrow between every pair of vertices, and one arrow can't provide that"
+        ],
+        "answer": "M and L both have no outgoing arrow, and one new arrow can only give one of them a way out",
+        "hint": "In a strongly connected graph every vertex can reach every other vertex. Which vertices are dead ends, where you can't go any further?",
+        "reteach": "M and L have no arrows leaving them, so from M or L you can't reach any other vertex. Both need an outgoing arrow, and one new arrow leaves only one vertex. That is why a single arrow can't work. (A having no incoming arrow is also a problem, but one arrow such as M -> A could fix that on its own.) Two arrows are enough, for example M -> A and L -> A. Strong connectivity doesn't need an arrow between every pair, only a route.",
+        "level": 3
+  },
+  {
+        "id": "final-cyc-hard-1",
+        "section": "final-cycles",
+        "question": "What is the smallest number of edges you must remove from Graph 3 so that it contains no cycle?",
+        "options": [
+          "1: removing C - D splits the graph in two, so no cycles are left",
+          "2: the two triangles are separate cycles, and removing one edge can only break one of them",
+          "3: one edge from each triangle, plus the edge joining them",
+          "6: every vertex lies on a cycle, so each one must lose an edge"
+        ],
+        "answer": "2: the two triangles are separate cycles, and removing one edge can only break one of them",
+        "hint": "List every cycle first. Then ask whether a single edge can belong to more than one of them.",
+        "reteach": "The cycles are the triangles A-B-C and D-E-F. They share no edge, so each triangle needs its own edge removed: 2 in total. Removing C - D splits the graph into two pieces, but both triangles survive, because C - D isn't on either cycle.",
+        "level": 3
+  },
+  {
+        "id": "final-cyc-hard-2",
+        "section": "final-cycles",
+        "question": "Which single arrow, if added to Graph 4, would create a cycle?",
+        "options": [
+          "D -> A, because A can already reach D, so the new arrow completes a loop",
+          "A -> D, because it gives D a second arrow pointing at it",
+          "B -> C, because it joins the two middle vertices",
+          "C -> B, because it points back along the layout"
+        ],
+        "answer": "D -> A, because A can already reach D, so the new arrow completes a loop",
+        "hint": "A new arrow from X to Y makes a loop only if you can already get from Y back to X by following the arrows.",
+        "reteach": "An arrow X -> Y closes a cycle exactly when Y can already reach X. A can reach D (A -> B -> D), so D -> A completes the loop A -> B -> D -> A. With A -> D, D can't get back to A. With B -> C, C can only reach D. With C -> B, B can only reach D. None of those gives a way back.",
+        "level": 3
+  }
 
 ]

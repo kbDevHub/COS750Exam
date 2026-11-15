@@ -56,7 +56,7 @@ export default function EdgesExample()
                         const active = selected ===a || selected===b;
                         return(
                             <line
-                                key={"${a}-${b}"}
+                                key={`${a}-${b}`}
                                 x1={A.x +R}
                                 y1={A.y}
                                 x2={B.x -R}
@@ -81,7 +81,7 @@ export default function EdgesExample()
                                 tabIndex={0}
                                 role="button"
                                 aria-pressed={isSelected}
-                                aria-label={"${p.name}, vertex ${p.label}"}
+                                aria-label={`${p.name}, vertex ${p.label}`}
                                 onKeyDown={(e)=>{
                                     if (e.key==="Enter" || e.key===" ")
                                     {

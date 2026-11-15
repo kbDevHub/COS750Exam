@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useProgress } from "./Progress";
+import { SECTION_TITLES } from "../data/SectionTitles";
 
 const MAX_ATTEMPTS = 2;
 
@@ -11,16 +12,6 @@ const shuffle = (arr) => {
     [a[i], a[j]] = [a[j], a[i]];
   }
   return a;
-};
-
-const SECTION_TITLES = {
-  "/": "Introduction",
-  "/nodes": "1.1 Graph: Nodes",
-  "/edges": "1.2 Graph: Edges",
-  "/weights": "1.3 Graph: Weighted Graphs",
-  "/shortest-path": "2.1 Dijkstra algorithm: Shortest path problem",
-  "/dijkstra": "2.2 Dijkstra algorithm: Dijkstra algorithm",
-  "/test": "Test Yourself",
 };
 
 const getNextChapter = (section) => {
@@ -55,8 +46,9 @@ const btnSecondary =
   "transition hover:bg-slate-100 active:scale-[0.98] focus:outline-none " +
   "focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2";
 
-export default function QuizRunner({ section, onPass = () => { } }) {
+export default function QuizRunner({ section, completePath, level = null, onPass = () => { }, onEmpty }) {
   const [questions, setQuestions] = useState([]);
+  const [loaded, setLoaded] = useState(false);
   const [loadError, setLoadError] = useState(false);
 
   const [qi, setQi] = useState(0);
@@ -69,17 +61,32 @@ export default function QuizRunner({ section, onPass = () => { } }) {
   const navigate = useNavigate();
   const nextChapter = getNextChapter(section);
   const { markComplete } = useProgress();
+  const [allDone, setAllDone] = useState(false);
 
   // Load questions from the backend
   useEffect(() => {
-    fetch(`/api/questions/${section}?side=learning`)
-      .then((r) => r.json())
-      .then((data) => {
-        setQuestions(data);
-        if (data.length > 0) setOptions(shuffle(data[0].options));
-      })
-      .catch(() => setLoadError(true));
-  }, [section]);
+  setLoaded(false);
+  setLoadError(false);
+
+  const params = new URLSearchParams({ side: "learning" });
+  if (level) params.set("level", level);
+
+  fetch(`/api/questions/${section}?${params}`)
+    .then((r) => r.json())
+    .then((data) => {
+      setQuestions(data);
+      setQi(0);
+      setSelected(null);
+      setStatus("answering");
+      setWrongCount(0);
+      setMissed([]);
+      setAllDone(false);
+      if (data.length > 0) setOptions(shuffle(data[0].options));
+      setLoaded(true);
+      if (data.length === 0) onEmpty?.();
+    })
+    .catch(() => setLoadError(true));
+  }, [section, level]);
 
   // Guards (after all hooks)
   if (loadError)
@@ -88,17 +95,23 @@ export default function QuizRunner({ section, onPass = () => { } }) {
         Couldn't load the questions. Is the backend running?
       </div>
     );
-  if (questions.length === 0)
+  if (!loaded)
     return (
       <div className="animate-pulse rounded-xl bg-slate-100 p-6 text-sm text-slate-500">
         Loading questions...
+      </div>
+    );
+  if (questions.length === 0)
+    return (
+      <div className="rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-600">
+        There are no questions at this difficulty yet.
       </div>
     );
 
   const q = questions[qi];
   const isLast = qi === questions.length - 1;
   const done = status === "correct" || status === "failed";
-  const finished = qi + (done ? 1 : 0);
+  const finished = allDone ? questions.length : qi + (done ? 1 : 0);
   const progress = (finished / questions.length) * 100;
   const attemptNumber = Math.min(wrongCount + (status === "correct" ? 0 : 1), MAX_ATTEMPTS);
   const isMiss = status === "wrong" || status === "failed";
@@ -179,7 +192,8 @@ export default function QuizRunner({ section, onPass = () => { } }) {
     if (status === "wrong") setMissed(finalMissed);
 
     if (isLast) {
-      markComplete(`/${section}`);
+      setAllDone(true);
+      markComplete(completePath ?? `/${section}`);
       onPass(finalMissed);
       if (nextChapter) navigate(nextChapter.path);
       return;
@@ -276,7 +290,7 @@ export default function QuizRunner({ section, onPass = () => { } }) {
         )}
 
         {status === "correct" && (
-          <button className={btnPrimary} onClick={proceed}>
+          <button className={btnPrimary} onClick={proceed} disabled={allDone}>
             {proceedLabel}
           </button>
         )}

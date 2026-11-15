@@ -1,0 +1,1075 @@
+import { useState, useEffect, useRef } from "react";
+
+
+const R = 26;
+const W = 600; 
+const H = 340; 
+const MAX_NODES = 15;
+const MAX_W = 99;
+
+const MIN_ZOOM = 0.35;
+const MAX_ZOOM = 3;
+const ZOOM_STEP = 1.25;
+const DEFAULT_VIEW = { zoom: 1, cx: W / 2, cy: H / 2 };
+
+const BOUNDS = { minX: -600, maxX: 1200, minY: -340, maxY: 680 };
+
+const EXAMPLE_NODES = [
+    { id: "I", x: 300, y: 80 },
+    { id: "A", x: 110, y: 180 },
+    { id: "M", x: 490, y: 180 },
+    { id: "P", x: 300, y: 285 },
+];
+const EXAMPLE_EDGES = [
+    { id: 1, from: "I", to: "A", w: 4 },
+    { id: 2, from: "A", to: "P", w: 5 },
+    { id: 3, from: "I", to: "M", w: 2 },
+    { id: 4, from: "M", to: "P", w: 8 },
+    { id: 5, from: "I", to: "P", w: 12 },
+];
+
+const fmt = (d) => (d === Infinity ? "∞" : d);
+const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
+const toWeight = (v) => clamp(parseInt(v, 10) || 1, 1, MAX_W);
+const clampX = (x) => clamp(x, BOUNDS.minX + 40, BOUNDS.maxX - 40);
+const clampY = (y) => clamp(y, BOUNDS.minY + 60, BOUNDS.maxY - 40);
+
+function zoomView(v, factor, fx = 0.5, fy = 0.5) {
+    const zoom = clamp(v.zoom * factor, MIN_ZOOM, MAX_ZOOM);
+    if (zoom === v.zoom) return v;
+    const w0 = W / v.zoom;
+    const h0 = H / v.zoom;
+    const px = v.cx - w0 / 2 + fx * w0;
+    const py = v.cy - h0 / 2 + fy * h0;
+    const w1 = W / zoom;
+    const h1 = H / zoom;
+    return {
+        zoom,
+        cx: clamp(px - fx * w1 + w1 / 2, BOUNDS.minX, BOUNDS.maxX),
+        cy: clamp(py - fy * h1 + h1 / 2, BOUNDS.minY, BOUNDS.maxY),
+    };
+}
+
+function runDijkstra(nodes, edges, start, directed) {
+    const dist = {};
+    const prev = {};
+    const visited = new Set();
+    nodes.forEach((n) => {
+        dist[n.id] = Infinity;
+        prev[n.id] = null;
+    });
+    dist[start] = 0;
+
+    const steps = [];
+    const snap = (current, edge, note) =>
+        steps.push({
+            current,
+            edge,
+            visited: [...visited],
+            dist: { ...dist },
+            prev: { ...prev },
+            note,
+        });
+
+    snap(null, null, `Set ${start} to 0 and every other vertex to ∞.`);
+
+    while (visited.size < nodes.length) {
+        let current = null;
+        for (const n of nodes) {
+            if (!visited.has(n.id) && (current === null || dist[n.id] < dist[current])) current = n.id;
+        }
+        if (current === null || dist[current] === Infinity) break;
+
+        snap(
+            current,
+            null,
+            `Pick ${current}: it has the smallest distance (${dist[current]}) of the unvisited vertices.`
+        );
+
+        let checked = 0;
+        for (const e of edges) {
+            let other = null;
+            if (e.from === current) other = e.to;
+            else if (!directed && e.to === current) other = e.from;
+            if (other === null || visited.has(other)) continue;
+
+            checked++;
+            const alt = dist[current] + e.w;
+            if (alt < dist[other]) {
+                const before = dist[other];
+                dist[other] = alt;
+                prev[other] = current;
+                snap(
+                    current,
+                    e.id,
+                    `${dist[current]} + ${e.w} = ${alt}. That beats ${fmt(before)}, so ${other} is updated to ${alt}.`
+                );
+            } else {
+                snap(
+                    current,
+                    e.id,
+                    `${dist[current]} + ${e.w} = ${alt}. That is not better than ${fmt(dist[other])}, so ${other} stays the same.`
+                );
+            }
+        }
+        if (checked === 0) {
+            snap(current, null, `${current} has no edges leading to unvisited vertices, so there is nothing to update.`);
+        }
+
+        visited.add(current);
+        snap(current, null, `${current} is visited. Its distance of ${dist[current]} is final.`);
+    }
+
+    const unreachable = nodes.filter((n) => dist[n.id] === Infinity).map((n) => n.id);
+    snap(
+        null,
+        null,
+        unreachable.length
+            ? `Finished. ${unreachable.join(", ")} cannot be reached from ${start}, so ${unreachable.length > 1 ? "they stay" : "it stays"
+            } at ∞.`
+            : "Finished. Every vertex now has its final shortest distance."
+    );
+    return steps;
+}
+
+function Toggle({ label, checked, onChange, disabled }) {
+    return (
+        <label
+            className={
+                "flex items-center gap-2 text-sm font-medium text-slate-700 " +
+                (disabled ? "cursor-not-allowed opacity-50" : "cursor-pointer")
+            }
+        >
+            <input
+                type="checkbox"
+                className="peer sr-only"
+                checked={checked}
+                disabled={disabled}
+                onChange={(e) => onChange(e.target.checked)}
+            />
+            <span
+                aria-hidden="true"
+                className="relative h-6 w-11 shrink-0 rounded-full bg-slate-300 transition peer-checked:bg-indigo-600 peer-focus-visible:ring-2 peer-focus-visible:ring-indigo-500 peer-focus-visible:ring-offset-2 after:absolute after:left-0.5 after:top-0.5 after:h-5 after:w-5 after:rounded-full after:bg-white after:shadow after:transition peer-checked:after:translate-x-5"
+            />
+            {label}
+        </label>
+    );
+}
+
+function LegendDot({ className, label }) {
+    return (
+        <span className="flex items-center gap-1.5">
+            <span className={`h-3 w-3 rounded-full border ${className}`} aria-hidden="true" />
+            {label}
+        </span>
+    );
+}
+
+const modeBtn = (active) =>
+    "w-full rounded-lg border-2 px-3 py-2 text-left text-sm font-semibold transition focus:outline-none " +
+    "focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 " +
+    (active
+        ? "border-indigo-500 bg-indigo-50 text-indigo-900"
+        : "border-slate-200 bg-white text-slate-700 hover:border-indigo-300");
+
+const tabBtn = (active) =>
+    "flex-1 px-3 py-2.5 text-sm font-semibold transition focus:outline-none " +
+    "focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-indigo-500 " +
+    (active
+        ? "border-b-2 border-indigo-600 bg-white text-indigo-700"
+        : "border-b-2 border-transparent bg-slate-50 text-slate-500 hover:text-slate-800");
+
+const selectCls =
+    "rounded-md border border-slate-300 bg-white px-2 py-1.5 text-sm text-slate-800 " +
+    "focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200 disabled:opacity-50";
+
+const TABS = [
+    { id: "graph", label: "Graph" },
+    { id: "dijkstra", label: "Dijkstra" },
+];
+
+function GraphSandbox() {
+    const svgRef = useRef(null);
+    const seq = useRef(1000);
+    const panRef = useRef(null);
+
+    const [tab, setTab] = useState("graph"); 
+
+    const [nodes, setNodes] = useState(EXAMPLE_NODES);
+    const [edges, setEdges] = useState(EXAMPLE_EDGES);
+    const [directed, setDirected] = useState(false);
+    const [mode, setModeState] = useState("select"); 
+    const [newW, setNewW] = useState("3");
+    const [pending, setPending] = useState(null);
+    const [selected, setSelected] = useState(null);
+    const [dragId, setDragId] = useState(null);
+    const [start, setStart] = useState("I");
+    const [target, setTarget] = useState("P");
+    const [msg, setMsg] = useState("Drag a vertex to move it. Click a vertex or edge to edit it.");
+    const [view, setView] = useState(DEFAULT_VIEW);
+
+    const [steps, setSteps] = useState(null);
+    const [i, setI] = useState(0);
+    const [playing, setPlaying] = useState(false);
+
+    const running = steps !== null;
+    const pos = Object.fromEntries(nodes.map((n) => [n.id, n]));
+    const startId = nodes.find((n) => n.id === start)?.id ?? nodes[0]?.id ?? null;
+    const targetId = nodes.find((n) => n.id === target)?.id ?? null;
+
+    const s = running ? steps[i] : null;
+    const last = running && i === steps.length - 1;
+
+    const vw = W / view.zoom;
+    const vh = H / view.zoom;
+    const vx = view.cx - vw / 2;
+    const vy = view.cy - vh / 2;
+    const isDefaultView = view.zoom === 1 && view.cx === W / 2 && view.cy === H / 2;
+
+    useEffect(() => {
+        if (!playing || !steps) return;
+        if (i >= steps.length - 1) {
+            setPlaying(false);
+            return;
+        }
+        const t = setTimeout(() => setI((n) => n + 1), 1500);
+        return () => clearTimeout(t);
+    }, [playing, i, steps]);
+
+    useEffect(() => {
+        const el = svgRef.current;
+        if (!el) return;
+        const onWheel = (e) => {
+            if (!e.ctrlKey && !e.metaKey) return;
+            e.preventDefault();
+            const r = el.getBoundingClientRect();
+            const fx = (e.clientX - r.left) / r.width;
+            const fy = (e.clientY - r.top) / r.height;
+            setView((v) => zoomView(v, e.deltaY < 0 ? ZOOM_STEP : 1 / ZOOM_STEP, fx, fy));
+        };
+        el.addEventListener("wheel", onWheel, { passive: false });
+        return () => el.removeEventListener("wheel", onWheel);
+    }, []);
+
+    const onTabKey = (e) => {
+        if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
+        e.preventDefault();
+        const next = tab === "graph" ? "dijkstra" : "graph";
+        setTab(next);
+        document.getElementById(`sb-tab-${next}`)?.focus();
+    };
+
+    const setMode = (m) => {
+        setModeState(m);
+        setPending(null);
+        setSelected(null);
+        setMsg(
+            m === "vertex"
+                ? "Click empty space on the canvas to add a vertex."
+                : m === "edge"
+                    ? "Click a vertex, then click a second vertex to join them."
+                    : "Drag a vertex to move it. Click a vertex or edge to edit it."
+        );
+    };
+
+    const svgPoint = (e) => {
+        const r = svgRef.current.getBoundingClientRect();
+        return {
+            x: vx + ((e.clientX - r.left) * vw) / r.width,
+            y: vy + ((e.clientY - r.top) * vh) / r.height,
+        };
+    };
+
+    const nextLabel = () => {
+        for (let c = 65; c <= 90; c++) {
+            const l = String.fromCharCode(c);
+            if (!nodes.some((n) => n.id === l)) return l;
+        }
+        return null;
+    };
+
+    const addVertexAt = (x, y) => {
+        if (nodes.length >= MAX_NODES) {
+            setMsg(`That's the maximum of ${MAX_NODES} vertices. Delete one to add another.`);
+            return;
+        }
+        const px = clampX(x);
+        const py = clampY(y);
+        if (nodes.some((n) => Math.hypot(n.x - px, n.y - py) < R * 2)) {
+            setMsg("That spot is too close to another vertex. Try a bit further away.");
+            return;
+        }
+        const id = nextLabel();
+        setNodes((ns) => [...ns, { id, x: px, y: py }]);
+        setMsg(`Vertex ${id} added.`);
+    };
+
+    const addVertexAuto = () => {
+        const scan = (x0, x1, y0, y1) => {
+            for (let y = y0; y <= y1; y += 90)
+                for (let x = x0; x <= x1; x += 110)
+                    if (!nodes.some((n) => Math.hypot(n.x - x, n.y - y) < R * 2.2)) return { x, y };
+            return null;
+        };
+        const spot =
+            scan(vx + 60, vx + vw - 60, vy + 70, vy + vh - 50) ??
+            scan(BOUNDS.minX + 60, BOUNDS.maxX - 60, BOUNDS.minY + 70, BOUNDS.maxY - 50);
+        if (!spot) {
+            setMsg("There is no free space left. Delete a vertex first.");
+            return;
+        }
+        addVertexAt(spot.x, spot.y);
+    };
+
+    const tryAddEdge = (u, v) => {
+        const exists = edges.some(
+            (e) => (e.from === u && e.to === v) || (e.from === v && e.to === u)
+        );
+        if (exists) {
+            setMsg(`${u} and ${v} are already joined. Switch to Select and click the edge to change it.`);
+            setPending(null);
+            return;
+        }
+        const w = toWeight(newW);
+        setEdges((es) => [...es, { id: ++seq.current, from: u, to: v, w }]);
+        setPending(null);
+        setMsg(`Edge ${u} ${directed ? "→" : "–"} ${v} added with weight ${w}.`);
+    };
+
+    const onSvgClick = (e) => {
+        if (running) return;
+        if (mode === "vertex") {
+            const p = svgPoint(e);
+            addVertexAt(p.x, p.y);
+        } else if (mode === "select") {
+            setSelected(null);
+        } else {
+            setPending(null);
+        }
+    };
+
+    const activateVertex = (id) => {
+        if (running) return;
+        if (mode === "edge") {
+            if (!pending) {
+                setPending(id);
+                setMsg(`${id} chosen. Now click the vertex you want to join it to.`);
+            } else if (pending === id) {
+                setPending(null);
+                setMsg("Cancelled. Click a vertex to start again.");
+            } else {
+                tryAddEdge(pending, id);
+            }
+        } else if (mode === "select") {
+            setSelected({ type: "v", id });
+            setMsg(`Vertex ${id} selected. Drag it, or use the Graph tab to edit it.`);
+        } else {
+            setMsg("There is already a vertex there. Click empty space to add a new one.");
+        }
+    };
+
+    const onVertexPointerDown = (id) => {
+        if (running || mode !== "select") return;
+        setDragId(id);
+        setSelected({ type: "v", id });
+    };
+
+    const onSvgPointerDown = (e) => {
+        if (e.target !== e.currentTarget) return; 
+        if (!running && mode !== "select") return;
+        panRef.current = { x: e.clientX, y: e.clientY, cx: view.cx, cy: view.cy };
+    };
+
+    const onSvgPointerMove = (e) => {
+        if (panRef.current) {
+            const r = svgRef.current.getBoundingClientRect();
+            const p = panRef.current;
+            setView((v) => ({
+                ...v,
+                cx: clamp(p.cx - ((e.clientX - p.x) * vw) / r.width, BOUNDS.minX, BOUNDS.maxX),
+                cy: clamp(p.cy - ((e.clientY - p.y) * vh) / r.height, BOUNDS.minY, BOUNDS.maxY),
+            }));
+            return;
+        }
+        if (!dragId) return;
+        const p = svgPoint(e);
+        const x = clampX(p.x);
+        const y = clampY(p.y);
+        setNodes((ns) => ns.map((n) => (n.id === dragId ? { ...n, x, y } : n)));
+    };
+
+    const endPointer = () => {
+        setDragId(null);
+        panRef.current = null;
+    };
+
+    const onVertexKey = (ev, id) => {
+        if (ev.key === "Enter" || ev.key === " ") {
+            ev.preventDefault();
+            activateVertex(id);
+            return;
+        }
+        if (running || mode !== "select") return;
+        const d = { ArrowLeft: [-12, 0], ArrowRight: [12, 0], ArrowUp: [0, -12], ArrowDown: [0, 12] }[ev.key];
+        if (d) {
+            ev.preventDefault();
+            setNodes((ns) =>
+                ns.map((n) =>
+                    n.id === id ? { ...n, x: clampX(n.x + d[0]), y: clampY(n.y + d[1]) } : n
+                )
+            );
+        }
+    };
+
+    const selectEdge = (id) => {
+        if (running || mode !== "select") return;
+        setSelected({ type: "e", id });
+        setMsg("Edge selected. Change its weight or delete it in the Graph tab.");
+    };
+
+    const deleteVertex = (id) => {
+        setNodes((ns) => ns.filter((n) => n.id !== id));
+        setEdges((es) => es.filter((e) => e.from !== id && e.to !== id));
+        setSelected(null);
+        setMsg(`Vertex ${id} and its edges were removed.`);
+    };
+
+    const deleteEdge = (id) => {
+        setEdges((es) => es.filter((e) => e.id !== id));
+        setSelected(null);
+        setMsg("Edge removed.");
+    };
+
+    const updateEdge = (id, patch) =>
+        setEdges((es) => es.map((e) => (e.id === id ? { ...e, ...patch } : e)));
+
+    const loadExample = () => {
+        setNodes(EXAMPLE_NODES);
+        setEdges(EXAMPLE_EDGES);
+        setStart("I");
+        setTarget("P");
+        setSelected(null);
+        setPending(null);
+        setView(DEFAULT_VIEW);
+        setMsg("Campus example loaded. Try changing a weight and running Dijkstra again.");
+    };
+
+    const clearAll = () => {
+        setNodes([]);
+        setEdges([]);
+        setSelected(null);
+        setPending(null);
+        setView(DEFAULT_VIEW);
+        setMsg("Canvas cleared. Choose Add vertex to begin.");
+        setModeState("vertex");
+    };
+
+    const fitView = () => {
+        if (!nodes.length) return;
+        const xs = nodes.map((n) => n.x);
+        const ys = nodes.map((n) => n.y);
+        const x0 = Math.min(...xs) - 80;
+        const x1 = Math.max(...xs) + 80;
+        const y0 = Math.min(...ys) - 90; 
+        const y1 = Math.max(...ys) + 60;
+        const zoom = clamp(Math.min(1.5, W / (x1 - x0), H / (y1 - y0)), MIN_ZOOM, MAX_ZOOM);
+        setView({ zoom, cx: (x0 + x1) / 2, cy: (y0 + y1) / 2 });
+    };
+
+    const canRun = nodes.length >= 2 && edges.length >= 1 && startId;
+
+    const run = () => {
+        setSteps(runDijkstra(nodes, edges, startId, directed));
+        setI(0);
+        setPlaying(false);
+        setSelected(null);
+        setPending(null);
+    };
+
+    const editGraph = () => {
+        setSteps(null);
+        setPlaying(false);
+        setI(0);
+        setTab("graph");
+        setMsg("You can edit the graph again.");
+    };
+
+    const togglePlay = () => {
+        if (!playing && last) setI(0);
+        setPlaying((p) => !p);
+    };
+
+    let finalNodes = [];
+    let finalEdgeIds = [];
+    if (last && targetId && s.dist[targetId] !== Infinity) {
+        let v = targetId;
+        finalNodes = [v];
+        while (s.prev[v]) {
+            v = s.prev[v];
+            finalNodes.unshift(v);
+        }
+        for (let k = 1; k < finalNodes.length; k++) {
+            const u = finalNodes[k - 1];
+            const w = finalNodes[k];
+            const e = edges.find(
+                (x) => (x.from === u && x.to === w) || (!directed && x.from === w && x.to === u)
+            );
+            if (e) finalEdgeIds.push(e.id);
+        }
+    }
+    const improved = (id) => running && i > 0 && s.dist[id] < steps[i - 1].dist[id];
+
+    const nodeStyle = (id) => {
+        if (running) {
+            if (id === s.current) return { fill: "#fde68a", stroke: "#d97706", text: "#78350f" };
+            if (s.visited.includes(id)) return { fill: "#d1fae5", stroke: "#059669", text: "#064e3b" };
+            return { fill: "#f8fafc", stroke: "#64748b", text: "#1e293b" };
+        }
+        if (selected?.type === "v" && selected.id === id)
+            return { fill: "#e0e7ff", stroke: "#4f46e5", text: "#312e81" };
+        if (pending === id) return { fill: "#e0e7ff", stroke: "#4f46e5", text: "#312e81" };
+        return { fill: "#f8fafc", stroke: "#64748b", text: "#1e293b" };
+    };
+
+    const edgeState = (e) => {
+        if (running) {
+            if (finalEdgeIds.includes(e.id)) return "final";
+            if (s.edge === e.id) return "active";
+            return "plain";
+        }
+        return selected?.type === "e" && selected.id === e.id ? "active" : "plain";
+    };
+    const edgeColour = { final: "#059669", active: "#4f46e5", plain: running ? "#cbd5e1" : "#94a3b8" };
+    const markerId = { final: "sb-arrow-final", active: "sb-arrow-active", plain: "sb-arrow" };
+
+    const selEdge = selected?.type === "e" ? edges.find((e) => e.id === selected.id) : null;
+    const selVertex = selected?.type === "v" ? selected.id : null;
+
+    const actBtn = "anim-btn";
+
+    return (
+        <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_320px] lg:items-start">
+            <div className="min-w-0">
+                <div className="mb-2 flex flex-wrap items-center justify-end gap-2" role="group" aria-label="Zoom controls">
+                    <span className="mr-auto text-xs text-slate-500">
+                        Ctrl/⌘ + scroll to zoom. Drag empty space to pan.
+                    </span>
+                    <button
+                        className="anim-btn"
+                        onClick={() => setView((v) => zoomView(v, 1 / ZOOM_STEP))}
+                        disabled={view.zoom <= MIN_ZOOM}
+                        aria-label="Zoom out"
+                    >
+                        −
+                    </button>
+                    <span className="w-14 text-center text-sm font-semibold text-slate-700" aria-live="polite">
+                        {Math.round(view.zoom * 100)}%
+                    </span>
+                    <button
+                        className="anim-btn"
+                        onClick={() => setView((v) => zoomView(v, ZOOM_STEP))}
+                        disabled={view.zoom >= MAX_ZOOM}
+                        aria-label="Zoom in"
+                    >
+                        +
+                    </button>
+                    <button className="anim-btn" onClick={fitView} disabled={nodes.length === 0}>
+                        Fit to graph
+                    </button>
+                    <button
+                        className="anim-btn anim-btn-secondary"
+                        onClick={() => setView(DEFAULT_VIEW)}
+                        disabled={isDefaultView}
+                    >
+                        Reset view
+                    </button>
+                </div>
+
+                <svg
+                    ref={svgRef}
+                    viewBox={`${vx} ${vy} ${vw} ${vh}`}
+                    className={
+                        "w-full select-none rounded-lg border border-slate-300 bg-white " +
+                        (!running && mode === "vertex"
+                            ? "cursor-crosshair"
+                            : running || mode === "select"
+                                ? "cursor-grab"
+                                : "")
+                    }
+                    style={{
+                        touchAction:
+                            (!running && mode === "select") || (running && view.zoom !== 1) ? "none" : "auto",
+                    }}
+                    role="group"
+                    aria-label="Graph canvas"
+                    onClick={onSvgClick}
+                    onPointerDown={onSvgPointerDown}
+                    onPointerMove={onSvgPointerMove}
+                    onPointerUp={endPointer}
+                    onPointerLeave={endPointer}
+                >
+                    <defs>
+                        {[
+                            ["sb-arrow", "#64748b"],
+                            ["sb-arrow-active", "#4f46e5"],
+                            ["sb-arrow-final", "#059669"],
+                        ].map(([id, fill]) => (
+                            <marker
+                                key={id}
+                                id={id}
+                                markerUnits="userSpaceOnUse"
+                                markerWidth="14"
+                                markerHeight="14"
+                                refX="13"
+                                refY="7"
+                                orient="auto"
+                            >
+                                <path d="M0,0 L14,7 L0,14 z" fill={fill} />
+                            </marker>
+                        ))}
+                        <pattern id="sb-grid" width="50" height="50" patternUnits="userSpaceOnUse">
+                            <path d="M50 0H0V50" fill="none" stroke="#f1f5f9" strokeWidth="1" />
+                        </pattern>
+                    </defs>
+
+                    <rect
+                        x={BOUNDS.minX}
+                        y={BOUNDS.minY}
+                        width={BOUNDS.maxX - BOUNDS.minX}
+                        height={BOUNDS.maxY - BOUNDS.minY}
+                        fill="url(#sb-grid)"
+                        stroke="#e2e8f0"
+                        strokeWidth="2"
+                        pointerEvents="none"
+                    />
+
+                    {nodes.length === 0 && (
+                        <text x={W / 2} y={H / 2} textAnchor="middle" fontSize="15" fill="#94a3b8" pointerEvents="none">
+                            Empty canvas. Choose "Add vertex" in the Graph tab and click here.
+                        </text>
+                    )}
+
+                    {edges.map((e) => {
+                        const a = pos[e.from];
+                        const b = pos[e.to];
+                        if (!a || !b) return null;
+                        const dx = b.x - a.x;
+                        const dy = b.y - a.y;
+                        const len = Math.hypot(dx, dy) || 1;
+                        const x2 = directed ? b.x - (dx / len) * (R + 3) : b.x;
+                        const y2 = directed ? b.y - (dy / len) * (R + 3) : b.y;
+                        const st = edgeState(e);
+                        return (
+                            <g
+                                key={e.id}
+                                onClick={(ev) => {
+                                    ev.stopPropagation();
+                                    selectEdge(e.id);
+                                }}
+                                className={!running && mode === "select" ? "cursor-pointer" : ""}
+                                tabIndex={!running && mode === "select" ? 0 : -1}
+                                role="button"
+                                aria-label={`Edge ${e.from} ${directed ? "to" : "and"} ${e.to}, weight ${e.w}`}
+                                onKeyDown={(ev) => {
+                                    if (ev.key === "Enter" || ev.key === " ") {
+                                        ev.preventDefault();
+                                        selectEdge(e.id);
+                                    }
+                                }}
+                            >
+                                <line x1={a.x} y1={a.y} x2={b.x} y2={b.y} stroke="transparent" strokeWidth="22" />
+                                <line
+                                    x1={a.x}
+                                    y1={a.y}
+                                    x2={x2}
+                                    y2={y2}
+                                    stroke={edgeColour[st]}
+                                    strokeWidth={st === "plain" ? 2.5 : 5}
+                                    strokeLinecap="round"
+                                    markerEnd={directed ? `url(#${markerId[st]})` : undefined}
+                                />
+                            </g>
+                        );
+                    })}
+
+                    {edges.map((e) => {
+                        const a = pos[e.from];
+                        const b = pos[e.to];
+                        if (!a || !b) return null;
+                        const mx = (a.x + b.x) / 2;
+                        const my = (a.y + b.y) / 2;
+                        const st = edgeState(e);
+                        return (
+                            <g key={"w" + e.id} pointerEvents="none">
+                                <rect
+                                    x={mx - 17}
+                                    y={my - 12}
+                                    width="34"
+                                    height="24"
+                                    rx="7"
+                                    fill="#ffffff"
+                                    stroke={st === "plain" ? "#94a3b8" : edgeColour[st]}
+                                    strokeWidth="1.5"
+                                />
+                                <text
+                                    x={mx}
+                                    y={my + 5}
+                                    textAnchor="middle"
+                                    fontSize="14"
+                                    fontWeight="700"
+                                    fill={st === "plain" ? "#475569" : "#1e1b4b"}
+                                >
+                                    {e.w}
+                                </text>
+                            </g>
+                        );
+                    })}
+
+                    {nodes.map((n) => {
+                        const c = nodeStyle(n.id);
+                        const isStart = n.id === startId;
+                        const isTarget = n.id === targetId && n.id !== startId;
+                        return (
+                            <g
+                                key={n.id}
+                                className={!running && mode !== "vertex" ? "cursor-pointer" : ""}
+                                tabIndex={0}
+                                role="button"
+                                aria-label={`Vertex ${n.id}${isStart ? ", start" : ""}${isTarget ? ", target" : ""}`}
+                                onPointerDown={() => onVertexPointerDown(n.id)}
+                                onClick={(ev) => {
+                                    ev.stopPropagation();
+                                    if (mode !== "select") activateVertex(n.id);
+                                }}
+                                onKeyDown={(ev) => onVertexKey(ev, n.id)}
+                            >
+                                <circle
+                                    cx={n.x}
+                                    cy={n.y}
+                                    r={R}
+                                    fill={c.fill}
+                                    stroke={c.stroke}
+                                    strokeWidth="3"
+                                    strokeDasharray={pending === n.id ? "6" : undefined}
+                                />
+                                <text x={n.x} y={n.y + 8} textAnchor="middle" fontSize="22" fontWeight="700" fill={c.text} pointerEvents="none">
+                                    {n.id}
+                                </text>
+
+                                {(isStart || isTarget) && (
+                                    <g pointerEvents="none">
+                                        <circle cx={n.x + R * 0.8} cy={n.y - R * 0.8} r="10" fill={isStart ? "#4f46e5" : "#1e293b"} />
+                                        <text x={n.x + R * 0.8} y={n.y - R * 0.8 + 4} textAnchor="middle" fontSize="11" fontWeight="700" fill="#ffffff">
+                                            {isStart ? "S" : "T"}
+                                        </text>
+                                    </g>
+                                )}
+
+                                {running && (
+                                    <g pointerEvents="none">
+                                        <rect
+                                            x={n.x - 24}
+                                            y={n.y - R - 32}
+                                            width="48"
+                                            height="24"
+                                            rx="12"
+                                            fill={improved(n.id) ? "#e0e7ff" : "#ffffff"}
+                                            stroke={improved(n.id) ? "#4f46e5" : "#cbd5e1"}
+                                            strokeWidth={improved(n.id) ? 2 : 1.5}
+                                        />
+                                        <text
+                                            x={n.x}
+                                            y={n.y - R - 15}
+                                            textAnchor="middle"
+                                            fontSize="14"
+                                            fontWeight="700"
+                                            fill={improved(n.id) ? "#312e81" : "#475569"}
+                                        >
+                                            {fmt(s.dist[n.id])}
+                                        </text>
+                                    </g>
+                                )}
+                            </g>
+                        );
+                    })}
+                </svg>
+
+                <p className="anim-note mt-3" aria-live="polite">
+                    {running ? (
+                        <>
+                            {s.note}
+                            {last && targetId && (
+                                <>
+                                    {" "}
+                                    <strong>
+                                        {finalNodes.length
+                                            ? `Shortest path from ${startId} to ${targetId}: ${finalNodes.join(" → ")} (cost ${fmt(s.dist[targetId])}).`
+                                            : startId === targetId
+                                                ? ""
+                                                : `${targetId} cannot be reached from ${startId}.`}
+                                    </strong>
+                                </>
+                            )}
+                        </>
+                    ) : (
+                        msg
+                    )}
+                </p>
+            </div>
+
+            <aside className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm lg:sticky lg:top-4">
+                <div role="tablist" aria-label="Sandbox controls" className="flex border-b border-slate-200" onKeyDown={onTabKey}>
+                    {TABS.map((t) => (
+                        <button
+                            key={t.id}
+                            id={`sb-tab-${t.id}`}
+                            role="tab"
+                            aria-selected={tab === t.id}
+                            aria-controls={`sb-panel-${t.id}`}
+                            tabIndex={tab === t.id ? 0 : -1}
+                            className={tabBtn(tab === t.id)}
+                            onClick={() => setTab(t.id)}
+                        >
+                            {t.label}
+                            {t.id === "dijkstra" && running && (
+                                <span className="ml-1.5 inline-block h-2 w-2 rounded-full bg-emerald-500" title="Running" />
+                            )}
+                        </button>
+                    ))}
+                </div>
+
+                {tab === "graph" && (
+                    <div id="sb-panel-graph" role="tabpanel" aria-labelledby="sb-tab-graph" className="space-y-4 p-4">
+                        {running ? (
+                            <div className="rounded-lg border border-amber-300 bg-amber-50 p-3 text-sm">
+                                <p className="font-semibold text-amber-900">The graph is locked while Dijkstra is running.</p>
+                                <p className="mt-1 text-slate-700">Stop the run to add, move or change vertices and edges.</p>
+                                <button className="anim-btn anim-btn-primary mt-3" onClick={editGraph}>
+                                    Edit graph
+                                </button>
+                            </div>
+                        ) : (
+                            <>
+                                <div>
+                                    <p className="mb-2 text-xs font-bold uppercase tracking-wider text-slate-500">Tools</p>
+                                    <div className="space-y-2" role="group" aria-label="Drawing tools">
+                                        <button className={modeBtn(mode === "vertex")} aria-pressed={mode === "vertex"} onClick={() => setMode("vertex")}>
+                                            Add vertex
+                                        </button>
+                                        <button className={modeBtn(mode === "edge")} aria-pressed={mode === "edge"} onClick={() => setMode("edge")}>
+                                            Add edge
+                                        </button>
+                                        <button className={modeBtn(mode === "select")} aria-pressed={mode === "select"} onClick={() => setMode("select")}>
+                                            Select / move
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div className="space-y-3">
+                                    <p className="text-xs font-bold uppercase tracking-wider text-slate-500">Options</p>
+                                    <Toggle label="Directed edges" checked={directed} onChange={setDirected} />
+
+                                    {mode === "edge" && (
+                                        <label className="flex items-center justify-between gap-2 text-sm font-medium text-slate-700">
+                                            Weight for new edges
+                                            <input
+                                                type="number"
+                                                min="1"
+                                                max={MAX_W}
+                                                value={newW}
+                                                onChange={(e) => setNewW(e.target.value)}
+                                                onBlur={() => setNewW(String(toWeight(newW)))}
+                                                className={`${selectCls} w-20`}
+                                            />
+                                        </label>
+                                    )}
+
+                                    {mode === "vertex" && (
+                                        <button className={actBtn} onClick={addVertexAuto}>
+                                            Place a vertex for me
+                                        </button>
+                                    )}
+                                </div>
+
+                                {mode === "select" && (selVertex || selEdge) && (
+                                    <div className="space-y-3 rounded-lg border border-indigo-200 bg-indigo-50 p-3 text-sm">
+                                        {selVertex && (
+                                            <>
+                                                <p className="font-semibold text-slate-900">Vertex {selVertex}</p>
+                                                <div className="flex flex-wrap gap-2">
+                                                    <button className={actBtn} onClick={() => setStart(selVertex)} disabled={selVertex === startId}>
+                                                        Set as start
+                                                    </button>
+                                                    <button className={actBtn} onClick={() => setTarget(selVertex)} disabled={selVertex === targetId}>
+                                                        Set as target
+                                                    </button>
+                                                    <button className={`${actBtn} anim-btn-secondary`} onClick={() => deleteVertex(selVertex)}>
+                                                        Delete vertex
+                                                    </button>
+                                                </div>
+                                            </>
+                                        )}
+                                        {selEdge && (
+                                            <>
+                                                <p className="font-semibold text-slate-900">
+                                                    Edge {selEdge.from} {directed ? "→" : "–"} {selEdge.to}
+                                                </p>
+                                                <label className="flex items-center justify-between gap-2 font-medium text-slate-700">
+                                                    Weight
+                                                    <input
+                                                        type="number"
+                                                        min="1"
+                                                        max={MAX_W}
+                                                        value={selEdge.w}
+                                                        onChange={(e) => updateEdge(selEdge.id, { w: toWeight(e.target.value) })}
+                                                        className={`${selectCls} w-20`}
+                                                    />
+                                                </label>
+                                                <div className="flex flex-wrap gap-2">
+                                                    {directed && (
+                                                        <button
+                                                            className={actBtn}
+                                                            onClick={() => updateEdge(selEdge.id, { from: selEdge.to, to: selEdge.from })}
+                                                        >
+                                                            Reverse direction
+                                                        </button>
+                                                    )}
+                                                    <button className={`${actBtn} anim-btn-secondary`} onClick={() => deleteEdge(selEdge.id)}>
+                                                        Delete edge
+                                                    </button>
+                                                </div>
+                                            </>
+                                        )}
+                                    </div>
+                                )}
+
+                                <div className="flex flex-wrap gap-2 border-t border-slate-200 pt-4">
+                                    <button className={`${actBtn} anim-btn-secondary`} onClick={loadExample}>
+                                        Load campus example
+                                    </button>
+                                    <button className={`${actBtn} anim-btn-secondary`} onClick={clearAll} disabled={nodes.length === 0}>
+                                        Clear
+                                    </button>
+                                </div>
+                            </>
+                        )}
+                    </div>
+                )}
+
+                {tab === "dijkstra" && (
+                    <div id="sb-panel-dijkstra" role="tabpanel" aria-labelledby="sb-tab-dijkstra" className="space-y-4 p-4">
+                        {!running ? (
+                            <>
+                                <div className="space-y-3">
+                                    <p className="text-xs font-bold uppercase tracking-wider text-slate-500">Set up</p>
+                                    <label className="flex items-center justify-between gap-2 text-sm font-medium text-slate-700">
+                                        Start vertex
+                                        <select className={selectCls} value={startId ?? ""} onChange={(e) => setStart(e.target.value)} disabled={!nodes.length}>
+                                            {nodes.map((n) => (
+                                                <option key={n.id} value={n.id}>{n.id}</option>
+                                            ))}
+                                        </select>
+                                    </label>
+                                    <label className="flex items-center justify-between gap-2 text-sm font-medium text-slate-700">
+                                        Target vertex
+                                        <select className={selectCls} value={targetId ?? ""} onChange={(e) => setTarget(e.target.value)} disabled={!nodes.length}>
+                                            <option value="">(none)</option>
+                                            {nodes.map((n) => (
+                                                <option key={n.id} value={n.id}>{n.id}</option>
+                                            ))}
+                                        </select>
+                                    </label>
+                                    <p className="text-xs text-slate-500">
+                                        Edges are treated as {directed ? "one-way (directed)" : "two-way (undirected)"}. Change this in the Graph tab.
+                                    </p>
+                                </div>
+
+                                <button className="anim-btn anim-btn-primary w-full" onClick={run} disabled={!canRun}>
+                                    Run Dijkstra
+                                </button>
+                                {!canRun && (
+                                    <p className="text-xs text-slate-500">Add at least two vertices and one edge to run the algorithm.</p>
+                                )}
+                            </>
+                        ) : (
+                            <>
+                                <div>
+                                    <p className="mb-2 text-xs font-bold uppercase tracking-wider text-slate-500">Key</p>
+                                    <div className="flex flex-col gap-1.5 text-xs text-slate-600">
+                                        <LegendDot className="border-amber-600 bg-amber-200" label="Being processed" />
+                                        <LegendDot className="border-emerald-600 bg-emerald-100" label="Visited (distance is final)" />
+                                        <LegendDot className="border-slate-500 bg-slate-50" label="Not visited yet" />
+                                        <span>Pills above circles = best distance from {startId} so far.</span>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <p className="mb-2 flex items-center justify-between text-xs font-bold uppercase tracking-wider text-slate-500">
+                                        <span>Playback</span>
+                                        <span className="font-semibold normal-case tracking-normal text-slate-500">
+                                            Step {i + 1} / {steps.length}
+                                        </span>
+                                    </p>
+                                    <div className="grid grid-cols-2 gap-2">
+                                        <button className="anim-btn" onClick={() => { setI(Math.max(0, i - 1)); setPlaying(false); }} disabled={i === 0}>
+                                            Back
+                                        </button>
+                                        <button className="anim-btn" onClick={() => { setI(Math.min(steps.length - 1, i + 1)); setPlaying(false); }} disabled={last}>
+                                            Next
+                                        </button>
+                                        <button className="anim-btn anim-btn-primary" onClick={togglePlay}>
+                                            {playing ? "Pause" : last ? "Replay" : "Play"}
+                                        </button>
+                                        <button className="anim-btn" onClick={() => { setI(steps.length - 1); setPlaying(false); }} disabled={last}>
+                                            Run all
+                                        </button>
+                                        <button className="anim-btn anim-btn-secondary" onClick={() => { setI(0); setPlaying(false); }} disabled={i === 0}>
+                                            Reset
+                                        </button>
+                                        <button className="anim-btn anim-btn-secondary" onClick={editGraph}>
+                                            Edit graph
+                                        </button>
+                                    </div>
+                                </div>
+                            </>
+                        )}
+                    </div>
+                )}
+            </aside>
+        </div>
+    );
+}
+
+export default function Sandbox() {
+    return (
+        <div className="mx-auto max-w-6xl space-y-8 text-slate-700">
+            <header>
+                <h1 className="text-4xl font-bold text-slate-900">Sandbox</h1>
+                <p className="mt-2 leading-7">Build your own graph and watch Dijkstra work on it.</p>
+            </header>
+
+            <section className="rounded-xl border border-indigo-500 bg-indigo-50 p-6">
+                <h2 className="mb-4 text-2xl font-semibold text-indigo-900">What you can do here</h2>
+                <ol className="list-inside list-decimal space-y-2">
+                    <li>Use the <strong>Graph</strong> tab to create vertices, edges and weights, and to choose whether edges are directed.</li>
+                    <li>Use the <strong>Dijkstra</strong> tab to pick a start and target, then run the algorithm step by step or all at once.</li>
+                    <li>Switch between the tabs whenever you like. Zoom and pan to make room for bigger graphs.</li>
+                    <li>Test your predictions about shortest paths.</li>
+                </ol>
+                <p className="mt-3 text-sm text-slate-600">
+                    Weights must be whole numbers from 1 to 99. Dijkstra's algorithm does not work with negative weights.
+                </p>
+            </section>
+
+            <section className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+                <h2 className="mb-3 text-2xl font-bold text-slate-900">Graph playground</h2>
+                <GraphSandbox />
+            </section>
+
+            <section className="rounded-xl border border-amber-300 bg-amber-50 p-6">
+                <p className="mb-2 text-xs font-bold uppercase tracking-wider text-amber-700">Challenge</p>
+                <p className="mb-3">Quiz yourself and see if you can predict the next move </p>
+            </section>
+        </div>
+    );
+}
