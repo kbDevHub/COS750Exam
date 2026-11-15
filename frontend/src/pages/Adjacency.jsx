@@ -69,7 +69,7 @@ function Adjacency() {
         </div>
       </section>
 
-      <section className="rounded-xl border border-amber-300 bg-amber-50 p-5">
+      <section className=" p-5">
         <p className="mb-1 text-xs font-bold uppercase tracking-wider text-amber-700">Key idea</p>
         <p className="leading-7">
           A matrix has a cell for every pair of vertices, even pairs with no edge. An <strong>adjacency list</strong> stores
