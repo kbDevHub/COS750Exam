@@ -22,7 +22,9 @@ function Sidebar() {
                 { title: "1.1 Nodes", path: "/nodes" },
                 { title: "1.2 Edges", path: "/edges" },
                 { title: "1.3 Weighted Graphs", path: "/weights" },
-                { title: "1.4 Adjacency Matrix", path: "/adjacency" }
+                { title: "1.4 Adjacency Matrix", path: "/adjacency" },
+                { title: "1.5 Connectivity", path: "/connected"},
+                { title: "1.6 Cyclic graphs", path: "/cyclic"},
             ],
         },
         {
