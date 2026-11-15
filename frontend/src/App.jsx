@@ -15,6 +15,8 @@ import Adjacency from "./pages/Adjacency";
 import Sandbox from "./pages/Sandbox";
 import Profile from "./pages/Profile";
 import BadgeToaster from "./components/BadgeToaster";
+import Cyclic from "./pages/Cyclic";
+import Connected from "./pages/Connected";
 
 function App() {
     return (
@@ -42,6 +44,8 @@ function App() {
                                 <Route path="/shortest-path" element={<Short />} />
                                 <Route path="/sandbox" element={<Sandbox />} />
                                 <Route path="/profile" element={<Profile />} />
+                                <Route path="/connected" element={<Connected />} />
+                                <Route path="/cyclic" element={<Cyclic />} />
                             </Routes>
 
                         </div>

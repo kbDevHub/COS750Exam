@@ -7,7 +7,7 @@ export const UNIT_BADGES = [
     title: "Graph Guru",
     desc: "Completed Unit 1: Graphs",
     img: unit1Img,
-    paths: ["/nodes", "/edges", "/weights","/adjacency"],
+    paths: ["/nodes", "/edges", "/weights", "/adjacency", "/connected", "/cyclic"],
   },
   {
     id: "unit2",
