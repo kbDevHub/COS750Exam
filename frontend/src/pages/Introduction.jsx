@@ -1,6 +1,6 @@
 import ReadAloud from "../components/ReadAloud";
 
-const DEFINITION ="Graph theory is the study of objects, called vertices ,and the connections between them, called edges"
+const DEFINITION ="Graph theory is the study of objects, called vertices, and the connections between them, called edges"
 
 function Introduction() {
   return (
