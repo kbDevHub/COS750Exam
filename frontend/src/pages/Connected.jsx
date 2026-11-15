@@ -4,7 +4,7 @@ import ReadAloud from "../components/ReadAloud";
 import { useProgress } from "../components/Progress";
 
 const DEFINITION =
-  "A graph is connected when a path exists between any two vertices. An n-connected graph has at least n non-overlapping paths between any two vertices. A biconnected graph is 2-connected. An articulation point is a vertex whose removal breaks the graph into disconnected pieces. Biconnected subgraphs are called blocks.";
+  "A graph is connected when you can get from any vertex to any other by following edges. An n-connected graph has at least n different routes between any two vertices, and the routes never share a stop in between. A biconnected graph is the case where n is two, so no single vertex failing can split the graph. An articulation point is a vertex that holds the graph together: remove just that one and the graph falls into separate pieces. A block is a chunk of the graph that no single vertex can break apart.";
 
 const NODES = {
   A: { x: 70, y: 50 },
@@ -46,6 +46,18 @@ function components(removed) {
   }
   return pieces;
 }
+
+/* The lecture's own wording, shown under each plain-language definition
+   so students still recognise it in the lecture and the exam. */
+/*
+function LectureWords({ children }) {
+  return (
+    <p className="text-sm text-slate-500">
+      <span className="font-semibold">In the lecture's words:</span> {children}
+    </p>
+  );
+}
+*/
 
 function BreakIt() {
   const [removed, setRemoved] = useState([]);
@@ -181,24 +193,29 @@ export default function Connected() {
           <ReadAloud text={DEFINITION} />
         </div>
         <p className="leading-7">
-          A graph is <strong>connected</strong> when a path exists between any two vertices.
+          A graph is <strong>connected</strong> when you can get from any vertex to any other by following edges, like driving between any two towns on a road map. Two islands with no bridge between them are not connected.
         </p>
+        {/*<LectureWords>a path exists between any two vertices.</LectureWords>*/}
         <p className="leading-7">
-          Connected is a yes-or-no answer. To ask <em>how</em> connected a graph is, we count paths. An{" "} <strong>n-connected</strong> graph has at least n non-overlapping paths between any two vertices. Two paths overlap if they share any vertex.
+          Connected is a yes-or-no answer. To ask <em>how well</em> connected a graph is, count the different routes. An{" "}<strong>n-connected</strong> graph has at least n routes between any two vertices, and the routes never share a stop in between. Another way to see it: fewer than n vertices failing can never break the graph apart.
         </p>
+        {/*<LectureWords>at least n non-overlapping paths between any two vertices. Two paths overlap if they share any vertex.</LectureWords>*/}
         <p className="leading-7">
-          A <strong>2-connected</strong>, or <strong>biconnected</strong>, graph has at least two non-overlapping paths between any two vertices. If one vertex fails, there is always another way round.
+          A <strong>biconnected</strong> graph is the case n = 2. There are always two separate routes between any two vertices, so if one vertex fails there is always another way round.
         </p>
+        {/*<LectureWords>a 2-connected graph.</LectureWords>*/}
       </section>
 
       <section className="space-y-4">
         <h2 className="text-2xl font-bold text-slate-900">Articulation points and blocks</h2>
         <p className="leading-7">
-          Some graphs are not biconnected. There is a vertex that always has to be on the path between some pair of vertices. That vertex is an <strong>articulation point</strong>, a breaking point. Remove it and the graph falls apart into disconnected pieces.
+          Some graphs have a vertex that holds everything together. Remove just that one and the graph falls into separate pieces. That vertex is an <strong>articulation point</strong>, a single point of failure. Try it in the graph at the top of the page: remove R.
         </p>
+        {/*<LectureWords>a vertex that always has to be on the path between some pair of vertices.</LectureWords>*/}
         <p className="leading-7">
-          The biconnected subgraphs are called <strong>blocks</strong>. In the graph above, P and R are the articulation points, and there are three blocks: A, J, R and Z; then R, N and P; then P and L.
+          A <strong>block</strong> is a chunk of the graph that no single vertex can break apart. Blocks join up at the articulation points. In the graph above, P and R are the articulation points, and there are three blocks: A, J, R and Z; then R, N and P; then P and L.
         </p>
+        {/*<LectureWords>the biconnected subgraphs are called blocks.</LectureWords>*/}
         <div className=" p-5">
           <p className="mb-1 text-xs font-bold uppercase tracking-wider text-amber-700">Why it matters</p>
           <p className="leading-7">
@@ -216,14 +233,20 @@ export default function Connected() {
           <div className="rounded-xl border border-slate-200 bg-white p-5">
             <p className="font-semibold text-slate-900">Weakly connected</p>
             <p className="mt-1 leading-7">
-              If we ignore the arrow directions, the graph is connected.
+              Pretend the arrows are plain lines. If the graph is in one piece, it is weakly connected.
             </p>
+            {/*<p className="mt-2 text-sm text-slate-500">
+              <span className="font-semibold">In the lecture's words:</span> the corresponding undirected graph structure is connected.
+            </p>*/}
           </div>
           <div className="rounded-xl border border-slate-200 bg-white p-5">
             <p className="font-semibold text-slate-900">Strongly connected</p>
             <p className="mt-1 leading-7">
-              Every vertex is reachable from every other vertex by following the arrows.
+              Obey the arrows like one-way streets. If you can still get from every vertex to every other, it is strongly connected.
             </p>
+            {/*<p className="mt-2 text-sm text-slate-500">
+              <span className="font-semibold">In the lecture's words:</span> every vertex is reachable from every other vertex.
+            </p>*/}
           </div>
         </div>
         <p className="leading-7">
