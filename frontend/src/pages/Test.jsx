@@ -257,7 +257,7 @@ function Test() {
           Question 2
         </h3>
         <p className = "mb-4 leading-7">
-          Answer the following questions. Use your solution from Question 1 to answer the first question.
+          Answer the following questions. Use your solution from Question 1 to answer the first two questions.
         </p>
         <QuizRunner section="final-dijkstra" onPass={(missed) => finishPart(3, missed)} />
         {partsDone >= 3 && (
