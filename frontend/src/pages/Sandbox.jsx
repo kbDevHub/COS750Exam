@@ -1068,7 +1068,7 @@ export default function Sandbox() {
 
             <section className="rounded-xl border border-amber-300 bg-amber-50 p-6">
                 <p className="mb-2 text-xs font-bold uppercase tracking-wider text-amber-700">Challenge</p>
-                <p className="mb-3">Quiz yourself and see if you can predict the next move </p>
+                <p className="mb-3">Before each step, predict which vertex Dijkstra will visit next, then press Next to check.</p>
             </section>
         </div>
     );
