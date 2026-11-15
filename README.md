@@ -2,7 +2,7 @@
 
 A pre-lecture, tutor-style learning app for the University of Pretoria's COS212 (Data Structures and Algorithms) module. Built for the COS750 Educational Software Development examination.
 
-The app teaches **graphs** (nodes/vertices, edges, weighted graphs and paths) and **Dijkstra's algorithm** to students who have no prior knowledge of the topic. Each section ends with a mini test that students must pass before moving on, and they can retry as many times as they like.
+The app teaches **graphs** (nodes/vertices, edges, weighted graphs, adjacency matrices, connectivity and cycles) and **Dijkstra's algorithm** to students who have no prior knowledge of the topic. Each section ends with a mini test: a wrong answer brings a hint and a second attempt, and a second wrong answer brings a short re-teach before the student moves on.
 
 ## Team
 
@@ -18,11 +18,14 @@ The app teaches **graphs** (nodes/vertices, edges, weighted graphs and paths) an
 
 ## Features
 
-- Learning sections: Introduction, Nodes, Edges, Weighted Graphs and Paths, Dijkstra's Algorithm
-- Interactive edge explorer (toggle weights and directions, click an edge to inspect it)
-- Step-by-step Dijkstra animation
-- Gated mini tests: a student must answer correctly to continue, with unlimited retries
-- Escalating support: a hint after the first wrong answer, a short re-teach after the second
+- Learning sections: Introduction; Unit 1, Graphs: 1.1 Nodes, 1.2 Edges, 1.3 Weighted Graphs, 1.4 Adjacency Matrix, 1.5 Connectivity, 1.6 Cyclic Graphs; Unit 2, Dijkstra: 2.1 Shortest Path Problem, 2.2 Dijkstra's Algorithm
+- Interactive diagrams: campus map, edge explorer, path builder, linked graph and adjacency matrix, break-the-graph, dependency toggle, ambulance route builder
+- Step-by-step Dijkstra animation (back, next, play) with pseudocode, C++ and JavaScript code
+- Mini tests after every section: two attempts per question, a hint after the first wrong answer, a short re-teach after the second
+- Sandbox: build your own graph (up to 15 vertices, directed or undirected) and run Dijkstra on it step by step
+- Test Yourself: a five-part final test at three difficulty levels, with a Dijkstra trace table
+- Progress ticks, unit progress bars, unit badges and a profile page
+- Note taker (saved in the browser, downloadable as .txt) and read-aloud
 - Answer keys are kept on the server, and answers are marked by the backend
 
 ## Tech stack
