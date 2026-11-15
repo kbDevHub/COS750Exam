@@ -429,7 +429,7 @@
     {
         "id": "final-dijkstra-1",
         "section": "final-dijkstra",
-        "question": "What is the shortest path from vertex A to vertex E as given by the algorithm above, and what is its cost?",
+        "question": "What is the shortest path from vertex A to vertex E as given by the algorithm above, and what is its cost? Use your solution from Question 1 to answer the question.",
         "options":
             [
                 "A -> B -> C -> D -> E, cost 4",
@@ -445,7 +445,7 @@
     {
       "id": "final-dijkstra-2",
       "section": "final-dijkstra",
-      "question": "When C (dist 2) is removed from unvisited, the road C-E (weight 3) gives newDist = 5. E already has (A, 5). What happens to E?",
+      "question": "When C (dist 2) is removed from unvisited, the road C-E (weight 3) gives newDist = 5. E already has (A, 5). What happens to E? Use your solution from Question 1 to answer the question.",
       "options": [
         "E stays (A, 5), because 5 is not less than 5",
         "E becomes (C, 5), because the newer route is preferred",

@@ -1,5 +1,6 @@
 import json
 from pathlib import Path
+from typing import Optional
 
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
@@ -17,11 +18,21 @@ BY_ID = {q["id"]: q for q in ALL_QUESTIONS}
 
 # ---------- Endpoint 1: send the questions for a section ----------
 @app.get("/api/questions/{section}")
-def get_questions(section: str, side: str = "learning"):
-    chosen = [q for q in ALL_QUESTIONS if q["section"] == section and q.get("side","learning") == side]
+def get_questions(section: str, side: str = "learning", level: Optional[int] = None):
+    chosen = [
+        q for q in ALL_QUESTIONS
+        if q["section"] == section and q.get("side", "learning") == side
+    ]
+
+    if level is not None:
+        chosen = [q for q in chosen if q.get("level") == level]
+
     if not chosen:
-        raise HTTPException(status_code=404, detail="No questions for that section")
-    # Strip the answer key before it leaves the server
+        section_exists = any(q["section"] == section for q in ALL_QUESTIONS)
+        if not section_exists:
+            raise HTTPException(status_code=404, detail="No questions for that section")
+        return []  
+
     return [{k: v for k, v in q.items() if k != "answer"} for q in chosen]
 
 

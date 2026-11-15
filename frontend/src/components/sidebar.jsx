@@ -68,7 +68,7 @@ function Sidebar() {
         <aside
             id="sidebar"
             onClick={(e) => e.target.closest("a") && setOpen(false)}
-            className={`fixed left-0 top-0 z-50 flex h-screen w-[220px] flex-col overflow-hidden bg-[#1f2937] px-4 py-6 font-mono text-white transition-[translate,visibility] duration-200 md:visible md:translate-x-0 ${open ? "visible translate-x-0" : "invisible -translate-x-full"}`}
+            className={`fixed left-0 top-0 z-50 flex h-screen w-[280px] flex-col overflow-hidden bg-[#1f2937] px-4 py-6 font-mono text-white transition-[translate,visibility] duration-200 md:visible md:translate-x-0 ${open ? "visible translate-x-0" : "invisible -translate-x-full"}`}
         >
 
             <div className="mb-8 flex items-start justify-between border-b border-gray-700 pb-5">
@@ -166,13 +166,13 @@ function Sidebar() {
                 </div>
 
                 {/* Test Yourself */}
-                <div className="mt-2 border-t border-gray-700 pt-4">
+                <div className="mt-2 border-t border-gray-700 pb-4 pt-4">
                     <NavLink to="/test" className={({ isActive }) =>
                       `${linkStyle({ isActive })} flex items-center justify-between gap-2`}>
                       <span>Test Yourself</span>
-                      {completed.includes("/test") && (
+                      {/* {completed.includes("/test") && (
                         <Check size={14} className="shrink-0 text-emerald-400" aria-label="Completed" />
-                      )}
+                      )} */}
                     </NavLink>
                 </div>
             </nav>

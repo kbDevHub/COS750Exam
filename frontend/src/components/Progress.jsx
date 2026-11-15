@@ -6,6 +6,7 @@ const ProgressContext = createContext({
     completed: [],
     markComplete: () => { },
     reset: () => { },
+    clearTestProgress: () => { },
 });
 
 export function ProgressProvider({ children }) {
@@ -30,9 +31,13 @@ export function ProgressProvider({ children }) {
         []
     );
     const reset = useCallback(() => setCompleted([]), []);
+    const clearTestProgress = useCallback(
+        () => setCompleted((c) => c.filter((p) => !p.includes("@L") && p !== "/test")),
+        []
+    );
 
     return (
-        <ProgressContext.Provider value={{ completed, markComplete, reset }}>
+        <ProgressContext.Provider value={{ completed, markComplete, reset, clearTestProgress }}>
             {children}
         </ProgressContext.Provider>
     );
