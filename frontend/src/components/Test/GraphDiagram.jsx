@@ -1,20 +1,30 @@
-// Directed, weighted graph drawing shared by DijkstraTable and DijkstraTrace.
-// Props: nodes { name: [x, y] }, edges [[from, to, weight]], source, viewBox,
-//   altList (default true): add a screen-reader-only list of the edges. Pass false
-//   when the page already shows the edges as visible text next to the diagram.
+// Graph drawing shared by DijkstraTable, DijkstraTrace and the Test page.
+// Props:
+//   nodes      { name: [x, y] }
+//   edges      [[from, to, weight?]]   (weight is optional)
+//   source     optional vertex to highlight
+//   viewBox    "0 0 width height"
+//   directed   true (default) draws arrowheads; false draws plain lines
+//   showWeights true (default) writes each edge's weight beside it
+//   altList    true (default) adds a screen-reader-only list of the edges. Pass
+//              false when the page already shows the edges as visible text.
 
 const R = 16; // node radius
 
-export default function GraphDiagram({ nodes, edges, source, viewBox = "0 0 430 310", altList = true }) {
+export default function GraphDiagram({ nodes, edges, source, viewBox = "0 0 430 310", directed = true, showWeights = true, altList = true }) {
+  const weighted = showWeights && edges.some((e) => e[2] !== undefined);
+
   return (
     <>
     <svg viewBox={viewBox} className="w-full max-w-lg" aria-hidden="true">
-      <defs>
-        <marker id="dj-arrow" viewBox="0 0 10 10" refX="9" refY="5"
-                markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-          <path d="M0 0 L10 5 L0 10 z" fill="#475569" />
-        </marker>
-      </defs>
+      {directed && (
+          <defs>
+            <marker id="dj-arrow" viewBox="0 0 10 10" refX="9" refY="5"
+                    markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M0 0 L10 5 L0 10 z" fill="#475569" />
+            </marker>
+          </defs>
+      )}
 
       {edges.map(([a, b, w]) => {
         const [x1, y1] = nodes[a];
@@ -23,19 +33,22 @@ export default function GraphDiagram({ nodes, edges, source, viewBox = "0 0 430 
         const ux = (x2 - x1) / len;
         const uy = (y2 - y1) / len;
         const sx = x1 + ux * R, sy = y1 + uy * R;
-        const ex = x2 - ux * (R + 2), ey = y2 - uy * (R + 2);
+        const gap = directed ? R + 2 : R; // leave room for the arrowhead
+        const ex = x2 - ux * gap, ey = y2 - uy * gap;
         // label sits beside the midpoint, pushed off the line
         const lx = (x1 + x2) / 2 - uy * 11;
         const ly = (y1 + y2) / 2 + ux * 11;
         return (
           <g key={`${a}-${b}`}>
-            <line x1={sx} y1={sy} x2={ex} y2={ey} stroke="#475569"
-                  strokeWidth="1.5" markerEnd="url(#dj-arrow)" />
-            <text x={lx} y={ly} fontSize="12" textAnchor="middle"
-                  dominantBaseline="central" fill="#1e293b"
-                  stroke="#fff" strokeWidth="3" paintOrder="stroke">
-              {w}
-            </text>
+            <line x1={sx} y1={sy} x2={ex} y2={ey} stroke="#475569" strokeWidth="1.5"
+                  markerEnd={directed ? "url(#dj-arrow)" : undefined} />
+            {showWeights && w !== undefined && (
+              <text x={lx} y={ly} fontSize="12" textAnchor="middle"
+                    dominantBaseline="central" fill="#1e293b"
+                    stroke="#fff" strokeWidth="3" paintOrder="stroke">
+                {w}
+              </text>
+            )}
           </g>
         );
       })}
@@ -56,12 +69,16 @@ export default function GraphDiagram({ nodes, edges, source, viewBox = "0 0 430 
     {altList && (
       <div className="sr-only">
         <p>
-          Directed weighted graph with vertices {Object.keys(nodes).join(", ")}.
+          {directed ? "Directed" : "Undirected"} {weighted ? "weighted " : ""}graph
+          with vertices {Object.keys(nodes).join(", ")}.
           {source ? ` The source vertex is ${source}.` : ""} Edges:
         </p>
         <ul>
           {edges.map(([a, b, w]) => (
-            <li key={`${a}-${b}`}>{a} to {b}, weight {w}</li>
+            <li key={`${a}-${b}`}>
+              {directed ? `${a} to ${b}` : `${a} and ${b}`}
+              {weighted && w !== undefined ? `, weight ${w}` : ""}
+            </li>
           ))}
         </ul>
       </div>
@@ -69,3 +86,4 @@ export default function GraphDiagram({ nodes, edges, source, viewBox = "0 0 430 
     </>
   );
 }
+

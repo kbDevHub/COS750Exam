@@ -2,15 +2,32 @@ import { useEffect, useRef, useState } from "react";
 import { useProgress } from "../components/Progress";
 import QuizRunner from "../components/QuizRunner";
 import CampusGraph from "../components/Test/CampusGraph.jsx";
-import {CAMPUS_GRAPH, MATRIX_GRAPH} from "../data/testGraphs.js";
+import GraphDiagram from "../components/Test/GraphDiagram.jsx";
 import AdjacencyMatrix from "../components/Test/AdjacencyMatrix.jsx";
 import DijkstraTrace from "../components/Test/DijkstraTrace.jsx";
 
-const TOTAL_PARTS = 3;
+import {
+  CAMPUS_GRAPH,
+  MATRIX_GRAPH,
+  GRAPH_ARTICULATION,
+  GRAPH_DIRECTED_CONNECTIVITY,
+  GRAPH_TWO_CYCLES,
+  GRAPH_DAG,
+} from "../data/testGraphs.js";
 
-// Match with what QuizRunner expects, except QuizRunner expects it on sections, not parts. So we simulate that.
-const PART_PATHS = ["/final-basics", "/final-matrix", "/final-dijkstra"];
-const PART_TITLES = ["Nodes, edges and weights", "Adjacency matrices", "Dijkstra's algorithm"];
+// The parts, in the order the student unlocks them. QuizRunner already calls
+// markComplete(`/${section}`) when a quiz is finished, so each path below is
+// both the quiz section name and the "part finished" marker in Progress.
+
+const PARTS = [
+  { path: "/final-basics", title: "Nodes, edges and weights" },
+  { path: "/final-matrix", title: "Adjacency matrices" },
+  { path: "/final-connectivity", title: "Connectivity" },
+  { path: "/final-cycles", title: "Cycles" },
+  { path: "/final-dijkstra", title: "Dijkstra's algorithm" },
+];
+const TOTAL_PARTS = PARTS.length;
+
 
 const btnPrimary =
   "rounded-lg bg-indigo-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm " +
@@ -68,10 +85,23 @@ function PartComplete({ message, buttonLabel, onContinue }) {
   );
 }
 
+/* A graph with its caption ("Graph 1") underneath */
+function GraphFigure({ graph }) {
+  return (
+    <figure className="m-0">
+      <GraphDiagram {...graph} />
+      <figcaption className="mt-1 text-sm font-semibold text-slate-600">
+        {graph.caption}
+        {graph.directed ? " (directed)" : " (undirected)"}
+      </figcaption>
+    </figure>
+  );
+}
+
 /* Shown when all three parts are finished. It celebrates finishing (focus is on readiness rather than points) and,
    depending on the student's performance, points at what is worth a second look before the lecture. */
 function Completion({ missedByPart, headingRef }) {
-  const known = [1, 2, 3].filter((n) => missedByPart[n]);
+  const known = PARTS.map((_, i) => i + 1).filter((n) => missedByPart[n]);
   const toRevisit = known.filter((n) => missedByPart[n].length > 0);
   const allKnown = known.length === TOTAL_PARTS;
 
@@ -93,7 +123,7 @@ function Completion({ missedByPart, headingRef }) {
         You've finished the assessment
       </h3>
       <p className="mx-auto mt-2 max-w-xl leading-7 text-emerald-900">
-        You've worked through nodes, edges, weights, adjacency matrices and Dijkstra's algorithm, so you're
+        You've worked through nodes, edges, weights, adjacency matrices, connectivity, cycles, and Dijkstra's algorithm, so you're
         ready for the lecture.
       </p>
 
@@ -103,7 +133,7 @@ function Completion({ missedByPart, headingRef }) {
           <ul className="mt-2 list-inside list-disc space-y-1">
             {toRevisit.map((n) => (
               <li key={n}>
-                {PART_TITLES[n - 1]}: {missedByPart[n].length}{" "}
+                {PARTS[n - 1].title}: {missedByPart[n].length}{" "}
                 {missedByPart[n].length === 1 ? "question" : "questions"} to revisit
               </li>
             ))}
@@ -128,8 +158,12 @@ function Completion({ missedByPart, headingRef }) {
 function Test() {
   const { completed, markComplete } = useProgress();
 
-  // Part n is unlocked once the previous parts are in the saved progress.
-  const partsDone = PART_PATHS.filter((p) => completed.includes(p)).length;
+    // A part is finished when its path is in the saved progress. Progress persists
+  // itself (and reset() relocks everything), so no extra state is needed.
+  const isDone = (n) => completed.includes(PARTS[n - 1].path);
+  // Part n unlocks only when every earlier part is finished.
+  const isLocked = (n) => !PARTS.slice(0, n - 1).every((p) => completed.includes(p.path));
+  const partsDone = PARTS.filter((p) => completed.includes(p.path)).length;
   const [announcement, setAnnouncement] = useState("");
 
   // Questions missed per part, for the parts finished in this visit (not saved)
@@ -137,26 +171,27 @@ function Test() {
   const [justFinished, setJustFinished] = useState(false);
 
 
-  const partRefs = [useRef(null), useRef(null), useRef(null)];
+  const partRefs = [useRef(null), useRef(null), useRef(null), useRef(null), useRef(null)];
 
   const celebrationRef = useRef(null);
 
 
     const finishPart = (n, missed = []) => {
-    markComplete(PART_PATHS[n - 1]); // no-op if QuizRunner already did
-      setMissedByPart((prev) => ({ ...prev, [n]: missed }));
-      setAnnouncement(
-      n < TOTAL_PARTS
-        ? `Part ${n} complete. Part ${n + 1} is unlocked.`
-        : "All three parts of the assessment are complete. You are ready for the lecture."
+    markComplete(PARTS[n - 1].path); // no-op if QuizRunner already did
+    setMissedByPart((prev) => ({ ...prev, [n]: missed }));
+    const allDone = PARTS.every((p, i) => i === n - 1 || completed.includes(p.path));
+    setAnnouncement(
+        allDone
+        ? `All ${TOTAL_PARTS} parts complete. You have finished the assessment and you are ready for the lecture.`
+        : `Part ${n} complete. Part ${n + 1} is unlocked.`
     );
-    if (n === TOTAL_PARTS) {
+    if (allDone) {
       markComplete("/test");
       setJustFinished(true);
     }
   };
 
-  // Bring the celebration into view once, right after the student finishes Part 3
+  // Bring the celebration into view once, right after the student finishes the final part
   useEffect(() => {
     if (!justFinished || !celebrationRef.current) return;
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -164,7 +199,9 @@ function Test() {
     celebrationRef.current.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "center" });
   }, [justFinished]);
 
-
+useEffect(() => {
+  if (partsDone === TOTAL_PARTS) markComplete("/test");
+}, [partsDone, markComplete]);
 
   // Move the student (and keyboard / screen reader focus) to a part
   const goToPart = (n) => {
@@ -175,7 +212,22 @@ function Test() {
     el.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
   };
 
-  const isLocked = (n) => partsDone < n - 1;
+    // "Part n complete" banner with a button to the next part
+  const banner = (n) =>
+    isDone(n) && n < TOTAL_PARTS ? (
+      <PartComplete
+        message={`Part ${n} complete. Part ${n + 1} is unlocked.`}
+        buttonLabel={`Go to Part ${n + 1}`}
+        onContinue={!isDone(n + 1) ? () => goToPart(n + 1) : undefined}
+      />
+    ) : null;
+
+  const partProps = (n) => ({
+    number: n,
+    title: PARTS[n - 1].title,
+    locked: isLocked(n),
+    headingRef: partRefs[n - 1],
+  });
 
   return (
     <div className="mx-auto max-w-5xl space-y-8 text-slate-700">
@@ -186,9 +238,9 @@ function Test() {
         <h1 className="text-4xl font-bold text-slate-900">Test Yourself</h1>
         <p className="mt-3 leading-7">
           Test your understanding of graph theory. The assessment covers every
-          topic in this learning module and has three parts. Finish each part to
-          unlock the next. When you complete Part 3, you are prepared for the
-          lecture.
+          topic in this learning module and has {TOTAL_PARTS} parts. Finish each
+          part to unlock the next. When you complete the last part, you are
+          ready for the lecture.
         </p>
         <p className="mt-2 text-sm text-slate-500">
           Progress: {partsDone} of {TOTAL_PARTS} parts complete
@@ -203,12 +255,14 @@ function Test() {
           <li>Edges</li>
           <li>Weighted Graphs and Paths</li>
           <li>Adjacency Matrix</li>
+          <li>Connectivity</li>
+          <li>Cycles</li>
           <li>Dijkstra's Algorithm</li>
         </ul>
       </section>
 
-    {/* Part 1: nodes, edges, weights */}
-    <Part number={1} title="Nodes, edges and weights" locked={false} headingRef={partRefs[0]}>
+      {/* Part 1: nodes, edges, weights */}
+      <Part {...partProps(1)} locked={false}>
         <p className="mb-4 leading-7">
           The graph shows {Object.keys(CAMPUS_GRAPH.nodes).length} University of
           Pretoria campuses and the roads between them. Use it to answer the
@@ -218,18 +272,12 @@ function Test() {
           <CampusGraph />
         </div>
         <QuizRunner section="final-basics" onPass={(missed) => finishPart(1, missed)} />
-          {partsDone >= 1 && (
-            <PartComplete
-              message="Part 1 complete. Part 2 is unlocked."
-              buttonLabel="Go to Part 2"
-              onContinue={partsDone === 1 ? () => goToPart(2) : undefined}
-            />
-          )}
+          {banner(1)}
       </Part>
 
 
     {/* Part 2: adjacency matrix */}
-    <Part number={2} title="Adjacency matrices" locked={isLocked(2)} headingRef={partRefs[1]}>
+      <Part {...partProps(2)}>
         <p className="mb-4 leading-7">
           This is the adjacency matrix of{" "}
           {MATRIX_GRAPH.directed ? "a directed" : "an undirected"}, weighted graph
@@ -240,27 +288,50 @@ function Test() {
           <AdjacencyMatrix />
         </div>
         <QuizRunner section="final-matrix" onPass={(missed) => finishPart(2, missed)} />
-        {partsDone >= 2 && (
-          <PartComplete
-            message="Part 2 complete. Part 3 is unlocked."
-            buttonLabel="Go to Part 3"
-            onContinue={partsDone === 2 ? () => goToPart(3) : undefined}
-          />
-        )}
+        {banner(2)}
       </Part>
 
-    { /* Part 3: Dijkstra */}
-     <Part number={3} title="Dijkstra's algorithm" locked={isLocked(3)} headingRef={partRefs[2]}>
-        <DijkstraTrace/>
-        <hr className = "my-8 border-slate-200"/>
-        <h3 className = "mb-3 text-lg font-semibold text-slate-900" >
-          Question 2
-        </h3>
-        <p className = "mb-4 leading-7">
-          Answer the following questions. Use your solution from Question 1 to answer the first two questions.
+    {/* Part 3: connectivity */}
+      <Part {...partProps(3)}>
+        <p className="mb-4 leading-7">
+          Use the two graphs below to answer the questions. Graph 1 is
+          undirected and Graph 2 is directed. These questions need some
+          reasoning, so work through each answer before you choose.
         </p>
-        <QuizRunner section="final-dijkstra" onPass={(missed) => finishPart(3, missed)} />
-        {partsDone >= 3 && (
+        <div className="mb-6 grid gap-6 sm:grid-cols-2">
+          <GraphFigure graph={GRAPH_ARTICULATION} />
+          <GraphFigure graph={GRAPH_DIRECTED_CONNECTIVITY} />
+        </div>
+        <QuizRunner section="final-connectivity" onPass={(missed) => finishPart(3, missed)} />
+        {banner(3)}
+      </Part>
+
+      {/* Part 4: cycles */}
+      <Part {...partProps(4)}>
+        <p className="mb-4 leading-7">
+          Use the two graphs below to answer the questions. Graph 3 is
+          undirected and Graph 4 is directed. These questions need some
+          reasoning, so work through each answer before you choose.
+        </p>
+        <div className="mb-6 grid gap-6 sm:grid-cols-2">
+          <GraphFigure graph={GRAPH_TWO_CYCLES} />
+          <GraphFigure graph={GRAPH_DAG} />
+        </div>
+        <QuizRunner section="final-cycles" onPass={(missed) => finishPart(4, missed)} />
+        {banner(4)}
+      </Part>
+
+      {/* Part 5: Dijkstra */}
+      <Part {...partProps(5)}>
+        <DijkstraTrace />
+        <hr className="my-8 border-slate-200" />
+        <h3 className="mb-3 text-lg font-semibold text-slate-900">Question 2</h3>
+        <p className="mb-4 leading-7">
+          Answer the following questions. Use your solution from Question 1 to
+          answer the first question.
+        </p>
+        <QuizRunner section="final-dijkstra" onPass={(missed) => finishPart(5, missed)} />
+        {partsDone >= TOTAL_PARTS && (
           <Completion missedByPart={missedByPart} headingRef={celebrationRef} />
         )}
       </Part>

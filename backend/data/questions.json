@@ -530,6 +530,68 @@
         "answer": "The lowest-cost path from one start vertex to every other vertex",
         "hint": "'Single-source' tells you how many start vertices there are. Where do the paths go?",
         "reteach": "Single-source means ONE start vertex (the source). The problem asks for the lowest-cost path from that source to EVERY other vertex in the graph. Dijkstra's algorithm, in the next section, solves it."
-    }
+    },
+
+
+    {
+        "id": "final-conn-hard-1",
+        "section": "final-connectivity",
+        "question": "Graph 1 has two articulation points. You may add ONE new edge. Which choice makes Graph 1 biconnected, and why?",
+        "options": [
+          "Z - L: L gets a second route that avoids P, and Z, A and J get a second route to the rest that avoids R",
+          "R - L: L gets a second connection, which removes every articulation point",
+          "N - Z: it links the blocks on either side of R, which removes every articulation point",
+          "J - N: any edge that creates a new cycle makes a graph biconnected"
+        ],
+        "answer": "Z - L: L gets a second route that avoids P, and Z, A and J get a second route to the rest that avoids R",
+        "hint": "Test each articulation point separately. After adding the edge, remove R and check the rest is still in one piece. Then remove P and check again.",
+        "reteach": "The articulation points are R (it holds Z, A and J to the rest of the graph) and P (it holds L). One edge has to fix both. Z - L does: without R, Z - L still joins {Z, A, J} to {P, N, L}; without P, L is still reachable through Z. R - L only fixes P, because removing R still strands Z, A and J. N - Z and J - N only fix R, because removing P still strands L. Creating a new cycle is not enough on its own. (A - L or J - L would also have worked.)",
+        "level": 3
+  },
+  {
+        "id": "final-conn-hard-2",
+        "section": "final-connectivity",
+        "question": "Graph 2 is weakly connected but not strongly connected. Why can't adding a single new arrow make it strongly connected?",
+        "options": [
+          "M and L both have no outgoing arrow, and one new arrow can only give one of them a way out",
+          "A has no incoming arrow, and a single new arrow can't fix that",
+          "R, P and N already form a cycle, so no other arrow can be added",
+          "Strong connectivity needs an arrow between every pair of vertices, and one arrow can't provide that"
+        ],
+        "answer": "M and L both have no outgoing arrow, and one new arrow can only give one of them a way out",
+        "hint": "In a strongly connected graph every vertex can reach every other vertex. Which vertices are dead ends, where you can't go any further?",
+        "reteach": "M and L have no arrows leaving them, so from M or L you can't reach any other vertex. Both need an outgoing arrow, and one new arrow leaves only one vertex. That is why a single arrow can't work. (A having no incoming arrow is also a problem, but one arrow such as M -> A could fix that on its own.) Two arrows are enough, for example M -> A and L -> A. Strong connectivity doesn't need an arrow between every pair, only a route.",
+        "level": 3
+  },
+  {
+        "id": "final-cyc-hard-1",
+        "section": "final-cycles",
+        "question": "What is the smallest number of edges you must remove from Graph 3 so that it contains no cycle?",
+        "options": [
+          "1: removing C - D splits the graph in two, so no cycles are left",
+          "2: the two triangles are separate cycles, and removing one edge can only break one of them",
+          "3: one edge from each triangle, plus the edge joining them",
+          "6: every vertex lies on a cycle, so each one must lose an edge"
+        ],
+        "answer": "2: the two triangles are separate cycles, and removing one edge can only break one of them",
+        "hint": "List every cycle first. Then ask whether a single edge can belong to more than one of them.",
+        "reteach": "The cycles are the triangles A-B-C and D-E-F. They share no edge, so each triangle needs its own edge removed: 2 in total. Removing C - D splits the graph into two pieces, but both triangles survive, because C - D isn't on either cycle.",
+        "level": 3
+  },
+  {
+        "id": "final-cyc-hard-2",
+        "section": "final-cycles",
+        "question": "Which single arrow, if added to Graph 4, would create a cycle?",
+        "options": [
+          "D -> A, because A can already reach D, so the new arrow completes a loop",
+          "A -> D, because it gives D a second arrow pointing at it",
+          "B -> C, because it joins the two middle vertices",
+          "C -> B, because it points back along the layout"
+        ],
+        "answer": "D -> A, because A can already reach D, so the new arrow completes a loop",
+        "hint": "A new arrow from X to Y makes a loop only if you can already get from Y back to X by following the arrows.",
+        "reteach": "An arrow X -> Y closes a cycle exactly when Y can already reach X. A can reach D (A -> B -> D), so D -> A completes the loop A -> B -> D -> A. With A -> D, D can't get back to A. With B -> C, C can only reach D. With C -> B, B can only reach D. None of those gives a way back.",
+        "level": 3
+  }
 
 ]
