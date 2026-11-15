@@ -143,5 +143,5 @@ Generative AI (Claude, by Anthropic) was used to help with parts of the app's co
 
 ## Documentation
 
-- Software Engineering (SE) document: _add link or file name_
-- Instructional Design (ID) document: _add link or file name_
+- Software Engineering (SE) document
+- Instructional Design (ID) document
