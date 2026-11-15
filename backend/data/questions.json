@@ -138,10 +138,10 @@
     {
         "id": "dijk-1",
         "section": "dijkstra",
-        "question": "What problem does Djikstra's algorithm solve?",
+        "question": "What problem does Dijkstra's algorithm solve?",
         "options":
             [
-                "Sorting a list a numbers",
+                "Sorting a list of numbers",
                 "Find the shortest path from one source vertex to all other vertices in a weighted graph",
                 "Detecting whether a graph contains a cycle",
                 "Searching for a value in an array"

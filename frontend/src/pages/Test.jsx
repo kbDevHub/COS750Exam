@@ -351,7 +351,7 @@ function Test() {
               This is the adjacency matrix of{" "}
               {MATRIX_GRAPH.directed ? "a directed" : "an undirected"}, weighted graph
               with vertices {MATRIX_GRAPH.vertices.join(", ")}. Use it to answer the
-              first four questions.
+              questions about this matrix.
             </p>
             <div className="mb-6 overflow-x-auto">
               <AdjacencyMatrix />
