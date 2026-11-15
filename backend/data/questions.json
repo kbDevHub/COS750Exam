@@ -530,6 +530,91 @@
         "answer": "The lowest-cost path from one start vertex to every other vertex",
         "hint": "'Single-source' tells you how many start vertices there are. Where do the paths go?",
         "reteach": "Single-source means ONE start vertex (the source). The problem asks for the lowest-cost path from that source to EVERY other vertex in the graph. Dijkstra's algorithm, in the next section, solves it."
-    }
+    },
+
+    {
+    "id": "connected-1",
+    "section": "connected",
+    "question": "Two vertices of this graph fail at the same time: R and P. How many separate pieces is the graph split into?",
+    "options": [
+      "3",
+      "2",
+      "4",
+      "1"
+    ],
+    "answer": "3",
+    "hint": "Remove R and P from the graph above. Don't forget any vertex that is left with no neighbours.",
+    "reteach": "Without R and P, the vertices A, J and Z still hold together. But N has lost both of its neighbours (R and P), and L has lost its only neighbour (P). The pieces are {A, J, Z}, {N} and {L}: three in total."
+  },
+  {
+    "id": "connected-2",
+    "section": "connected",
+    "question": "In this graph, which pair of vertices has two non-overlapping paths between them?",
+    "options": [
+      "A and R",
+      "L and R",
+      "N and Z",
+      "J and P"
+    ],
+    "answer": "A and R",
+    "hint": "Two paths overlap if they share a vertex between the two end vertices. Try to find two different routes for each pair.",
+    "reteach": "A to R has the routes A - J - R and A - Z - R, which share no vertex. For L and R, every route has to go through P. For N and Z, and for J and P, every route has to go through R. A pair like that has only one non-overlapping path."
+  },
+  {
+    "id": "connected-3",
+    "section": "connected",
+    "question": "Engineers want to add one new link so that L is no longer cut off when P fails. Which link does that?",
+    "options": [
+      "L - R",
+      "Z - N",
+      "A - R",
+      "J - Z"
+    ],
+    "answer": "L - R",
+    "hint": "Right now L has only one neighbour. What does L need so that it can still reach the rest of the network if P fails?",
+    "reteach": "L's only connection is P, so if P fails L is cut off. A link from L to R gives L a second way into the rest of the network. Z - N, A - R and J - Z don't touch L, so L is still stranded when P fails. (L - N would also have worked)."
+  },
+  {
+    "id": "cyclic-1",
+    "section": "cyclic",
+    "question": "With the dependencies shown before the extra one is added, which order installs all four packages? (An arrow from X to Y means \"to install X you need Y\".)",
+    "options": [
+      "C, B, D, A",
+      "A, B, C, D",
+      "B, C, D, A",
+      "D, B, C, A"
+    ],
+    "answer": "C, B, D, A",
+    "hint": "Start with the package that needs nothing. Then only install a package once everything it needs is already installed.",
+    "reteach": "C needs nothing, so it goes first. B needs C, so it comes next. D needs B, then A needs B, C and D, so A goes last: C, B, D, A. The other orders install a package before one of the packages it needs. A graph with a valid order like this has no cycles."
+  },
+  {
+    "id": "cyclic-2",
+    "section": "cyclic",
+    "question": "Now C needs E, and E needs B. Which sequence of packages is a cycle?",
+    "options": [
+      "B -> C -> E -> B",
+      "A -> B -> C",
+      "A -> C -> E",
+      "A -> D -> B"
+    ],
+    "answer": "B -> C -> E -> B",
+    "hint": "A cycle is a path that arrives back at its start. Follow the arrows and see which sequence returns to where it began.",
+    "reteach": "B needs C, C needs E, and E needs B, which brings you back to B. The other sequences are valid paths, but none of them returns to its starting package."
+  },
+  {
+    "id": "cyclic-3",
+    "section": "cyclic",
+    "question": "Why can't B, C and E ever be installed once C needs E?",
+    "options": [
+      "Each of them needs another package in the loop to be installed first",
+      "Packages that depend on three others can't be installed",
+      "E has no dependencies, so nothing can use it",
+      "A has to be installed before any of them"
+    ],
+    "answer": "Each of them needs another package in the loop to be installed first",
+    "hint": "Try to install B. What do you need first? Then what does that need?",
+    "reteach": "To install B you need C, to install C you need E, and to install E you need B. Every package in the loop is waiting for another, so none can go first. That is why you need to be aware of cycles in a graph."
+  }
 
 ]
