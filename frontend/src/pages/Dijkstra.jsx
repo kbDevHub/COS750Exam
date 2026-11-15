@@ -120,7 +120,7 @@ function Dijkstra() {
           Interactive Dijkstra Animation
         </h2>
         <p className="leading-7">
-          Use the controls to move through each step of the algorithm. The travel path is I-P. Watch how the distances change as vertices are visited.
+          Use the controls to move through each step of the algorithm. The animation finds the shortest path from I to P. Watch how the distances change as vertices are visited.
         </p>
         <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
           <DijkstraAnimation />
@@ -134,7 +134,7 @@ function Dijkstra() {
           Algorithm Code
         </h2>
         <p className="leading-7">
-          Use the tab above to switch between the pseudocode and C++ code for this algorithm
+          Use the tabs below to switch between the pseudocode, C++ and JavaScript code for this algorithm.
         </p>
         <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
           <DijkstraCodeview />
