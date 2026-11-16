@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import defaultAvatar from "../assets/user.png";
 import { useBadges } from "../utils/useBadges";
 import BadgeModal from "../components/BadgeModal";
@@ -7,6 +7,15 @@ export default function Profile() {
     const { units, earnedIds } = useBadges();
     const [openId, setOpenId] = useState(null);
     const open = units.find((u) => u.id === openId);
+
+    const [textScale, setTextScale] = useState(() => {
+        return Number(localStorage.getItem("textScale")) || 100;
+    });
+
+    useEffect(() => {
+        document.documentElement.style.fontSize = `${textScale}%`;
+        localStorage.setItem("textScale", textScale);
+    }, [textScale]);
 
     return (
         <div className="mx-auto max-w-4xl space-y-8 text-gray-700">
@@ -61,6 +70,46 @@ export default function Profile() {
             </section>
 
             {open && <BadgeModal badge={open} onClose={() => setOpenId(null)} />}
+
+            {/* Accessibility Settings */}
+            <section className="border-t border-gray-200 pt-6">
+                <h2 className="mb-2 text-2xl font-bold text-gray-900">
+                    Accessibility Settings
+                </h2>
+
+                <p className="mb-4 text-gray-600">
+                    Adjust the text size to make the learning content easier to read.
+                </p>
+
+                <label
+                    htmlFor="textScale"
+                    className="mb-2 block font-semibold text-gray-800"
+                >
+                    Text Size: {textScale}%
+                </label>
+
+                <div className="flex flex-wrap gap-2">
+                    {[75, 100, 125, 150, 175, 200].map((size) => (
+                        <button
+                            key={size}
+                            type="button"
+                            onClick={() => setTextScale(size)}
+                            aria-pressed={textScale === size}
+                            className={`rounded-lg border px-4 py-2 font-semibold transition ${textScale === size
+                                ? "border-indigo-600 bg-indigo-600 text-white"
+                                : "border-gray-300 bg-white text-gray-700 hover:bg-gray-100"
+                                }`}
+                        >
+                            {size}%
+                        </button>
+                    ))}
+                </div>
+
+                <p className="mt-3 text-sm text-gray-500">
+                    Select up to 200% to increase text size.
+                </p>
+            </section>
+
         </div>
     );
 }
