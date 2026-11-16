@@ -82,6 +82,51 @@ const CPP = [
     "}",
 ].join("\n");
 
+const JAVA = [
+    "import java.util.Arrays;",
+    "import java.util.List;",
+    "",
+    "public class Dijkstra {",
+    "",
+    "    static final int INF = Integer.MAX_VALUE;",
+    "",
+    "    // graph.get(u) holds {neighbour, weight} pairs",
+    "    public static void dijkstra(List<List<int[]>> graph, int start,",
+    "                                int[] dist, int[] previous) {",
+    "        int n = graph.size();",
+    "        boolean[] visited = new boolean[n];",
+    "",
+    "        Arrays.fill(dist, INF);",
+    "        Arrays.fill(previous, -1);",
+    "        dist[start] = 0;",
+    "",
+    "        for (int count = 0; count < n; count++) {",
+    "",
+    "            // pick the unvisited vertex with the smallest dist",
+    "            int u = -1;",
+    "            for (int i = 0; i < n; i++) {",
+    "                if (!visited[i] && (u == -1 || dist[i] < dist[u])) {",
+    "                    u = i;",
+    "                }",
+    "            }",
+    "",
+    "            if (dist[u] == INF) break;",
+    "            visited[u] = true;",
+    "",
+    "            for (int[] edge : graph.get(u)) {",
+    "                int v = edge[0];",
+    "                int w = edge[1];",
+    "",
+    "                if (!visited[v] && dist[u] + w < dist[v]) {",
+    "                    dist[v] = dist[u] + w;   // relax the edge",
+    "                    previous[v] = u;",
+    "                }",
+    "            }",
+    "        }",
+    "    }",
+    "}",
+].join("\n");
+
 const JAVASCRIPT=
 [
     "function dijkstra(graph, start) {",
@@ -129,6 +174,7 @@ const TABS =
 [
     {id: "pseudo", label: "Pseudocode", lang:"text", code: PSEUDO},
     {id: "cpp", label: "C++", lang: "cpp", code: CPP},
+    {id: "java", label: "Java", lang: "java", code: JAVA},
     {id: "js", label: "Javascript", lang: "javascript", code: JAVASCRIPT}
 ];
 
